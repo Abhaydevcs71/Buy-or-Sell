@@ -1,6 +1,6 @@
 # second_store
 
-A new Flutter project.
+Not finished yet.
 
 ## Getting Started
 

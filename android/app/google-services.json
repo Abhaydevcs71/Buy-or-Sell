@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "860034148982",
+    "project_id": "secondstore-62b29",
+    "storage_bucket": "secondstore-62b29.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860034148982:android:60b152fa825b42330d4d57",
+        "android_client_info": {
+          "package_name": "com.example.second_store"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOVPjFeDmDlodXvxy97V1lTOQsFzkaXVU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
