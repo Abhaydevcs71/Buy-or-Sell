@@ -62,10 +62,11 @@ class PhoneAuthServices {
     };
     try {
       auth.verifyPhoneNumber(
+          phoneNumber: number,
           verificationCompleted: verificationCompleted,
           verificationFailed: verificationFailed,
           codeSent: codeSent,
-          timeout: Duration(seconds: 30),
+          timeout: Duration(minutes: 1),
           codeAutoRetrievalTimeout: (String verificationId) {
             print(verificationId);
           });

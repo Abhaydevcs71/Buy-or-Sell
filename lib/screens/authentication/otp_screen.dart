@@ -28,6 +28,8 @@ class _OTPScreenState extends State<OTPScreen> {
 
   Future<void> PhoneCredential(BuildContext context, String otp) async {
     FirebaseAuth _auth = FirebaseAuth.instance;
+    debugPrint("ver id::::"+widget.verId);
+    debugPrint("otp:::::"+otp);
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: widget.verId, smsCode: otp);
@@ -212,7 +214,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                 setState(() {
                                   _loading = true;
                                 });
-                                PhoneCredential(context, _otp);
+                                PhoneCredential(context, '${_text1.text}${_text2.text}${_text3.text}${_text4.text}${_text5.text}${_text6.text}');
                               }
                             }
                           }
