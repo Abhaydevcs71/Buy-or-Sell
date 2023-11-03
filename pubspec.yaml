@@ -42,6 +42,7 @@ dependencies:
   google_sign_in: ^6.1.5
   email_validator: ^2.1.17
   open_mail_app: ^0.4.5
+  csc_picker: ^0.2.7
 
 dev_dependencies:
   flutter_lints: ^2.0.0
