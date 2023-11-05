@@ -75,7 +75,7 @@ class EmailAuthentication {
         //log in success
         // add data to firestore
 
-        return users.doc(userCredential.user?.email).set({
+        return users.doc(userCredential.user?.uid).set({
           'uid': userCredential.user?.uid,
           'phone': null,
           'email': userCredential.user?.email,

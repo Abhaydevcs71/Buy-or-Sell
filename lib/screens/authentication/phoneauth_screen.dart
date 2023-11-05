@@ -17,19 +17,18 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   var countryCodeController = TextEditingController(text: '+91');
   var phoneNumberController = TextEditingController();
 
-   PhoneAuthServices _services = PhoneAuthServices();
+  PhoneAuthServices _services = PhoneAuthServices();
 
   @override
   Widget build(BuildContext context) {
-
     //Create an instance of ProgressDialog
-ProgressDialog progressDialog = ProgressDialog(
-                  context: context,
-                  backgroundColor: Colors.white,
-                  textColor: Colors.black,
-                  loadingText:'Please wait' ,
-                  progressIndicatorColor: Theme.of(context).primaryColor,
-                );
+    ProgressDialog progressDialog = ProgressDialog(
+      context: context,
+      backgroundColor: Colors.white,
+      textColor: Colors.black,
+      loadingText: 'Please wait',
+      progressIndicatorColor: Theme.of(context).primaryColor,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -134,7 +133,7 @@ ProgressDialog progressDialog = ProgressDialog(
                   progressDialog.show();
                   String number =
                       '${countryCodeController.text}${phoneNumberController.text}';
-                 
+
                   progressDialog.show();
                   _services.verifyPhoneNumber(context, number);
                 },
