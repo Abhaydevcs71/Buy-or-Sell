@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:dialogs/dialogs/progress_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +22,7 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   FirebaseService _service = FirebaseService();
 
-  bool _loading = false;
+  bool _loading = true;
   Location location = new Location();
 
   late bool _serviceEnabled;
@@ -72,6 +73,24 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
+    _service.users
+        .doc(_service.user?.uid)
+        .get()
+        .then((DocumentSnapshot document) {
+      if (document.exists) {
+        // location already updated
+
+        if (document['address'] != null) {
+          Navigator.pushReplacementNamed(context, HomeScreen.id);
+        } else {
+          setState(() {
+            _loading = false;
+          });
+        }
+      }
+    });
+
     ProgressDialog progressDialog = ProgressDialog(
       context: context,
       backgroundColor: Colors.white,
@@ -144,6 +163,19 @@ class _LocationScreenState extends State<LocationScreen> {
                     ListTile(
                       onTap: () {
                         // save addresses to the firestore
+                        progressDialog.show();
+                        getLocation().then((value) {
+                          if (value != null) {
+                            _service.updateUser({
+                              'location':
+                                  GeoPoint(value.latitude!, value.longitude!),
+                              'address': _address,
+                            }, context).then((value) {
+                              progressDialog.dismiss();
+                              Navigator.pushNamed(context, HomeScreen.id);
+                            });
+                          }
+                        });
                       },
                       horizontalTitleGap: 0.0,
                       leading: const Icon(
@@ -183,6 +215,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                       child: CSCPicker(
                         layout: Layout.vertical,
+                        flagState: CountryFlag.DISABLE,
                         dropdownDecoration:
                             const BoxDecoration(shape: BoxShape.rectangle),
                         defaultCountry: CscCountry.India,
@@ -205,12 +238,14 @@ class _LocationScreenState extends State<LocationScreen> {
 
                           // send this address to the firestore
 
-                          _service.updateUser({
-                            'address': manualAddress,
-                            'state': stateValue,
-                            'city': cityValue,
-                            'country': countryValue,
-                          }, context);
+                          if (value != null) {
+                            _service.updateUser({
+                              'address': manualAddress,
+                              'state': stateValue,
+                              'city': cityValue,
+                              'country': countryValue,
+                            }, context);
+                          }
                         },
                       ),
                     ),
@@ -271,69 +306,69 @@ class _LocationScreenState extends State<LocationScreen> {
           const SizedBox(
             height: 30,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _loading
-                      ? Center(
-                          child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              Theme.of(context).primaryColor),
-                        ))
-                      : ElevatedButton.icon(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Theme.of(context).primaryColor),
-                          ),
-                          icon: const Icon(CupertinoIcons.location_fill),
-                          label: const Padding(
-                            padding: EdgeInsets.only(top: 15, bottom: 15),
-                            child: Text(
-                              'Around me',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+          _loading ? CircularProgressIndicator() : Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _loading
+                          ? Center(
+                              child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Theme.of(context).primaryColor),
+                            ))
+                          : ElevatedButton.icon(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Theme.of(context).primaryColor),
+                              ),
+                              icon: const Icon(CupertinoIcons.location_fill),
+                              label: const Padding(
+                                padding: EdgeInsets.only(top: 15, bottom: 15),
+                                child: Text(
+                                  'Around me',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              onPressed: () {                               
+                                progressDialog.show();
+                                getLocation().then((value) {
+                                  if (value != null) {
+                                    _service.updateUser({
+                                      'address': _address,
+                                      'location': GeoPoint(
+                                          value.latitude!, value.longitude!),
+                                    }, context);
+                                  }
+                                });
+                              },
                             ),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _loading = true;
-                            });
-                            getLocation().then((value) {
-                              if (value != null) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        HomeScreen(
-                                      locationData: _locationData,
-                                    ),
-                                  ),
-                                );
-                              }
-                            });
-                          },
-                        ),
-                ),
-              ],
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              progressDialog.show();
-              showBottomScreen(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(width: 2))),
-                child: const Text(
-                  'Set location manually',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                  ],
                 ),
               ),
-            ),
+              InkWell(
+                onTap: () {
+                  progressDialog.show();
+                  showBottomScreen(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 2))),
+                    child: const Text(
+                      'Set location manually',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                  ),
+                ),
+              )
+            ],
           )
         ],
       ),

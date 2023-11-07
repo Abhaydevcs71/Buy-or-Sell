@@ -5,12 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_geocoder/geocoder.dart';
 import 'package:location/location.dart';
 import 'package:second_store/constants/constants.dart';
+import 'package:second_store/screens/location_screen.dart';
 import 'package:second_store/screens/login_screen.dart';
+import 'package:second_store/widgets/banner_widget.dart';
+import 'package:second_store/widgets/custom_appBar.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home-screen';
-  final LocationData? locationData;
-  const HomeScreen({super.key, this.locationData});
+
+  const HomeScreen({super.key});
+
+  // final LocationData? locationData;
+
+  // const HomeScreen({super.key, this.locationData});
   //we are getting latilude and longitude here
 
   @override
@@ -19,73 +26,81 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String address = 'India';
-  Future<String?> getAddress() async {
-    final coordinates = new Coordinates(
-        widget.locationData?.latitude, widget.locationData?.altitude);
-    var addresses =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    var first = addresses.first;
-    setState(() {
-      address = first.addressLine!;
-    });
 
-    return first.addressLine;
-  }
+  // Future<String?> getAddress() async {
+  //   final coordinates = new Coordinates(
+  //       widget.locationData?.latitude, widget.locationData?.altitude);
+  //   var addresses =
+  //       await Geocoder.local.findAddressesFromCoordinates(coordinates);
+  //   var first = addresses.first;
+  //   setState(() {
+  //     address = first.addressLine!;
+  //   });
 
-  @override
-  void initState() {
-    getAddress();
-    super.initState();
-  }
+  //   return first.addressLine;
+  // }
+
+  // @override
+  // void initState() {
+  //   getAddress();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
-        elevation: 0.0,
-        title: InkWell(
-          onTap: () {},
-          child: Container(
-            width: MediaQuery.of(context).size.width,
+      //backgroundColor: Colors.red,
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(26),
+        child: SafeArea(child: CustomAppBar()),
+      ),
+      body: Column(
+        children: [
+          Container(
+            color: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 8),
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 8),
               child: Row(
                 children: [
-                  const Icon(
-                    CupertinoIcons.location_solid,
-                    color: AppColors.blackColor,
-                    size: 18,
-                  ),
-                  Flexible(
-                    child: Text(
-                      address,
-                      style: const TextStyle(
-                        color: AppColors.blackColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            size: 25,
+                          ),
+                          labelText: 'Search by city or hotel',
+                          labelStyle: const TextStyle(fontSize: 18),
+                          contentPadding:
+                              const EdgeInsets.only(left: 10, right: 10)),
                     ),
                   ),
+                  const SizedBox(
+                    width: 8,
+                  ),
                   const Icon(
-                    Icons.keyboard_arrow_down_outlined,
-                    color: AppColors.blackColor,
-                    size: 18,
+                    Icons.notifications_none,
+                    size: 25,
+                  ),
+                  const SizedBox(
+                    width: 8,
                   )
                 ],
               ),
             ),
           ),
-        ),
-      ),
-      body: Center(
-        child: ElevatedButton(
-            child: const Text('Sign Out'),
-            onPressed: () {
-              FirebaseAuth.instance.signOut().then((value) {
-                Navigator.pushReplacementNamed(context, LoginScreen.id);
-              });
-            }),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(12, 0, 12, 8),
+            child: Column(
+              children: [
+                BannerWidget(),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
