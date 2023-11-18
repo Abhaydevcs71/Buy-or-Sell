@@ -6,6 +6,7 @@ import 'package:second_store/screens/home_screen.dart';
 
 class FirebaseService {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference categories = FirebaseFirestore.instance.collection('categories');
   User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> updateUser(Map<String, dynamic> data, context) {

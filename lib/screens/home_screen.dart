@@ -8,6 +8,7 @@ import 'package:second_store/constants/constants.dart';
 import 'package:second_store/screens/location_screen.dart';
 import 'package:second_store/screens/login_screen.dart';
 import 'package:second_store/widgets/banner_widget.dart';
+import 'package:second_store/widgets/category_widget.dart';
 import 'package:second_store/widgets/custom_appBar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,26 +27,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String address = 'India';
-
-  // Future<String?> getAddress() async {
-  //   final coordinates = new Coordinates(
-  //       widget.locationData?.latitude, widget.locationData?.altitude);
-  //   var addresses =
-  //       await Geocoder.local.findAddressesFromCoordinates(coordinates);
-  //   var first = addresses.first;
-  //   setState(() {
-  //     address = first.addressLine!;
-  //   });
-
-  //   return first.addressLine;
-  // }
-
-  // @override
-  // void initState() {
-  //   getAddress();
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,11 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          const Padding(
+         Padding(
             padding: EdgeInsets.fromLTRB(12, 0, 12, 8),
             child: Column(
               children: [
                 BannerWidget(),
+                CategoryWidget()
               ],
             ),
           )

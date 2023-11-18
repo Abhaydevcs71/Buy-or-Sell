@@ -8,12 +8,16 @@ import 'package:flutter_geocoder/geocoder.dart';
 import 'package:location/location.dart';
 import 'package:second_store/constants/constants.dart';
 import 'package:second_store/screens/home_screen.dart';
+import 'package:second_store/screens/main_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class LocationScreen extends StatefulWidget {
+  
   static const String id = 'location-screen';
 
-  const LocationScreen({super.key});
+  
+   bool? locationChanging;
+  LocationScreen({ this.locationChanging});
 
   @override
   State<LocationScreen> createState() => _LocationScreenState();
@@ -73,23 +77,37 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
-    _service.users
+
+    if(widget.locationChanging==null){
+         _service.users
         .doc(_service.user?.uid)
         .get()
         .then((DocumentSnapshot document) {
       if (document.exists) {
+        Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
         // location already updated
-
-        if (document['address'] != null) {
-          Navigator.pushReplacementNamed(context, HomeScreen.id);
+        if(data != null && data!.containsKey('address')){
+          if (document['address'] != null) {
+            Navigator.pushReplacementNamed(context, MainScreen.id);
+          } else {
+            setState(() {
+              _loading = false;
+            });
+          }
         } else {
           setState(() {
             _loading = false;
           });
         }
+
       }
     });
+    }else{
+setState(() {
+  _loading=false;
+});    }
+    
+   
 
     ProgressDialog progressDialog = ProgressDialog(
       context: context,
@@ -249,26 +267,7 @@ class _LocationScreenState extends State<LocationScreen> {
                         },
                       ),
                     ),
-                    // TextButton(
-                    //     onPressed: () {
-                    //       if (countryValue != null &&
-                    //           stateValue != null &&
-                    //           cityValue != null) {
-                    //         _service.updateUser({
-                    //           'address': manualAddress,
-                    //           'state': stateValue,
-                    //           'city': cityValue,
-                    //           'country': countryValue,
-                    //         }, context);
-                    //       } else if(stateValue == null || cityValue == null){
-                    //         ScaffoldMessenger.of(context).showSnackBar(
-                    //           const SnackBar(
-                    //             content: Text('Failed to save location'),
-                    //           ),
-                    //         );
-                    //       }
-                    //     },
-                    //     child: Text('Save'))
+                   
                   ],
                 );
               });

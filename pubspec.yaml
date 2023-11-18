@@ -28,22 +28,23 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  animated_text_kit: null
-  cupertino_icons: ^1.0.2
+  animated_text_kit: ^4.2.2
+  cloud_firestore: ^4.12.0
+  csc_picker: ^0.2.7
+  cupertino_icons: ^1.0.6
   dialogs: ^0.0.7
+  email_validator: ^2.1.17
   firebase_auth: null
   firebase_core: null
+  firebase_storage: ^11.5.0
   flutter:
     sdk: flutter
-  flutter_signin_button: null
-  cloud_firestore: ^4.12.0
-  location: ^5.0.3
   flutter_geocoder: ^0.2.2-nullsafety
+  flutter_neumorphic: ^3.2.0
+  flutter_signin_button: null
   google_sign_in: ^6.1.5
-  email_validator: ^2.1.17
+  location: ^5.0.3
   open_mail_app: ^0.4.5
-  csc_picker: ^0.2.7
-  #flutter_neumorphic: ^3.2.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
