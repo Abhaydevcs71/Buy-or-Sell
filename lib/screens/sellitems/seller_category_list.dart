@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:second_store/forms/pg_seller_form.dart';
 import 'package:second_store/screens/categories/subCat_Screen.dart';
 import 'package:second_store/screens/sellitems/seller_subCat.dart';
 import 'package:second_store/services/firebase_services.dart';
@@ -59,9 +60,12 @@ class SellerCategory extends StatelessWidget {
                               visualDensity: VisualDensity(vertical: -3),
                             onTap: () {
                               if(snapshot.data!.docs[index]['subCat']==null){
-                                return print('No sub Categories');
-                              }
-                              Navigator.pushNamed(context, SellerSubCatList.id,arguments:snapshot.data!.docs[index] );
+                                //return
+                                 Navigator.pushNamed(context, PgSellerForm.id);                         
+                              }else
+                              {
+                                Navigator.pushNamed(context, SellerSubCatList.id,arguments:snapshot.data!.docs[index] );
+                                }
                             },
                             leading: Image.network(
                               snapshot.data!.docs[index]['image'],

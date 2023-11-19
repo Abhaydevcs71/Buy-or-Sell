@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/constants/constants.dart';
+import 'package:second_store/forms/pg_seller_form.dart';
 import 'package:second_store/screens/authentication/email_auth_screen.dart';
 import 'package:second_store/screens/authentication/email_verification_screen.dart';
 import 'package:second_store/screens/authentication/phoneauth_screen.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
         MainScreen.id:(context)=>MainScreen(),
         SellerSubCatList.id:(context)=>SellerSubCatList(),
         SellerCategory.id:(context)=>SellerCategory(),
+        PgSellerForm.id:(context)=>PgSellerForm(),
 
 
       },
