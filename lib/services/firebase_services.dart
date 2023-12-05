@@ -7,12 +7,18 @@ import 'package:second_store/screens/home_screen.dart';
 class FirebaseService {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   CollectionReference categories = FirebaseFirestore.instance.collection('categories');
+    CollectionReference products = FirebaseFirestore.instance.collection('products');
+
   User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> updateUser(Map<String, dynamic> data, context) {
-    return users.doc(user?.uid).update(data).then((value) {
+    return users
+    .doc(user?.uid)
+    .update(data)
+    .then((value) {
       Navigator.pushNamed(context, HomeScreen.id);
-    }).catchError((error) {
+    },)
+    .catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Failed to update location'),
@@ -30,3 +36,5 @@ class FirebaseService {
     return first.addressLine;
   }
 }
+
+

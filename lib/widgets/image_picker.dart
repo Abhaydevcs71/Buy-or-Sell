@@ -1,10 +1,10 @@
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 class ImagePickerWidget extends StatefulWidget {
   const ImagePickerWidget({super.key});
@@ -14,22 +14,21 @@ class ImagePickerWidget extends StatefulWidget {
 }
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
-  File? _selectedImage;
+  final List<File> _image = [];
 
-  Future getImage() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+  List<String> urlsList=[];
+  bool uploading = false;
+  double val = 0;
 
+  chooseImage() async {
+    XFile? pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
-      _selectedImage = File(returnImage!.path);
+      _image.add(File(pickedFile!.path));
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
     return Dialog(
       child: Column(
         children: [
@@ -46,29 +45,62 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             children: [
               Stack(
                 children: [
-                  if(_selectedImage != null)
-                  Positioned(
-                    right: 30,
-                    child: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          _selectedImage = null;
-                        });
-                      },
+                  if (_image != null)
+                    Positioned(
+                      right: 30,
+                      child: IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                           // _image = null;
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 15),
-                    height: 150,
-                    width: MediaQuery.of(context).size.width,
-                    child: FittedBox(
-                        child: _selectedImage != null
-                            ? Image.file(_selectedImage!)
-                            : const Icon(
-                                CupertinoIcons.photo_on_rectangle,
-                                color: Colors.grey,
-                              )),
+                  SingleChildScrollView(
+                    child: Stack(
+                      children: [
+                        Container(
+                          width:MediaQuery.of(context).size.width,
+                          height:MediaQuery.of(context).size.width ,
+                          padding: EdgeInsets.all(4),
+                          child: GridView.builder(
+                            itemCount: _image.length,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                            ),
+                            itemBuilder: (context, index) {
+                              return index == 0
+                                  ? Center(
+                                      child: IconButton(
+                                        icon: const Icon(Icons.add),
+                                        onPressed: () {
+                                          !uploading ? chooseImage() : null;
+                                        },
+                                      ),
+                                    )
+                                  : Container(
+                                      margin: const EdgeInsets.all(3),
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: FileImage(_image[index - 1]),
+                                        ),
+                                      ),
+                                    );
+                            },
+                          ),
+                        ),
+                        uploading
+                            ? Center(
+                                child: Column(
+                                  children: [
+                                    const Text('Uploading...'),
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -105,23 +137,24 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               ),
               InkWell(
                 onTap: () {
-                  getImage();
+                  chooseImage();
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.6,
                   height: 40,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.grey[400],
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 3,
-                          blurRadius: 5,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ]),
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.grey[400],
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 5,
+                        offset: Offset(0, 3), // changes position of the shadow
+                      ),
+                    ],
+                  ),
                   child: const Text(
                     'Upload ',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -129,7 +162,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
