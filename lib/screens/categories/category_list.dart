@@ -34,7 +34,7 @@ class CategoryListScreen extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               } else
-               debugPrint(snapshot.data!.docs.toString());
+                debugPrint(snapshot.data!.docs.toString());
               return Container(
                 height: MediaQuery.of(context).size.height,
                 // width: MediaQuery.of(context).size.width,
@@ -44,8 +44,7 @@ class CategoryListScreen extends StatelessWidget {
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount:
-                    snapshot.data!.docs.length,
+                    itemCount: snapshot.data!.docs.length,
                     itemBuilder: (BuildContext context, int index) {
                       var doc = snapshot.data!.docs[index];
                       return Container(
@@ -55,12 +54,12 @@ class CategoryListScreen extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
-                              visualDensity: VisualDensity(vertical: -3),
+                            visualDensity: VisualDensity(vertical: -3),
                             onTap: () {
-                              if(snapshot.data!.docs[index]['subCat']==null){
-                                return print('No sub Categories');
-                              }
-                              Navigator.pushNamed(context, SubCatList.id,arguments:snapshot.data!.docs[index] );
+                              //   if(snapshot.data!.docs[index]['subCat']==null){
+                              //     return print('No sub Categories');
+                              //   }
+                              //  // Navigator.pushNamed(context, SubCatList.id,arguments:snapshot.data!.docs[index] );
                             },
                             leading: Image.network(
                               snapshot.data!.docs[index]['image'],

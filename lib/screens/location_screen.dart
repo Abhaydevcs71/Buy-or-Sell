@@ -7,17 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_geocoder/geocoder.dart';
 import 'package:location/location.dart';
 import 'package:second_store/constants/constants.dart';
-import 'package:second_store/screens/home_screen.dart';
+import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 import 'package:second_store/screens/main_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class LocationScreen extends StatefulWidget {
-  
   static const String id = 'location-screen';
 
-  
-   bool? locationChanging;
-  LocationScreen({ this.locationChanging});
+  bool? locationChanging;
+  LocationScreen({this.locationChanging});
 
   @override
   State<LocationScreen> createState() => _LocationScreenState();
@@ -77,37 +75,34 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    if(widget.locationChanging==null){
-         _service.users
-        .doc(_service.user?.uid)
-        .get()
-        .then((DocumentSnapshot document) {
-      if (document.exists) {
-        Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
-        // location already updated
-        if(data != null && data!.containsKey('address')){
-          if (document['address'] != null) {
-            Navigator.pushReplacementNamed(context, MainScreen.id);
+    if (widget.locationChanging == null) {
+      _service.users
+          .doc(_service.user?.uid)
+          .get()
+          .then((DocumentSnapshot document) {
+        if (document.exists) {
+          Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+          // location already updated
+          if (data != null && data!.containsKey('address')) {
+            if (document['address'] != null) {
+              Navigator.pushReplacementNamed(context, MainScreen.id);
+            } else {
+              setState(() {
+                _loading = false;
+              });
+            }
           } else {
             setState(() {
               _loading = false;
             });
           }
-        } else {
-          setState(() {
-            _loading = false;
-          });
         }
-
-      }
-    });
-    }else{
-setState(() {
-  _loading=false;
-});    }
-    
-   
+      });
+    } else {
+      setState(() {
+        _loading = false;
+      });
+    }
 
     ProgressDialog progressDialog = ProgressDialog(
       context: context,
@@ -267,7 +262,6 @@ setState(() {
                         },
                       ),
                     ),
-                   
                   ],
                 );
               });
@@ -305,70 +299,77 @@ setState(() {
           const SizedBox(
             height: 30,
           ),
-          _loading ? CircularProgressIndicator() : Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                child: Row(
+          _loading
+              ? CircularProgressIndicator()
+              : Column(
                   children: [
-                    Expanded(
-                      child: _loading
-                          ? Center(
-                              child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  Theme.of(context).primaryColor),
-                            ))
-                          : ElevatedButton.icon(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, bottom: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _loading
+                                ? Center(
+                                    child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
                                         Theme.of(context).primaryColor),
-                              ),
-                              icon: const Icon(CupertinoIcons.location_fill),
-                              label: const Padding(
-                                padding: EdgeInsets.only(top: 15, bottom: 15),
-                                child: Text(
-                                  'Around me',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              onPressed: () {                               
-                                progressDialog.show();
-                                getLocation().then((value) {
-                                  if (value != null) {
-                                    _service.updateUser({
-                                      'address': _address,
-                                      'location': GeoPoint(
-                                          value.latitude!, value.longitude!),
-                                    }, context);
-                                  }
-                                });
-                              },
-                            ),
+                                  ))
+                                : ElevatedButton.icon(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Theme.of(context).primaryColor),
+                                    ),
+                                    icon: const Icon(
+                                        CupertinoIcons.location_fill),
+                                    label: const Padding(
+                                      padding:
+                                          EdgeInsets.only(top: 15, bottom: 15),
+                                      child: Text(
+                                        'Around me',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      progressDialog.show();
+                                      getLocation().then((value) {
+                                        if (value != null) {
+                                          _service.updateUser({
+                                            'address': _address,
+                                            'location': GeoPoint(
+                                                value.latitude!,
+                                                value.longitude!),
+                                          }, context);
+                                        }
+                                      });
+                                    },
+                                  ),
+                          ),
+                        ],
+                      ),
                     ),
+                    InkWell(
+                      onTap: () {
+                        progressDialog.show();
+                        showBottomScreen(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                              border: Border(bottom: BorderSide(width: 2))),
+                          child: const Text(
+                            'Set location manually',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  progressDialog.show();
-                  showBottomScreen(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 2))),
-                    child: const Text(
-                      'Set location manually',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          )
+                )
         ],
       ),
     );

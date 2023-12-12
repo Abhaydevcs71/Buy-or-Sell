@@ -6,25 +6,23 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:second_store/forms/user_review_screen.dart';
+import 'package:second_store/forms/pg/user_review_screen.dart';
 import 'package:second_store/screens/main_screen.dart';
 import 'package:second_store/widgets/image_picker.dart';
 import 'package:second_store/widgets/image_viewer.dart';
 
-class PgSellerForm extends StatefulWidget {
-  const PgSellerForm({super.key});
+class ApartmentSellerForm extends StatefulWidget {
+  const ApartmentSellerForm({super.key});
 
-  static const String id = 'pg-form';
-  
+  static const String id = 'apartment-form';
 
   @override
-  State<PgSellerForm> createState() => _PgSellerFormState();
+  State<ApartmentSellerForm> createState() => _ApartmentSellerFormState();
 }
 
-class _PgSellerFormState extends State<PgSellerForm> {
+class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
   final _formKey = GlobalKey<FormState>();
-  FirebaseStorage storage =
-      FirebaseStorage.instance;
+  FirebaseStorage storage = FirebaseStorage.instance;
   var _nameController = TextEditingController();
   var _descController = TextEditingController();
   var _priceController = TextEditingController();
@@ -33,37 +31,56 @@ class _PgSellerFormState extends State<PgSellerForm> {
   bool imageSelected = false;
   final List<File> _image = [];
   final List<String> imageUrls = [];
+  bool uploading = false;
 
-   void showConfirmDialogue(BuildContext context) {
+  void showConfirmDialogue(BuildContext context) async {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm'),
-          content: Text('Are you sure you want to save the details?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, MainScreen.id); // Close the dialog
-              },
-              child: Text('Yes'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text('No'),
-            ),
-          ],
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(
+                height: 10,
+              ),
+              Text('Adding products'),
+            ],
+          ),
         );
       },
     );
+
+    try {
+      // Call addProducts
+      await addProducts();
+
+      // Close the progress indicator dialog
+      Navigator.of(context).pop();
+
+      // Navigate to home screen
+      Navigator.pushReplacementNamed(context, MainScreen.id);
+    } catch (e) {
+      // Handle error, if any
+      print('Error adding products: $e');
+
+      // Close the progress indicator dialog
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to add products. Please try again.'),
+        ),
+      );
+    }
   }
 
-  String? countPeople;
-    String? countRoom;
-    var PG;
-    bool val=false;
+  String? bhk;
+
+  String? parking;
+
+  bool val = false;
 
   Future uploadFile(int i) async {
     if (_image.isEmpty) return;
@@ -71,49 +88,51 @@ class _PgSellerFormState extends State<PgSellerForm> {
     final destination = 'files/$fileName';
 
     try {
-      final ref = FirebaseStorage.instance
-          .ref(destination)
-          .child('file/$fileName');
-    String downloadUrl = await (await ref.putFile(_image[i],SettableMetadata(
-        contentType: "image/png",
-      ))).ref.getDownloadURL();
-    imageUrls.add(downloadUrl);
+      final ref =
+          FirebaseStorage.instance.ref(destination).child('file/$fileName');
+      String downloadUrl = await (await ref.putFile(
+              _image[i],
+              SettableMetadata(
+                contentType: "image/png",
+              )))
+          .ref
+          .getDownloadURL();
+      imageUrls.add(downloadUrl);
     } catch (e) {
       print('error occured');
     }
   }
 
-  Future<void> addProducts() async{
-    for(int i =0; i<_image.length;i++){
-      uploadFile(i);
+  Future<void> addProducts() async {
+    List<Future<void>> uploadTasks = [];
+    for (int i = 0; i < _image.length; i++) {
+      uploadTasks.add(uploadFile(i));
     }
-    CollectionReference products = FirebaseFirestore.instance.collection('products');
+    await Future.wait(uploadTasks);
+    CollectionReference products =
+        FirebaseFirestore.instance.collection('products');
     products.add({
-
-     'name': _nameController.text,
-     'Description': _descController.text,
-     'Price': _priceController.text,
-     'adress': _addressController.text,
-     'images':imageUrls,
-     'Rooms' : countRoom,
-     'People': countPeople,
-     'Category': PG
-    } 
-    );
+      'name': _nameController.text,
+      'Description': _descController.text,
+      'Price': _priceController.text,
+      'adress': _addressController.text,
+      'images': imageUrls,
+      'Category': 'Apartment',
+      'bhk': bhk,
+      'parking': parking,
+    });
   }
 
   validate() {
     if (_formKey.currentState!.validate()) {
       log('validated');
-      val=true;
+      val = true;
     }
   }
+
   chooseImage() async {
-    List<XFile?> pickedFile = await ImagePicker().pickMultiImage(
-
-
-    );
-    for(int i=0;i<pickedFile.length;i++){
+    List<XFile?> pickedFile = await ImagePicker().pickMultiImage();
+    for (int i = 0; i < pickedFile.length; i++) {
       setState(() {
         _image.add(File(pickedFile[i]!.path));
       });
@@ -121,25 +140,21 @@ class _PgSellerFormState extends State<PgSellerForm> {
     setState(() {
       imageSelected = true;
     });
-
   }
+
   chooseCamera() async {
-    XFile? pickedFile = await ImagePicker().pickImage(source: ImageSource.camera
-
-
-    );
-      setState(() {
-        _image.add(File(pickedFile!.path));
-      });
+    XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    setState(() {
+      _image.add(File(pickedFile!.path));
+    });
     setState(() {
       imageSelected = true;
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    // String? countPeople;
-    // String? countRoom;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -169,7 +184,7 @@ class _PgSellerFormState extends State<PgSellerForm> {
                 child: Column(
                   children: [
                     const Text(
-                      'Paying Guest',
+                      'Apartment',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -202,8 +217,7 @@ class _PgSellerFormState extends State<PgSellerForm> {
                       maxLines: 5,
                       keyboardType: TextInputType.multiline,
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                            ),
+                        border: OutlineInputBorder(),
                         labelText: 'Description',
                         hintText: 'Tell something about this place',
                       ),
@@ -222,15 +236,21 @@ class _PgSellerFormState extends State<PgSellerForm> {
                           border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       )),
-                      hint: const Text('Select the number of persons allowed'),
-                      value: countPeople,
+                      hint:
+                          const Text('Select the number of BHK in this house'),
+                      value: bhk,
                       onChanged: (String? newValue) {
                         setState(() {
-                          countPeople = newValue!;
+                          bhk = newValue!;
                         });
                       },
-                      items: <String>['1', '2', '3', '4', '5', '6', '7', '8']
-                          .map<DropdownMenuItem<String>>((String value) {
+                      items: <String>[
+                        '1-BHK',
+                        '2-BHK',
+                        '3-BHK',
+                        '4-BHK',
+                        '5-BHK',
+                      ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -240,19 +260,19 @@ class _PgSellerFormState extends State<PgSellerForm> {
                     const SizedBox(
                       height: 15,
                     ),
-                     DropdownButtonFormField<String>(
+                    DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       )),
-                      hint: const Text('Select the number of Rooms'),
-                      value: countPeople,
+                      hint: const Text('Parking facility'),
+                      value: parking,
                       onChanged: (String? newValue) {
                         setState(() {
-                          countRoom = newValue!;
+                          parking = newValue!;
                         });
                       },
-                      items: <String>['1', '2', '3', '4', '5', '6', '7', '8']
+                      items: <String>['available', 'not available']
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -260,7 +280,7 @@ class _PgSellerFormState extends State<PgSellerForm> {
                         );
                       }).toList(),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 15,
                     ),
                     TextFormField(
@@ -301,16 +321,16 @@ class _PgSellerFormState extends State<PgSellerForm> {
                     ),
                     InkWell(
                       onTap: () {
-                        if(!imageSelected)
-                        setState(() {
-                          isUploadImage = true;
-                        });
-                        if(imageSelected)
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return ImageViewer(images: _image);
-                            });
+                        if (!imageSelected)
+                          setState(() {
+                            isUploadImage = true;
+                          });
+                        if (imageSelected)
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return ImageViewer(images: _image);
+                              });
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.6,
@@ -328,8 +348,8 @@ class _PgSellerFormState extends State<PgSellerForm> {
                                     Offset(0, 3), // changes position of shadow
                               ),
                             ]),
-                        child:  Text(
-                          !imageSelected ?'Upload images':'View Images',
+                        child: Text(
+                          !imageSelected ? 'Upload images' : 'View Images',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
@@ -349,7 +369,7 @@ class _PgSellerFormState extends State<PgSellerForm> {
         children: [
           Row(
             children: [
-              if(isUploadImage) ...[
+              if (isUploadImage) ...[
                 Spacer(),
                 SizedBox(
                   height: 60,
@@ -357,14 +377,19 @@ class _PgSellerFormState extends State<PgSellerForm> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             setState(() {
                               isUploadImage = false;
                             });
                             chooseCamera();
                           },
-                          child: Icon(Icons.camera,size: 30,)),
-                      SizedBox(height: 5,),
+                          child: Icon(
+                            Icons.camera,
+                            size: 30,
+                          )),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Text('Camera')
                     ],
                   ),
@@ -397,57 +422,62 @@ class _PgSellerFormState extends State<PgSellerForm> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             setState(() {
                               isUploadImage = false;
                             });
                             chooseImage();
                           },
-                          child: Icon(Icons.image,size: 30,)),
-                      SizedBox(height: 5,),
+                          child: Icon(
+                            Icons.image,
+                            size: 30,
+                          )),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Text('Gallery')
                     ],
                   ),
                 ),
                 Spacer(),
-
               ],
-              if(!isUploadImage)
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(25.0),
-                  child: ElevatedButton(
-                      onPressed: () {
-                  if (_nameController.text.isEmpty ||
-                    _descController.text.isEmpty ||
-                    _priceController.text.isEmpty ||
-                    _addressController.text.isEmpty)
-                     {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please fill in all the required fields'),
-                    ),
-                  );
-                } else {
-                  showConfirmDialogue(context);
-                }
-                         
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal[400],
-                          foregroundColor: Colors.black,
-                          shadowColor: const Color.fromARGB(255, 109, 106, 105),
-                          elevation: 5,
-                          fixedSize: const Size(60, 40)),
-                      child: const Text(
-                        'Next',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
+              if (!isUploadImage)
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (_nameController.text.isEmpty ||
+                              _descController.text.isEmpty ||
+                              _priceController.text.isEmpty ||
+                              _addressController.text.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Please fill in all the required fields'),
+                              ),
+                            );
+                          } else {
+                            // addProducts().then((value) => Navigator.pushNamed(context, MainScreen.id));
+                            showConfirmDialogue(context);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.teal[400],
+                            foregroundColor: Colors.black,
+                            shadowColor:
+                                const Color.fromARGB(255, 109, 106, 105),
+                            elevation: 5,
+                            fixedSize: const Size(60, 40)),
+                        child: const Text(
+                          'Next',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                  ),
                 ),
-              ),
             ],
           ),
         ],

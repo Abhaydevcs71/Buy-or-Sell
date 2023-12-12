@@ -54,8 +54,12 @@ class CustomAppBar extends StatelessWidget {
       elevation: 0.0,
       title: InkWell(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(
-            builder:(BuildContext context) => LocationScreen(locationChanging:true,)) );
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => LocationScreen(
+                        locationChanging: true,
+                      )));
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -83,6 +87,45 @@ class CustomAppBar extends StatelessWidget {
                   Icons.keyboard_arrow_down_outlined,
                   color: AppColors.blackColor,
                   size: 18,
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: Container(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          size: 25,
+                        ),
+                        labelText: 'Search by city or hotel',
+                        labelStyle: const TextStyle(fontSize: 18),
+                        contentPadding:
+                            const EdgeInsets.only(left: 10, right: 10)),
+                  ),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                const Icon(
+                  Icons.notifications_none,
+                  size: 25,
+                ),
+                const SizedBox(
+                  width: 8,
                 )
               ],
             ),

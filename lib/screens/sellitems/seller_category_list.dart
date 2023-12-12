@@ -1,7 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:second_store/forms/pg_seller_form.dart';
+import 'package:second_store/forms/apartment/apartment_seller_form.dart';
+import 'package:second_store/forms/hostel/forms_screen.dart';
+import 'package:second_store/forms/hostel/hostel_seller_form.dart';
+import 'package:second_store/forms/hotel/hotel_seller_form.dart';
+import 'package:second_store/forms/house/house_seller_form.dart';
+import 'package:second_store/forms/pg/pg_seller_form.dart';
+//import 'package:second_store/forms/pg_seller_form.dart';
 import 'package:second_store/screens/categories/subCat_Screen.dart';
+import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 import 'package:second_store/screens/sellitems/seller_subCat.dart';
 import 'package:second_store/services/firebase_services.dart';
 
@@ -36,51 +43,63 @@ class SellerCategory extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               } else
-               debugPrint(snapshot.data!.docs.toString());
+                debugPrint(snapshot.data!.docs.toString());
               return Container(
                 height: MediaQuery.of(context).size.height,
-                // width: MediaQuery.of(context).size.width,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount:
-                    snapshot.data!.docs.length,
+                    itemCount: snapshot.data!.docs.length,
                     itemBuilder: (BuildContext context, int index) {
                       var doc = snapshot.data!.docs[index];
+
                       return Container(
                         width: MediaQuery.of(context).size.width,
-                        // height:MediaQuery.of(context).size.height/6 ,
-                        // color: Colors.blue,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
                               visualDensity: VisualDensity(vertical: -3),
-                            onTap: () {
-                              if(snapshot.data!.docs[index]['subCat']==null){
-                                //return
-                                 Navigator.pushNamed(context, PgSellerForm.id);                         
-                              }else
-                              {
-                                Navigator.pushNamed(context, SellerSubCatList.id,arguments:snapshot.data!.docs[index] );
+                              leading: Image.network(
+                                snapshot.data!.docs[index]['image'],
+                                width: 40,
+                              ),
+                              title: Text(
+                                snapshot.data!.docs[index]['catName'],
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              trailing: Icon(
+                                Icons.arrow_forward_ios,
+                                size: 12,
+                              ),
+                              onTap: () {
+                                if (snapshot.data!.docs[index]['catName'] ==
+                                    'PG') {
+                                  Navigator.pushNamed(context, PgSellerForm.id);
+                                } else if (snapshot.data!.docs[index]
+                                        ['catName'] ==
+                                    'hostel') {
+                                  Navigator.pushNamed(
+                                      context, HostelSellerForm.id);
+                                } else if (snapshot.data!.docs[index]
+                                        ['catName'] ==
+                                    'house') {
+                                  Navigator.pushNamed(
+                                      context, HouseSellerForm.id);
+                                } else if (snapshot.data!.docs[index]
+                                        ['catName'] ==
+                                    'Hotel') {
+                                  Navigator.pushNamed(
+                                      context, HotelSellerForm.id);
+                                } else if (snapshot.data!.docs[index]
+                                        ['catName'] ==
+                                    'Apartment') {
+                                  Navigator.pushNamed(
+                                      context, ApartmentSellerForm.id);
                                 }
-                            },
-                            leading: Image.network(
-                              snapshot.data!.docs[index]['image'],
-                              width: 40,
-                              
-                            ),
-                            title: Text(
-                              snapshot.data!.docs[index]['catName'],
-                              style: TextStyle(fontSize: 15),
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 12,
-                            ),
-                          ),
+                              }),
                         ),
                       );
                     },
