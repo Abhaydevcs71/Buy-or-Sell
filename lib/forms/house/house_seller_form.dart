@@ -128,6 +128,8 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
       'Category': 'House',
       'bhk': bhk,
       'parking': parking,
+      'latitude': lat,
+      'longitude': long 
     });
   }
 
@@ -497,7 +499,6 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
                               ),
                             );
                           } else {
-                            // addProducts().then((value) => Navigator.pushNamed(context, MainScreen.id));
                             showConfirmDialogue(context);
                           }
                         },

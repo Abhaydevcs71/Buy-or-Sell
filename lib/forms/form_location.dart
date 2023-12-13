@@ -36,29 +36,9 @@ Future<Position> _getCurrentLocation() async {
   return await Geolocator.getCurrentPosition();
 }
 
-Future<void> _addLocationToFirestore(String lat, String long) async {
-  final docRef = FirebaseFirestore.instance.collection('products').doc();
 
-  await docRef.set({
-    'latitude': lat,
-    'longitude': long,
-  });
-}
 
-// void _liveLocation() {
-//   LocationSettings locationSettings = const LocationSettings(
-//     accuracy: LocationAccuracy.high,
-//     distanceFilter: 100,
-//   );
-//   Geolocator.getPositionStream(locationSettings: locationSettings)
-//       .listen((Position position) {
-//     lat = position.latitude.toString();
-//     long = position.longitude.toString();
-//     setState(() {
-//       locationMessage = 'Latitude: $lat , Longitude: $long';
-//     });
-//   });
-// }
+
 
 class _FormLocationState extends State<FormLocation> {
   void _liveLocation() {
@@ -102,9 +82,12 @@ class _FormLocationState extends State<FormLocation> {
                     setState(() {
                       locationMessage = 'Latitude: $lat , Longitude: $long';
                     });
-                    _addLocationToFirestore(lat, long);
+                    return (lat, long);
                     _liveLocation();
+                  }).then((value) {
+                    Navigator.pop(context);
                   });
+
                 },
                 child: Text('Get current Location'))
           ])),

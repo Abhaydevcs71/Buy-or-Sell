@@ -44,45 +44,58 @@ class ProductList extends StatelessWidget {
               itemCount: snapshot.data!.size,
               itemBuilder: (BuildContext context, int i) {
                 var data = snapshot.data!.docs[i];
-                return Container(
-                  decoration: BoxDecoration(
-                      border:
-                          Border.all(color: Theme.of(context).primaryColor)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: 100,
-                          child: Center(
-                            child: Image.network(
-                              data['images'][0],
-                              fit: BoxFit.cover,
+                return Padding(
+                  padding: const EdgeInsets.only(left:10,right:10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(color: Theme.of(context).primaryColor,width: 0),
+                            borderRadius: BorderRadius.circular(8)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 100,
+                            child: Center(
+                              child: Image.network(
+                                data['images'][0],
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text(
-                          '₹ ${data['Price']}',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        SizedBox(
+                          height: 5,
                         ),
-                      ),
-                      Text(
-                        data['name'],
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(data['Category'])
-                    ],
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Text(
+                            '₹ ${data['Price']}',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left:15),
+                          child: Text(
+                            data['name'],
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Text(data['Category']),
+                        )
+                      ],
+                    ),
                   ),
                 );
               });
