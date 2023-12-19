@@ -24,18 +24,6 @@ class _ProductCardState extends State<ProductCard> {
 
   String address = '';
 
-  // @override
-  // void initState() {
-  //   _service.getSellerData(widget.data['sellerUid']).then((value) {
-  // if(mounted){
-  //     setState(() {
-  //       address = value['adress'];
-  //     });
-  // }
-  //   });
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -89,21 +77,6 @@ class _ProductCardState extends State<ProductCard> {
                   SizedBox(
                     height: 10,
                   ),
-                  // Row(
-                  //   children: [
-                  //     Icon(
-                  //       Icons.location_pin,
-                  //       size: 14,
-                  //       color: Colors.blueAccent,
-                  //     ),
-                  //     Flexible(
-                  //         child: Text(
-                  //       address,
-                  //       maxLines: 1,
-                  //       overflow: TextOverflow.ellipsis,
-                  //     ))
-                  //   ],
-                  // )
                 ],
               ),
               // like button part

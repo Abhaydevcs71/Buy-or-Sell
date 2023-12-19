@@ -27,6 +27,20 @@ class FirebaseService {
     });
   }
 
+  Future<void> updateProducts(Map<String, dynamic> data, context) {
+    return products.doc(products?.id).update(data).then(
+      (value) {
+        Navigator.pushNamed(context, HomeScreen.id);
+      },
+    ).catchError((error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to update location'),
+        ),
+      );
+    });
+  }
+
   Future<String?> getAddress(lat, long) async {
     final coordinates = new Coordinates(lat, long);
     var addresses =
@@ -34,15 +48,5 @@ class FirebaseService {
     var first = addresses.first;
 
     return first.addressLine;
-  }
-
-  Future<DocumentSnapshot> getUserData() async {
-    DocumentSnapshot doc = await users.doc(user?.uid).get();
-    return doc;
-  }
-
-  Future<DocumentSnapshot> getSellerData(id) async {
-    DocumentSnapshot doc = await users.doc(id).get();
-    return doc;
   }
 }

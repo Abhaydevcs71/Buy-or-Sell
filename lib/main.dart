@@ -17,6 +17,7 @@ import 'package:second_store/screens/authentication/email_verification_screen.da
 import 'package:second_store/screens/authentication/phoneauth_screen.dart';
 import 'package:second_store/screens/authentication/reset_password_screen.dart';
 import 'package:second_store/screens/categories/category_list.dart';
+import 'package:second_store/screens/gmap.dart';
 
 import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 import 'package:second_store/screens/location_screen.dart';
@@ -83,7 +84,9 @@ class MyApp extends StatelessWidget {
         HouseSellerForm.id: (context) => HouseSellerForm(),
         HotelSellerForm.id: (context) => HotelSellerForm(),
         ApartmentSellerForm.id: (context) => ApartmentSellerForm(),
-        FormLocation.id: (context) => FormLocation(),
+       // FormLocation.id: (context) => FormLocation(),
+        MapScreen.id: (context) => MapScreen(),
+
       },
     );
   }

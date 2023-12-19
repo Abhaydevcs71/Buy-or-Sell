@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/screens/account_screen.dart';
 import 'package:second_store/screens/chat_screen.dart';
-import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 import 'package:second_store/screens/myads/myAd_screen.dart';
+import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
+
 import 'package:second_store/screens/sellitems/seller_category_list.dart';
 
 class MainScreen extends StatefulWidget {

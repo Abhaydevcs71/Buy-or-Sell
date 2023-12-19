@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:second_store/screens/gmap.dart';
 
 class FormLocation extends StatefulWidget {
   const FormLocation({super.key});
@@ -35,10 +36,6 @@ Future<Position> _getCurrentLocation() async {
 
   return await Geolocator.getCurrentPosition();
 }
-
-
-
-
 
 class _FormLocationState extends State<FormLocation> {
   void _liveLocation() {
@@ -85,7 +82,7 @@ class _FormLocationState extends State<FormLocation> {
                     return (lat, long);
                     _liveLocation();
                   }).then((value) {
-                    Navigator.pop(context);
+                    Navigator.pushNamed(context, MapScreen.id);
                   });
 
                 },

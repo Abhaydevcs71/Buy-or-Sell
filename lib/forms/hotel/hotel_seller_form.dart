@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -117,13 +116,6 @@ class _HotelSellerFormState extends State<HotelSellerForm> {
       uploadTasks.add(uploadFile(i));
     }
     await Future.wait(uploadTasks);
-
-    //Get current timestamp
-    DateTime currentDate = DateTime.now();
-
-    //Get current user
-    User? user = FirebaseAuth.instance.currentUser;
-
     CollectionReference products =
         FirebaseFirestore.instance.collection('products');
     products.add({
@@ -142,8 +134,6 @@ class _HotelSellerFormState extends State<HotelSellerForm> {
       'singleroom': singleRoom,
       'doubleroom': doubleRoom,
       'familyroom': familyRoom,
-      'date': currentDate,
-      'userId': user?.uid,
     });
   }
 

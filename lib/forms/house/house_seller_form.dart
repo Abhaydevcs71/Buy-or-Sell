@@ -3,20 +3,20 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:dialogs/dialogs/progress_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geocoder/services/base.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:second_store/forms/form_location.dart';
 import 'package:second_store/forms/pg/user_review_screen.dart';
+import 'package:second_store/screens/gmap.dart';
 import 'package:second_store/screens/location_screen.dart';
 import 'package:second_store/screens/main_screen.dart';
 import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
-import 'package:second_store/services/firebase_services.dart';
 import 'package:second_store/widgets/image_picker.dart';
 import 'package:second_store/widgets/image_viewer.dart';
 import 'package:flutter_geocoder/geocoder.dart';
@@ -66,6 +66,7 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
     try {
       // Call addProducts
       await addProducts();
+      print(location);
 
       // Close the progress indicator dialog
       Navigator.of(context).pop();
@@ -91,6 +92,7 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
   String? parking;
 
   bool val = false;
+  late LatLng loc;
 
   Future uploadFile(int i) async {
     if (_image.isEmpty) return;
@@ -119,15 +121,9 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
       uploadTasks.add(uploadFile(i));
     }
     await Future.wait(uploadTasks);
-
-    //Get current timestamp
-    DateTime currentDate = DateTime.now();
-
-    //Get current user
-    User? user = FirebaseAuth.instance.currentUser;
-
     CollectionReference products =
         FirebaseFirestore.instance.collection('products');
+        await 
     products.add({
       'name': _nameController.text,
       'Description': _descController.text,
@@ -137,11 +133,9 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
       'Category': 'House',
       'bhk': bhk,
       'parking': parking,
-      // 'latitude': lat,
-      // 'longitude': long,
-      'date': currentDate,
-      'userId': user?.uid,
-    });
+      'location': "${loc.latitude} ${loc.longitude}"
+    } 
+    );
   }
 
   validate() {
@@ -341,32 +335,38 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
                       height: 40,
                     ),
                     //location part
-                    // InkWell(
-                    //     onTap: () {
-                    //       Navigator.pushNamed(context, FormLocation.id);
-                    //     },
-                    //     child: Container(
-                    //       width: MediaQuery.of(context).size.width * 0.6,
-                    //       height: 40,
-                    //       alignment: Alignment.center,
-                    //       decoration: BoxDecoration(
-                    //           borderRadius: BorderRadius.circular(8),
-                    //           color: Colors.grey[400],
-                    //           boxShadow: [
-                    //             BoxShadow(
-                    //               color: Colors.grey.withOpacity(0.5),
-                    //               spreadRadius: 3,
-                    //               blurRadius: 5,
-                    //               offset: Offset(
-                    //                   0, 3), // changes position of shadow
-                    //             ),
-                    //           ]),
-                    //       child: Text(
-                    //         'Location',
-                    //         style: TextStyle(
-                    //             fontSize: 18, fontWeight: FontWeight.bold),
-                    //       ),
-                    //     )),
+                    InkWell(
+                        onTap: () async{
+                         final result = await Navigator.pushNamed(context, MapScreen.id);
+                         if(result != null){
+                           setState(() {
+                             loc = result as LatLng;
+                           });
+                           debugPrint("datdtatd"+loc.latitude.toString());
+                         }
+                         },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          height: 40,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.grey[400],
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 3,
+                                  blurRadius: 5,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ]),
+                          child: Text(
+                            'Location',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        )),
                     SizedBox(
                       height: 10,
                     ),
@@ -498,11 +498,12 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
                   child: Padding(
                     padding: const EdgeInsets.all(25.0),
                     child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: ()async {
                           if (_nameController.text.isEmpty ||
                               _descController.text.isEmpty ||
                               _priceController.text.isEmpty ||
-                              _addressController.text.isEmpty) {
+                              _addressController.text.isEmpty||
+                              pressed==false) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(

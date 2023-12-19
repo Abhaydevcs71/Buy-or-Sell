@@ -21,7 +21,7 @@ class ProductList extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder<QuerySnapshot>(
-          future: _service.products.orderBy('date').get(),
+          future: _service.products.get(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
