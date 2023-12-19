@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -90,6 +91,13 @@ class _PgSellerFormState extends State<PgSellerForm> {
     for (int i = 0; i < _image.length; i++) {
       uploadFile(i);
     }
+
+    //Get current timestamp
+    DateTime currentDate = DateTime.now();
+
+    //Get current user
+    User? user = FirebaseAuth.instance.currentUser;
+
     CollectionReference products =
         FirebaseFirestore.instance.collection('products');
     products.add({
@@ -100,7 +108,9 @@ class _PgSellerFormState extends State<PgSellerForm> {
       'images': imageUrls,
       'Rooms': countRoom,
       'People': countPeople,
-      'Category': 'PG'
+      'Category': 'PG',
+      'date': currentDate,
+      'userId': user?.uid,
     });
   }
 

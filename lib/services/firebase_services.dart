@@ -35,4 +35,14 @@ class FirebaseService {
 
     return first.addressLine;
   }
+
+  Future<DocumentSnapshot> getUserData() async {
+    DocumentSnapshot doc = await users.doc(user?.uid).get();
+    return doc;
+  }
+
+  Future<DocumentSnapshot> getSellerData(id) async {
+    DocumentSnapshot doc = await users.doc(id).get();
+    return doc;
+  }
 }
