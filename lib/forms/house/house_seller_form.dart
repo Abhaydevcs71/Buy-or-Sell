@@ -11,7 +11,6 @@ import 'package:flutter_geocoder/services/base.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
-import 'package:second_store/forms/form_location.dart';
 import 'package:second_store/forms/pg/user_review_screen.dart';
 import 'package:second_store/screens/gmap.dart';
 import 'package:second_store/screens/location_screen.dart';

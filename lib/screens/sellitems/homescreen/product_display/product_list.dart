@@ -70,6 +70,7 @@ class ProductList extends StatelessWidget {
 
                       return ProductCard(
                           data: data, formatedPrice: _formatedPrice);
+
                     }),
               ],
             );

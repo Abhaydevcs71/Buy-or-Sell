@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:second_store/constants/constants.dart';
 import 'package:second_store/forms/apartment/apartment_seller_form.dart';
-import 'package:second_store/forms/form_location.dart';
 import 'package:second_store/forms/hostel/forms_screen.dart';
 import 'package:second_store/forms/hostel/hostel_seller_form.dart';
 import 'package:second_store/forms/hotel/hotel_seller_form.dart';
@@ -18,6 +17,7 @@ import 'package:second_store/screens/authentication/phoneauth_screen.dart';
 import 'package:second_store/screens/authentication/reset_password_screen.dart';
 import 'package:second_store/screens/categories/category_list.dart';
 import 'package:second_store/screens/gmap.dart';
+import 'package:second_store/screens/product_details_screen.dart';
 
 import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 import 'package:second_store/screens/location_screen.dart';
@@ -86,6 +86,8 @@ class MyApp extends StatelessWidget {
         ApartmentSellerForm.id: (context) => ApartmentSellerForm(),
        // FormLocation.id: (context) => FormLocation(),
         MapScreen.id: (context) => MapScreen(),
+        ProductDetailsScreen.id: (context) => ProductDetailsScreen(productId: 'DEdJCb8vdb47m62zvl6h',),
+
 
       },
     );

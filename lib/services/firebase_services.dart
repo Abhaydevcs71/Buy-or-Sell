@@ -27,26 +27,29 @@ class FirebaseService {
     });
   }
 
-  Future<void> updateProducts(Map<String, dynamic> data, context) {
-    return products.doc(products?.id).update(data).then(
+  Future<void> updateProduct(Map<String, dynamic> data, String productId, context) {
+    return products.doc(productId).update(data).then(
       (value) {
         Navigator.pushNamed(context, HomeScreen.id);
       },
     ).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Failed to update location'),
+          content: Text('Failed to update product'),
         ),
       );
     });
   }
 
-  Future<String?> getAddress(lat, long) async {
-    final coordinates = new Coordinates(lat, long);
-    var addresses =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+  Future<String?> getAddress(double lat, double long) async {
+    final coordinates = Coordinates(lat, long);
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
 
     return first.addressLine;
+  }
+
+  Future<DocumentSnapshot> getProductDetails(String productId) {
+    return products.doc(productId).get();
   }
 }
