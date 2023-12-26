@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:dialogs/dialogs/progress_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -19,6 +20,7 @@ import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 import 'package:second_store/widgets/image_picker.dart';
 import 'package:second_store/widgets/image_viewer.dart';
 import 'package:flutter_geocoder/geocoder.dart';
+import 'package:uuid/uuid.dart';
 
 class HouseSellerForm extends StatefulWidget {
   const HouseSellerForm({super.key});
@@ -41,6 +43,7 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
   final List<File> _image = [];
   final List<String> imageUrls = [];
   bool uploading = false;
+  var uuid = Uuid();
 
   void showConfirmDialogue(BuildContext context) async {
     showDialog(
@@ -120,10 +123,19 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
       uploadTasks.add(uploadFile(i));
     }
     await Future.wait(uploadTasks);
+
+    //Get current timestamp
+    DateTime currentDate = DateTime.now();
+
+    //Get user
+    User? user = FirebaseAuth.instance.currentUser;
+
+    //Get product id
+    var docId = uuid.v4();
+
     CollectionReference products =
         FirebaseFirestore.instance.collection('products');
-        await 
-    products.add({
+    await products.add({
       'name': _nameController.text,
       'Description': _descController.text,
       'Price': _priceController.text,
@@ -132,9 +144,11 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
       'Category': 'House',
       'bhk': bhk,
       'parking': parking,
-      'location': "${loc.latitude} ${loc.longitude}"
-    } 
-    );
+      'location': "${loc.latitude} ${loc.longitude}",
+      'date': currentDate,
+      'userId': user?.uid,
+      'docId': docId
+    });
   }
 
   validate() {
@@ -335,15 +349,16 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
                     ),
                     //location part
                     InkWell(
-                        onTap: () async{
-                         final result = await Navigator.pushNamed(context, MapScreen.id);
-                         if(result != null){
-                           setState(() {
-                             loc = result as LatLng;
-                           });
-                           debugPrint("datdtatd"+loc.latitude.toString());
-                         }
-                         },
+                        onTap: () async {
+                          final result =
+                              await Navigator.pushNamed(context, MapScreen.id);
+                          if (result != null) {
+                            setState(() {
+                              loc = result as LatLng;
+                            });
+                            debugPrint("datdtatd" + loc.latitude.toString());
+                          }
+                        },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.6,
                           height: 40,
@@ -497,12 +512,12 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
                   child: Padding(
                     padding: const EdgeInsets.all(25.0),
                     child: ElevatedButton(
-                        onPressed: ()async {
+                        onPressed: () async {
                           if (_nameController.text.isEmpty ||
                               _descController.text.isEmpty ||
                               _priceController.text.isEmpty ||
-                              _addressController.text.isEmpty||
-                              pressed==false) {
+                              _addressController.text.isEmpty ||
+                              pressed == false) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(

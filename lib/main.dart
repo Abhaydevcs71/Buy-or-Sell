@@ -84,11 +84,9 @@ class MyApp extends StatelessWidget {
         HouseSellerForm.id: (context) => HouseSellerForm(),
         HotelSellerForm.id: (context) => HotelSellerForm(),
         ApartmentSellerForm.id: (context) => ApartmentSellerForm(),
-       // FormLocation.id: (context) => FormLocation(),
+        // FormLocation.id: (context) => FormLocation(),
         MapScreen.id: (context) => MapScreen(),
-        ProductDetailsScreen.id: (context) => ProductDetailsScreen(productId: 'DEdJCb8vdb47m62zvl6h',),
-
-
+        ProductDetailsScreen.id: (context) => ProductDetailsScreen(),
       },
     );
   }

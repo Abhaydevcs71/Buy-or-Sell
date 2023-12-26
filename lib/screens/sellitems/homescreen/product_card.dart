@@ -6,7 +6,7 @@ import 'package:second_store/screens/product_details_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class ProductCard extends StatefulWidget {
-  const ProductCard({
+  ProductCard({
     super.key,
     required this.data,
     required String formatedPrice,
@@ -18,21 +18,31 @@ class ProductCard extends StatefulWidget {
   @override
   State<ProductCard> createState() => _ProductCardState();
 }
+
 class _ProductCardState extends State<ProductCard> {
   FirebaseService _service = FirebaseService();
   final _format = NumberFormat('##,##,##0'); // to get price format look better
 
   @override
   Widget build(BuildContext context) {
+    var adId = widget.data['docId'];
+
     return InkWell(
-      onTap:(){
-     Navigator.pushNamed(context, ProductDetailsScreen.id);
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductDetailsScreen(
+                adId: adId,
+              ),
+            ));
       },
       child: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Container(
           decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).primaryColor, width: 0),
+              border:
+                  Border.all(color: Theme.of(context).primaryColor, width: 0),
               borderRadius: BorderRadius.circular(8)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
