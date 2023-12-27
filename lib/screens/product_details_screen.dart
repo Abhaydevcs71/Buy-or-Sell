@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
 import 'package:second_store/constants/constants.dart';
+import 'package:second_store/screens/chat_conversation.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -31,6 +32,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   var _bhk;
   var _parking;
   var _date;
+  var _sellerId;
+  var _id;
 
   @override
   void initState() {
@@ -54,15 +57,52 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _adress = data?['adress'];
           _bhk = data?['bhk'];
           _description = data?['description'];
-          _parking = data?['parking'];
+          _parking = data['parking'];
           _date = data?['date'];
           _price = data?['Price'];
+          _sellerId = data['userId'];
+          _id = data['docId'];
         });
       }
     } catch (error) {
       print('Error loading product details: $error');
       // Handle error here
     }
+  }
+
+  createChatRoom() {
+    List<String> users = [
+      _sellerId, // seller
+      _service.user!.uid, // buyer
+    ];
+
+// chat room id
+
+    String chatRoomId = '$_sellerId.${_service.user!.uid}.${_id}';
+
+//print (chatRoomId);
+
+Map<String,dynamic> chatData ={
+  'users' : users,
+  'chatRoomId' : chatRoomId,
+  'lastChat' : null,
+  'lastChatTime' : DateTime.now().microsecondsSinceEpoch,
+
+};
+
+_service.createChatRoom(
+  chatData: chatData,
+);
+
+
+//open chat screen 
+
+Navigator.push<void>(
+    context,
+    MaterialPageRoute<void>(
+      builder: (BuildContext context) => ChatConversation(chatRoomId: chatRoomId,),
+    ),
+  );
   }
 
   @override
@@ -161,11 +201,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
               ),
             ),
-            Positioned(
+           _sellerId== _service.user!.uid ? Positioned(
               right: 10,
               bottom: 10,
               child: FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  createChatRoom();
+                },
+                child: Text('Edit'),
+              ),
+            )  : Positioned(
+              right: 10,
+              bottom: 10,
+              child: FloatingActionButton(
+                onPressed: () {
+                  createChatRoom();
+                },
                 child: Text('chat'),
               ),
             )
