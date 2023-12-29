@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -10,6 +11,7 @@ import 'package:second_store/forms/pg/user_review_screen.dart';
 import 'package:second_store/screens/main_screen.dart';
 import 'package:second_store/widgets/image_picker.dart';
 import 'package:second_store/widgets/image_viewer.dart';
+import 'package:uuid/uuid.dart';
 
 class ApartmentSellerForm extends StatefulWidget {
   const ApartmentSellerForm({super.key});
@@ -32,6 +34,7 @@ class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
   final List<File> _image = [];
   final List<String> imageUrls = [];
   bool uploading = false;
+  var uuid = Uuid();
 
   void showConfirmDialogue(BuildContext context) async {
     showDialog(
@@ -109,6 +112,16 @@ class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
       uploadTasks.add(uploadFile(i));
     }
     await Future.wait(uploadTasks);
+
+    //Get current timestamp
+    DateTime currentDate = DateTime.now();
+
+    //Get user
+    User? user = FirebaseAuth.instance.currentUser;
+
+    //Generate and get product id
+    var docId = uuid.v4();
+
     CollectionReference products =
         FirebaseFirestore.instance.collection('products');
     products.add({
@@ -120,6 +133,9 @@ class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
       'Category': 'Apartment',
       'bhk': bhk,
       'parking': parking,
+      'date': currentDate,
+      'userId': user?.uid,
+      'docId': docId,
     });
   }
 

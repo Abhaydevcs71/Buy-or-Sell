@@ -130,7 +130,7 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
     //Get user
     User? user = FirebaseAuth.instance.currentUser;
 
-    //Get product id
+    //Generate and get product id
     var docId = uuid.v4();
 
     CollectionReference products =

@@ -31,6 +31,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   var _bhk;
   var _parking;
   var _date;
+  var _category;
+  var _people;
+  var _bathroom;
+  var _gender;
+  var _food;
+
+  var _singleRoomPrice;
+  var _doubleRoomPrice;
+  var _familyRoomPrice;
+  var _wifi;
+  var _cleaning;
 
   @override
   void initState() {
@@ -53,10 +64,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _name = data?['name'];
           _adress = data?['adress'];
           _bhk = data?['bhk'];
-          _description = data?['description'];
+          _description = data?['Description'];
           _parking = data?['parking'];
-          _date = data?['date'];
+          _date = (data?['date'] as Timestamp).toDate();
           _price = data?['Price'];
+          _category = data?['Category'];
+          _people = data?['People'];
+          _bathroom = data?['bathroom'];
+          _gender = data?['gender'];
+          _food = data?['food'];
+
+          _familyRoomPrice = data?['familyRoomPrice'];
+          _doubleRoomPrice = data?['doubleRoomPrice'];
+          _singleRoomPrice = data?['singleRoomPrice'];
+          _wifi = data?['internet'];
+          _cleaning = data?['cleaningservice'];
         });
       }
     } catch (error) {
@@ -68,108 +90,325 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.teal,
+        title: Text(_name),
+      ),
       body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              child: _loading
-                  ? Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColor),
-                          ),
-                          SizedBox(height: 10),
-                          Text('Loading your ad'),
-                        ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                child: _loading
+                    ? Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Theme.of(context).primaryColor),
+                            ),
+                            SizedBox(height: 10),
+                            Text('Loading images'),
+                          ],
+                        ),
+                      )
+                    : Container(
+                        height: 330,
+                        color: Colors.transparent,
+                        child: FanCarouselImageSlider(
+                          imagesLink: images,
+                          initalPageIndex: 0,
+                          isClickable: true,
+                          userCanDrag: true,
+                          isAssets: false,
+                          autoPlay: true,
+                          imageFitMode: BoxFit.cover,
+                          sliderHeight: 300,
+                          showIndicator: true,
+                          sliderWidth: double.infinity,
+                          indicatorActiveColor: Colors.teal,
+                          indicatorDeactiveColor: Colors.blueGrey,
+                          autoPlayInterval: Duration(seconds: 4),
+                          currentItemShadow: [
+                            BoxShadow(color: Colors.transparent)
+                          ],
+                        ),
                       ),
-                    )
-                  : FanCarouselImageSlider(
-                      imagesLink: images,
-                      isAssets: false,
-                      autoPlay: false,
-                      imageFitMode: BoxFit.cover,
-                      sliderHeight: 300,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 130,
+                width: double.infinity,
+                // color: Colors.grey[350],
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        _name.toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 40),
+                      ),
                     ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  _name.toString(),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        '₹ ${_price.toString()}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 30),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Align(
-                alignment: Alignment.bottomLeft,
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
                 child: Text(
-                  _price.toString(),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                  'Description',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  _adress.toString(),
-                  style: TextStyle(fontSize: 25),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                color: Colors.grey[100],
+                width: double.infinity,
+                child: Flexible(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Description: ${_description.toString()}',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.normal),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Address: ${_adress.toString()}',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                              'Posted On: ${DateFormat.yMd().add_jm().format(_date)}',
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.normal)),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Parking: ${_parking.toString()}',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        if (_category.toString() == 'House' ||
+                            _category.toString() == 'Apartment')
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              'BHK: ${_bhk.toString()}',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        if (_category.toString() == 'PG' ||
+                            _category.toString() ==
+                                'Hostel') //create a column for addiing two text widgets by checking with one if condition
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Number of people in a room: ${_people.toString()}',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Bathroom facility: ${_bathroom.toString()}',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                              ]),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        if (_category.toString() == 'Hostel')
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Only for: ${_gender.toString()}',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        if (_category.toString() == 'Hostel' ||
+                            _category.toString() == 'Hotel')
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Food facility: ${_food.toString()}',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        if (_category.toString() ==
+                            'Hotel') //create a column for addiing two text widgets by checking with one if condition
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Price of Single Room: ${_singleRoomPrice.toString()}',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Price of Double Room: ${_doubleRoomPrice.toString()}',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Price of Family Room: ${_familyRoomPrice.toString()}',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Internet facility: ${_wifi.toString()}',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Room cleaning facility: ${_cleaning.toString()}',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                              ]),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Align(
-                alignment: Alignment.bottomLeft,
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
                 child: Text(
-                  _bhk.toString(),
-                  style: TextStyle(fontSize: 20),
+                  'User details',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Align(
-                alignment: Alignment.bottomLeft,
+              SizedBox(
+                height: 10,
+              ),
+              //ad Posted user details
+              Container(
+                height: 120,
+                color: Colors.teal,
+                child: Center(
+                    child: Text(
+                  'Ad posted user account part',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 20),
+                )),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
                 child: Text(
-                  _parking.toString(),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                  'Ad Posted at',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-            ),
-            Positioned(
-              right: 10,
-              bottom: 10,
-              child: FloatingActionButton(
-                onPressed: () {},
-                child: Text('chat'),
+              SizedBox(
+                height: 10,
               ),
-            )
-          ],
+              // Ad Location part
+              Container(
+                height: 220,
+                color: Colors.teal,
+                child: Center(
+                    child: Text(
+                  'Show location part',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 20),
+                )),
+              ),
+            ],
+          ),
         ),
       ),
     );
