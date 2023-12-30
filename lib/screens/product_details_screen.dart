@@ -201,16 +201,18 @@ Navigator.push<void>(
                 ),
               ),
             ),
-           _sellerId== _service.user!.uid ? Positioned(
-              right: 10,
-              bottom: 10,
-              child: FloatingActionButton(
-                onPressed: () {
-                  createChatRoom();
-                },
-                child: Text('Edit'),
-              ),
-            )  : Positioned(
+           _sellerId== _service.user!.uid ? SizedBox()
+          //  Positioned(
+          //     right: 10,
+          //     bottom: 10,
+          //     child: FloatingActionButton(
+          //       onPressed: () {
+          //         createChatRoom();
+          //       },
+          //       child: Text('Edit'),
+          //     ),
+          //   ) 
+             : Positioned(
               right: 10,
               bottom: 10,
               child: FloatingActionButton(

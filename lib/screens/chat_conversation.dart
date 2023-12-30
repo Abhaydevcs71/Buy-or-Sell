@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:second_store/screens/chat_stream.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class ChatConversation extends StatefulWidget {
@@ -13,7 +14,7 @@ class ChatConversation extends StatefulWidget {
 class _ChatConversationState extends State<ChatConversation> {
   FirebaseService _service = FirebaseService();
 
-  Stream<QuerySnapshot<Object?>>? chatMessageStream;
+  //Stream<QuerySnapshot<Object?>>? chatMessageStream;
   var chatMessageController = TextEditingController();
 
   bool _send = false;
@@ -31,48 +32,22 @@ class _ChatConversationState extends State<ChatConversation> {
     }
   }
 
-//display chat
-
-  @override
-  void initState() {
-    _service.getChat(widget.chatRoomId).then((value) {
-      setState(() {
-        chatMessageStream = value;
-      });
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,color: Colors.black,),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Container(
         child: Stack(
           children: [
-            StreamBuilder<QuerySnapshot>(
-              stream: chatMessageStream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return Text('Something went wrong');
-                }
-
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                return snapshot.hasData
-                    ? ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          return Text(snapshot.data!.docs[index]['message']);
-                        })
-                    : Container();
-              },
-            ),
+            ChatStream(chatRoomId: widget.chatRoomId),
             Container(
               alignment: Alignment.bottomCenter,
               child: Container(
