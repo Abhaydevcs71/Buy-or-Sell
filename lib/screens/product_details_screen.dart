@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
 import 'package:second_store/constants/constants.dart';
+import 'package:second_store/screens/chat_conversation.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -31,6 +32,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   var _bhk;
   var _parking;
   var _date;
+  var _sellerId;
+  var _id;
   var _category;
   var _people;
   var _bathroom;
@@ -65,9 +68,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _adress = data?['adress'];
           _bhk = data?['bhk'];
           _description = data?['Description'];
-          _parking = data?['parking'];
+          _parking = data['parking'];
           _date = (data?['date'] as Timestamp).toDate();
           _price = data?['Price'];
+          _sellerId = data['userId'];
+          _id = data['docId'];
           _category = data?['Category'];
           _people = data?['People'];
           _bathroom = data?['bathroom'];
@@ -85,6 +90,41 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       print('Error loading product details: $error');
       // Handle error here
     }
+  }
+
+  createChatRoom() {
+    List<String> users = [
+      _sellerId, // seller
+      _service.user!.uid, // buyer
+    ];
+
+// chat room id
+
+    String chatRoomId = '$_sellerId.${_service.user!.uid}.${_id}';
+
+//print (chatRoomId);
+
+Map<String,dynamic> chatData ={
+  'users' : users,
+  'chatRoomId' : chatRoomId,
+  'lastChat' : null,
+  'lastChatTime' : DateTime.now().microsecondsSinceEpoch,
+
+};
+
+_service.createChatRoom(
+  chatData: chatData,
+);
+
+
+//open chat screen 
+
+Navigator.push<void>(
+    context,
+    MaterialPageRoute<void>(
+      builder: (BuildContext context) => ChatConversation(chatRoomId: chatRoomId,),
+    ),
+  );
   }
 
   @override
@@ -391,6 +431,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
+            );
+           _sellerId== _service.user!.uid ? Container() : Positioned(
+              right: 10,
+              bottom: 10,
+              child: FloatingActionButton(
+                onPressed: () {
+                  createChatRoom();
+                },
+                child: Text('chat'),
+              ),
+            )
+          ,
               SizedBox(
                 height: 10,
               ),
@@ -407,10 +459,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       fontSize: 20),
                 )),
               ),
-            ],
+            ,
           ),
         ),
       ),
-    );
+    
   }
 }
