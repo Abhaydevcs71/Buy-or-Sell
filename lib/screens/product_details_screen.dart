@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
 import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
 import 'package:second_store/constants/constants.dart';
@@ -35,6 +36,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   var _date;
   var _sellerId;
   var _id;
+  var _category;
+  var _people;
+  var _bathroom;
+  var _gender;
+  var _food;
+
+  var _singleRoomPrice;
+  var _doubleRoomPrice;
+  var _familyRoomPrice;
+  var _wifi;
+  var _cleaning;
+  var _phoneNumber;
   var _loc;
 
   @override
@@ -58,12 +71,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _name = data?['name'];
           _adress = data?['adress'];
           _bhk = data?['bhk'];
-          _description = data?['description'];
+          _description = data?['Description'];
           _parking = data['parking'];
-          _date = data?['date'];
+          _date = (data?['date'] as Timestamp).toDate();
           _price = data?['Price'];
           _sellerId = data['userId'];
           _id = data['docId'];
+          _category = data?['Category'];
+          _people = data?['People'];
+          _bathroom = data?['bathroom'];
+          _gender = data?['gender'];
+          _food = data?['food'];
+
+          _familyRoomPrice = data?['familyRoomPrice'];
+          _doubleRoomPrice = data?['doubleRoomPrice'];
+          _singleRoomPrice = data?['singleRoomPrice'];
+          _wifi = data?['internet'];
+          _cleaning = data?['cleaningservice'];
+          _phoneNumber = data?['phoneNumber'];
           _loc = data['location'];
         });
       }
@@ -91,135 +116,395 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
     String chatRoomId = '$_sellerId.${_service.user!.uid}.${_id}';
 
-    Map<String,dynamic> chatData ={
-      'users' : users,
-      'chatRoomId' : chatRoomId,
-      'lastChat' : null,
-      'lastChatTime' : DateTime.now().microsecondsSinceEpoch,
+//print (chatRoomId);
+
+    Map<String, dynamic> chatData = {
+      'users': users,
+      'chatRoomId': chatRoomId,
+      'lastChat': null,
+      'lastChatTime': DateTime.now().microsecondsSinceEpoch,
+      'read': false,
+      'image': images[0],
+      'adtitle': _name
     };
 
     _service.createChatRoom(
       chatData: chatData,
     );
 
-    Navigator.push<void>(
-      context,
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => ChatConversation(chatRoomId: chatRoomId,),
-      ),
-    );
+//open chat screen
+
+Navigator.push<void>(
+    context,
+    MaterialPageRoute<void>(
+      builder: (BuildContext context) => ChatConversation(chatRoomId: chatRoomId,),
+    ),
+  );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.teal,
+        title: Text(_name),
+      ),
       body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: SingleChildScrollView(
+            child: Stack(
           children: [
-            Container(
-              child: _loading
-                  ? Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColor),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  child: _loading
+                      ? Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Theme.of(context).primaryColor),
+                              ),
+                              SizedBox(height: 10),
+                              Text('Loading images'),
+                            ],
                           ),
-                          SizedBox(height: 10),
-                          Text('Loading your ad'),
+                        )
+                      : Container(
+                          height: 330,
+                          color: Colors.transparent,
+                          child: FanCarouselImageSlider(
+                            imagesLink: images,
+                            initalPageIndex: 0,
+                            isClickable: true,
+                            userCanDrag: true,
+                            isAssets: false,
+                            autoPlay: true,
+                            imageFitMode: BoxFit.cover,
+                            sliderHeight: 300,
+                            showIndicator: true,
+                            sliderWidth: double.infinity,
+                            indicatorActiveColor: Colors.teal,
+                            indicatorDeactiveColor: Colors.blueGrey,
+                            autoPlayInterval: Duration(seconds: 4),
+                            currentItemShadow: [
+                              BoxShadow(color: Colors.transparent)
+                            ],
+                          ),
+                        ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 130,
+                  width: double.infinity,
+                  // color: Colors.grey[350],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                          _name.toString(),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 40),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                          '₹ ${_price.toString()}',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 30),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    'Description',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  color: Colors.grey[100],
+                  width: double.infinity,
+                  child: Flexible(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Description: ${_description.toString()}',
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.normal),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Address: ${_adress.toString()}',
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                                'Posted On: ${DateFormat.yMd().add_jm().format(_date)}',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal)),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Parking: ${_parking.toString()}',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          if (_category.toString() == 'House' ||
+                              _category.toString() == 'Apartment')
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                'BHK: ${_bhk.toString()}',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          if (_category.toString() == 'PG' ||
+                              _category.toString() ==
+                                  'Hostel') //create a column for addiing two text widgets by checking with one if condition
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      'Number of people in a room: ${_people.toString()}',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      'Bathroom facility: ${_bathroom.toString()}',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                  ),
+                                ]),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          if (_category.toString() == 'Hostel')
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                'Only for: ${_gender.toString()}',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          if (_category.toString() == 'Hostel' ||
+                              _category.toString() == 'Hotel')
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                'Food facility: ${_food.toString()}',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          if (_category.toString() ==
+                              'Hotel') //create a column for addiing two text widgets by checking with one if condition
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      'Price of Single Room: ${_singleRoomPrice.toString()}',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      'Price of Double Room: ${_doubleRoomPrice.toString()}',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      'Price of Family Room: ${_familyRoomPrice.toString()}',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      'Internet facility: ${_wifi.toString()}',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      'Room cleaning facility: ${_cleaning.toString()}',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ]),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Text(
+                                  'Phone Number: ${_phoneNumber.toString()}',
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: ElevatedButton.icon(
+                                    style: const ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStatePropertyAll(
+                                                Colors.teal),
+                                        minimumSize: MaterialStatePropertyAll(
+                                            Size(10, 10))),
+                                    onPressed: () async {
+                                      final Uri url = Uri(
+                                          scheme: 'tel',
+                                          path: _phoneNumber.toString());
+                                      if (await canLaunchUrl(url)) {
+                                        await launchUrl(url);
+                                      } else {
+                                        print('cannot launch this Url');
+                                      }
+                                    },
+                                    icon: Icon(Icons.call_outlined),
+                                    label: Text('Call')),
+                              )
+                            ],
+                          )
                         ],
                       ),
-                    )
-                  : FanCarouselImageSlider(
-                      imagesLink: images,
-                      isAssets: false,
-                      autoPlay: false,
-                      imageFitMode: BoxFit.cover,
-                      sliderHeight: 300,
                     ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  _name.toString(),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  _price.toString(),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  _adress.toString(),
-                  style: TextStyle(fontSize: 25),
+                _sellerId == _service.user!.uid
+                    ? SizedBox()
+                    : Container(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            createChatRoom();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.teal,
+                            textStyle: TextStyle(fontSize: 18),
+                          ),
+                          child: Text('Chat Now'),
+                        ),
+                      ),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  _bhk.toString(),
-                  style: TextStyle(fontSize: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    'User details',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  _parking.toString(),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-            ),
-            _sellerId== _service.user!.uid ? SizedBox() : Positioned(
-              right: 10,
-              bottom: 10,
-              child: FloatingActionButton(
-                onPressed: () {
-                  createChatRoom();
-                },
-                child: Text('chat'),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            InkWell(
+                //ad Posted user details
+                Container(
+                  height: 120,
+                  color: Colors.teal,
+                  child: Center(
+                      child: Text(
+                    'Ad posted user account part',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20),
+                  )),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    'Ad Posted at',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                InkWell(
               onTap: () {
                 openGoogleMaps();
               },
@@ -246,8 +531,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
               ),
             ),
+                // Container(
+                //   height: 120,
+                //   color: Colors.teal,
+                //   child: Center(
+                //       child: Text(
+                //     'Ad posted Location',
+                //     style: TextStyle(
+                //         fontWeight: FontWeight.bold,
+                //         color: Colors.white,
+                //         fontSize: 20),
+                //   )),
+                // ),
+                SizedBox(
+                  height: 20,
+                )
+              ],
+            ),
           ],
-        ),
+        )),
       ),
     );
   }

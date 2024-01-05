@@ -67,11 +67,20 @@ class FirebaseService {
     messages.doc(chatRoomId).update({
       'lastChat': message['message'],
       'lastChatTime': message['time'],
+      'read': false
     });
   }
 
   getChat(chatRoomId) async {
-    return messages.doc(chatRoomId).collection('chats').orderBy('time').snapshots();
+    return messages
+        .doc(chatRoomId)
+        .collection('chats')
+        .orderBy('time')
+        .snapshots();
+  }
+
+  getUserDetails() async {
+    return users.doc().get();
   }
 
   Future<void> updateFavorite(bool _isLiked, String productId, context) async {

@@ -1,83 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:second_store/screens/chat_card.dart';
+import 'package:second_store/screens/chat_conversation.dart';
+import 'package:second_store/services/firebase_services.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  @override
+  Widget build(BuildContext context) {
+    FirebaseService _service = FirebaseService();
 
-  Stream<QuerySnapshot> getChatStream() {
-  return _firestore
-      .collection('messages')
-      .orderBy('time')
-      .snapshots();
-}
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: Text('Chats'),
-    ),
-    body: StreamBuilder<QuerySnapshot>(
-      stream: getChatStream(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        Set<String> chatRoomIds = Set<String>();
-
-        snapshot.data!.docs.forEach((DocumentSnapshot document) {
-          Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-          String chatRoomId = data['chatRoomId'] ?? ''; // Replace with your actual field name
-
-          if (chatRoomId.isNotEmpty) {
-            chatRoomIds.add(chatRoomId);
-          }
-        });
-
-       // ...
-
-return ListView(
-  children: chatRoomIds.map((String chatRoomId) {
-    // Retrieve the latest message for each chat room
-    QueryDocumentSnapshot? latestMessage = snapshot.data!.docs.firstWhere(
-      (doc) => doc['chatRoomId'] == chatRoomId,
-     // orElse: () => null,
-    );
-
-    if (latestMessage != null) {
-      Map<String, dynamic> data = latestMessage.data() as Map<String, dynamic>;
-
-      return ListTile(
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage(data['image'] ?? ''),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 5,
+        leading: const Icon(
+          Icons.chat_rounded,
+          color: Colors.black,
         ),
-        title: Text(data['name'] ?? ''),
-        subtitle: data.containsKey('lastChat') ? Text(data['lastChat'] ?? '') : Text('No lastChat field'),
-      );
-    } else {
-      return Container(); // Placeholder for no messages in the chat room
-    }
-  }).toList(),
-);
+        title: const Text(
+          'Chats',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+        ),
+      ),
+      body: Container(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: _service.messages
+              .where('users', arrayContains: _service.user!.uid)
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) { 
+            if (snapshot.hasError) {
+              Text('Something went wrong');
+            }
 
-// ...
-
-      },
-    ),
-  );
-}
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              Center(
+                child: CircularProgressIndicator(
+                    // valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                    ),
+              );
+            }
+            return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                Map<String, dynamic> data =
+                    document.data()! as Map<String, dynamic>;
+                return Container(
+                  // decoration: BoxDecoration(
+                  //   border: Border(bottom: BorderSide(color: Colors.grey))
+                  // ),
+                  child: ListTile(
+                    leading: Image.network(
+                      data['image'],
+                      width: 40,
+                      height: 40, 
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.more_vert),
+                      onPressed: () {},
+                    ),
+                    title: Text(
+                      data['adtitle'],
+                      style: TextStyle(
+                          fontWeight: data['read'] == false
+                              ? FontWeight.bold
+                              : FontWeight.normal),
+                    ),
+                    onTap: () {
+                      _service.messages
+                          .doc(data['chatRoomId'])
+                          .update({'read': 'true'});
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                  ChatConversation(
+                                      chatRoomId: data['chatRoomId'])));
+                    },
+                    subtitle: Text(data['lastChat']),
+                  ),
+                );
+              }).toList(),
+            );
+          },
+        ),
+      ),
+    );
+  }
 }
