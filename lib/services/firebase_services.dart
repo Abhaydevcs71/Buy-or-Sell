@@ -53,10 +53,6 @@ class FirebaseService {
     return first.addressLine;
   }
 
-  Future<DocumentSnapshot> getProductInfo(id) async{
-  DocumentSnapshot doc = await products.doc(id).get();
-  return doc;
-  }
 
   createChatRoom({chatData}) {
     messages.doc(chatData['chatRoomId']).set(chatData).catchError((e) {

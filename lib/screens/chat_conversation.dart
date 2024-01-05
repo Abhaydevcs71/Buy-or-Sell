@@ -74,7 +74,7 @@ class _ChatConversationState extends State<ChatConversation> {
                 color: Colors.grey[600],
               ),
               child: Row(
-               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               
                 children: [
                   Expanded(
                     child: TextField(

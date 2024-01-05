@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:second_store/screens/chat_card.dart';
+
 import 'package:second_store/screens/chat_conversation.dart';
 import 'package:second_store/services/firebase_services.dart';
 
