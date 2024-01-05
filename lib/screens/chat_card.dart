@@ -26,23 +26,22 @@ class _ChatCardState extends State<ChatCard> {
     _service.getProductInfo(widget.chatData['product']['docId']).then((value) {
       setState(() {
         doc = value;
+                        //print(doc['title']);
+
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return
-        doc == null ? Container(
-          color: Colors.red,
-        ) :
-        Container(
-          color: Colors.red,
-          height: 300,
+    return Container(
+      color: Colors.red,
+      height: 300,
       child: ListTile(
-        leading: Image.network(doc['images'][0]),
+        leading: Image.network(doc['images'][0],width: 50,height: 50,
+        ),
         title: Text(
-          doc['title'],
+          doc['name'],
         ),
         subtitle: Column(children: [
           if (widget.chatData['lastChat'] != null)
@@ -50,9 +49,10 @@ class _ChatCardState extends State<ChatCard> {
               widget.chatData['lastChat'],
               maxLines: 1,
               style: TextStyle(fontSize: 15),
-            )
+            ),
         ]),
       ),
     );
+
   }
 }

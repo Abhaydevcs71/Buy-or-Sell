@@ -53,9 +53,9 @@ class FirebaseService {
     return first.addressLine;
   }
 
-  Future<DocumentSnapshot> getProductInfo(chatData) async{
-    DocumentSnapshot doc = await products.doc(chatData).get();
-    return doc;
+  Future<DocumentSnapshot> getProductInfo(id) async{
+  DocumentSnapshot doc = await products.doc(id).get();
+  return doc;
   }
 
   createChatRoom({chatData}) {
@@ -72,6 +72,7 @@ class FirebaseService {
     messages.doc(chatRoomId).update({
       'lastChat': message['message'],
       'lastChatTime': message['time'],
+      'read' : false
     });
   }
 

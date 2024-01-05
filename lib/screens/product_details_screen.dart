@@ -34,6 +34,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   var _date;
   var _sellerId;
   var _id;
+  
 
   @override
   void initState() {
@@ -87,8 +88,11 @@ Map<String,dynamic> chatData ={
   'chatRoomId' : chatRoomId,
   'lastChat' : null,
   'lastChatTime' : DateTime.now().microsecondsSinceEpoch,
-
+  'read' : false,
+  'image': images[0],
+  'adtitle' : _name
 };
+
 
 _service.createChatRoom(
   chatData: chatData,
@@ -97,9 +101,9 @@ _service.createChatRoom(
 
 //open chat screen 
 
-Navigator.push<void>(
+Navigator.push(
     context,
-    MaterialPageRoute<void>(
+    MaterialPageRoute(
       builder: (BuildContext context) => ChatConversation(chatRoomId: chatRoomId,),
     ),
   );
