@@ -69,7 +69,7 @@ class ProductList extends StatelessWidget {
                       String _formatedPrice = '₹ ${_format.format(_price)}';
 
                       return ProductCard(
-                          data: data, formatedPrice: _formatedPrice);
+                          data: data, formattedPrice: _formatedPrice);
 
                     }),
               ],

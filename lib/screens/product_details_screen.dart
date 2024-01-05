@@ -8,6 +8,7 @@ import 'package:like_button/like_button.dart';
 import 'package:second_store/constants/constants.dart';
 import 'package:second_store/screens/chat_conversation.dart';
 import 'package:second_store/services/firebase_services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   static const String id = 'product-details-screen';
@@ -34,6 +35,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   var _date;
   var _sellerId;
   var _id;
+  var _loc;
 
   @override
   void initState() {
@@ -62,11 +64,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _price = data?['Price'];
           _sellerId = data['userId'];
           _id = data['docId'];
+          _loc = data['location'];
         });
       }
     } catch (error) {
       print('Error loading product details: $error');
       // Handle error here
+    }
+  }
+
+  void openGoogleMaps() async {
+    try {
+      // Open Google Maps with the specified location
+      String googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$_loc';
+      await launch(googleMapsUrl);
+    } catch (e) {
+      print('Error opening Google Maps: $e');
     }
   }
 
@@ -76,33 +89,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       _service.user!.uid, // buyer
     ];
 
-// chat room id
-
     String chatRoomId = '$_sellerId.${_service.user!.uid}.${_id}';
 
-//print (chatRoomId);
+    Map<String,dynamic> chatData ={
+      'users' : users,
+      'chatRoomId' : chatRoomId,
+      'lastChat' : null,
+      'lastChatTime' : DateTime.now().microsecondsSinceEpoch,
+    };
 
-Map<String,dynamic> chatData ={
-  'users' : users,
-  'chatRoomId' : chatRoomId,
-  'lastChat' : null,
-  'lastChatTime' : DateTime.now().microsecondsSinceEpoch,
+    _service.createChatRoom(
+      chatData: chatData,
+    );
 
-};
-
-_service.createChatRoom(
-  chatData: chatData,
-);
-
-
-//open chat screen 
-
-Navigator.push<void>(
-    context,
-    MaterialPageRoute<void>(
-      builder: (BuildContext context) => ChatConversation(chatRoomId: chatRoomId,),
-    ),
-  );
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => ChatConversation(chatRoomId: chatRoomId,),
+      ),
+    );
   }
 
   @override
@@ -201,18 +206,7 @@ Navigator.push<void>(
                 ),
               ),
             ),
-           _sellerId== _service.user!.uid ? SizedBox()
-          //  Positioned(
-          //     right: 10,
-          //     bottom: 10,
-          //     child: FloatingActionButton(
-          //       onPressed: () {
-          //         createChatRoom();
-          //       },
-          //       child: Text('Edit'),
-          //     ),
-          //   ) 
-             : Positioned(
+            _sellerId== _service.user!.uid ? SizedBox() : Positioned(
               right: 10,
               bottom: 10,
               child: FloatingActionButton(
@@ -221,7 +215,37 @@ Navigator.push<void>(
                 },
                 child: Text('chat'),
               ),
-            )
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            InkWell(
+              onTap: () {
+                openGoogleMaps();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                   borderRadius: BorderRadius.circular(5),
+                  color: Color.fromARGB(255, 147, 209, 175),
+                  ),
+                  width:200 ,
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.location_on, color: Colors.white),
+                      SizedBox(width: 10),
+                      Text(
+                        'View on Map',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -6,7 +6,6 @@ import 'package:second_store/forms/hostel/hostel_seller_form.dart';
 import 'package:second_store/forms/hotel/hotel_seller_form.dart';
 import 'package:second_store/forms/house/house_seller_form.dart';
 import 'package:second_store/forms/pg/pg_seller_form.dart';
-//import 'package:second_store/forms/pg_seller_form.dart';
 import 'package:second_store/screens/categories/subCat_Screen.dart';
 import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 import 'package:second_store/screens/sellitems/seller_subCat.dart';

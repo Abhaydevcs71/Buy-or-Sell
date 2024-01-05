@@ -6,12 +6,9 @@ import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 
 class FirebaseService {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  CollectionReference categories =
-      FirebaseFirestore.instance.collection('categories');
-  CollectionReference products =
-      FirebaseFirestore.instance.collection('products');
-  CollectionReference messages =
-      FirebaseFirestore.instance.collection('messages');
+  CollectionReference categories = FirebaseFirestore.instance.collection('categories');
+  CollectionReference products = FirebaseFirestore.instance.collection('products');
+  CollectionReference messages = FirebaseFirestore.instance.collection('messages');
 
   User? user = FirebaseAuth.instance.currentUser;
 
@@ -29,8 +26,7 @@ class FirebaseService {
     });
   }
 
-  Future<void> updateProduct(
-      Map<String, dynamic> data, String productId, context) {
+  Future<void> updateProduct(Map<String, dynamic> data, String productId, context) {
     return products.doc(productId).update(data).then(
       (value) {
         Navigator.pushNamed(context, HomeScreen.id);
@@ -46,14 +42,13 @@ class FirebaseService {
 
   Future<String?> getAddress(double lat, double long) async {
     final coordinates = Coordinates(lat, long);
-    var addresses =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
 
     return first.addressLine;
   }
 
-  Future<DocumentSnapshot> getProductInfo(chatData) async{
+  Future<DocumentSnapshot> getProductInfo(chatData) async {
     DocumentSnapshot doc = await products.doc(chatData).get();
     return doc;
   }
@@ -75,7 +70,34 @@ class FirebaseService {
     });
   }
 
-  getChat(chatRoomId)async{
+  getChat(chatRoomId) async {
     return messages.doc(chatRoomId).collection('chats').orderBy('time').snapshots();
   }
+
+  Future<void> updateFavorite(bool _isLiked, String productId, context) async {
+    try {
+      if (user?.uid != null) {
+        DocumentSnapshot productDoc = await products.doc(productId).get();
+
+        if (productDoc.exists) {
+          List<String> favCount = List<String>.from(productDoc['favCount']);
+
+          if (_isLiked) {
+            favCount.add(user!.uid);
+          } else {
+            favCount.remove(user!.uid);
+          }
+
+          await products.doc(productId).update({
+            'favCount': favCount,
+          });
+        }
+      } else {
+      }
+    } catch (error) {
+      print('Error updating favorite: $error');
+    }
+  }
+
+  
 }
