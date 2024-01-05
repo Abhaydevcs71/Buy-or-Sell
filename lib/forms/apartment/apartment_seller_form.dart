@@ -6,8 +6,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:second_store/forms/pg/user_review_screen.dart';
+import 'package:second_store/screens/gmap.dart';
 import 'package:second_store/screens/main_screen.dart';
 import 'package:second_store/widgets/image_picker.dart';
 import 'package:second_store/widgets/image_viewer.dart';
@@ -29,6 +31,7 @@ class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
   var _descController = TextEditingController();
   var _priceController = TextEditingController();
   var _addressController = TextEditingController();
+  var _phoneNumberController = TextEditingController();
   bool isUploadImage = false;
   bool imageSelected = false;
   final List<File> _image = [];
@@ -85,6 +88,8 @@ class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
 
   bool val = false;
 
+  late LatLng loc;
+
   Future uploadFile(int i) async {
     if (_image.isEmpty) return;
     final fileName = _image[i].path.split('/').last;
@@ -136,6 +141,8 @@ class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
       'date': currentDate,
       'userId': user?.uid,
       'docId': docId,
+      'phoneNumber': _phoneNumberController.text,
+      'location': "${loc.latitude} ${loc.longitude}",
     });
   }
 
@@ -333,7 +340,60 @@ class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
                       },
                     ),
                     const SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      controller: _phoneNumberController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Phone Number',
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Required Field';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
                       height: 40,
+                    ),
+                    InkWell(
+                        onTap: () async {
+                          final result =
+                              await Navigator.pushNamed(context, MapScreen.id);
+                          if (result != null) {
+                            setState(() {
+                              loc = result as LatLng;
+                            });
+                            debugPrint("datdtatd" + loc.latitude.toString());
+                          }
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          height: 40,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.grey[400],
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 3,
+                                  blurRadius: 5,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ]),
+                          child: Text(
+                            'Location',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                    SizedBox(
+                      height: 10,
                     ),
                     InkWell(
                       onTap: () {

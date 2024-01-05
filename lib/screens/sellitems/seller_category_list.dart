@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/forms/apartment/apartment_seller_form.dart';
-import 'package:second_store/forms/hostel/forms_screen.dart';
 import 'package:second_store/forms/hostel/hostel_seller_form.dart';
 import 'package:second_store/forms/hotel/hotel_seller_form.dart';
 import 'package:second_store/forms/house/house_seller_form.dart';

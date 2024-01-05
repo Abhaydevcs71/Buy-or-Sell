@@ -53,7 +53,7 @@ class FirebaseService {
     return first.addressLine;
   }
 
-  Future<DocumentSnapshot> getProductInfo(chatData) async{
+  Future<DocumentSnapshot> getProductInfo(chatData) async {
     DocumentSnapshot doc = await products.doc(chatData).get();
     return doc;
   }
@@ -75,7 +75,15 @@ class FirebaseService {
     });
   }
 
-  getChat(chatRoomId)async{
-    return messages.doc(chatRoomId).collection('chats').orderBy('time').snapshots();
+  getChat(chatRoomId) async {
+    return messages
+        .doc(chatRoomId)
+        .collection('chats')
+        .orderBy('time')
+        .snapshots();
+  }
+
+  getUserDetails() async {
+    return users.doc().get();
   }
 }

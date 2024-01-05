@@ -135,7 +135,7 @@ class _MainScreenState extends State<MainScreen> {
                     onPressed: () {
                       setState(() {
                         _index = 3;
-                        _currentScreen = ChatScreen();
+                        _currentScreen = AccountScreen();
                       });
                     },
                     child: Column(
@@ -145,7 +145,7 @@ class _MainScreenState extends State<MainScreen> {
                             ? CupertinoIcons.person_fill
                             : CupertinoIcons.person),
                         Text(
-                          'CHAT',
+                          'Account',
                           style: TextStyle(
                               color: _index == 3 ? color : Colors.black,
                               fontWeight: _index == 3

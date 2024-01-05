@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:second_store/constants/constants.dart';
 import 'package:second_store/forms/apartment/apartment_seller_form.dart';
-import 'package:second_store/forms/hostel/forms_screen.dart';
+
 import 'package:second_store/forms/hostel/hostel_seller_form.dart';
 import 'package:second_store/forms/hotel/hotel_seller_form.dart';
 import 'package:second_store/forms/house/house_seller_form.dart';
@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
         // SellerSubCatList.id: (context) => SellerSubCatList(),
         SellerCategory.id: (context) => SellerCategory(),
         PgSellerForm.id: (context) => PgSellerForm(),
-        FormsScreen.id: (context) => FormsScreen(),
+
         HostelSellerForm.id: (context) => HostelSellerForm(),
         //UserReviewScreen.id:(context)=>UserReviewScreen(),
         HouseSellerForm.id: (context) => HouseSellerForm(),

@@ -38,6 +38,7 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
   var _descController = TextEditingController();
   var _priceController = TextEditingController();
   var _addressController = TextEditingController();
+  var _phoneNumberController = TextEditingController();
   bool isUploadImage = false;
   bool imageSelected = false;
   final List<File> _image = [];
@@ -147,7 +148,8 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
       'location': "${loc.latitude} ${loc.longitude}",
       'date': currentDate,
       'userId': user?.uid,
-      'docId': docId
+      'docId': docId,
+      'phoneNumber': _phoneNumberController.text,
     });
   }
 
@@ -336,6 +338,23 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Address',
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Required Field';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      controller: _phoneNumberController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Phone Number',
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
