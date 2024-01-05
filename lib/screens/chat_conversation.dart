@@ -1,26 +1,28 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/screens/chat_stream.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class ChatConversation extends StatefulWidget {
-  const ChatConversation({super.key, required this.chatRoomId});
-  final String chatRoomId;
+  const ChatConversation({
+    Key? key,
+    required this.chatRoomId,
+  }) : super(key: key);
 
+  final String chatRoomId;
+  
   @override
   State<ChatConversation> createState() => _ChatConversationState();
 }
 
 class _ChatConversationState extends State<ChatConversation> {
   FirebaseService _service = FirebaseService();
-
-  //Stream<QuerySnapshot<Object?>>? chatMessageStream;
   var chatMessageController = TextEditingController();
-
   bool _send = false;
+  ScrollController _scrollController = ScrollController();
 
   sendMessage() {
     if (chatMessageController.text.isNotEmpty) {
+      FocusScope.of(context).unfocus();
       Map<String, dynamic> message = {
         'message': chatMessageController.text,
         'sentBy': _service.user!.uid,
@@ -29,74 +31,88 @@ class _ChatConversationState extends State<ChatConversation> {
 
       _service.createChat(widget.chatRoomId, message);
       chatMessageController.clear();
+
+      // Scroll to the bottom after a short delay to allow the keyboard to close  
+      Future.delayed(Duration(milliseconds: 300), () {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      });
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: Colors.black,),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
-      body: Container(
-        child: Stack(
-          children: [
-            ChatStream(chatRoomId: widget.chatRoomId),
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: Colors.grey),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: chatMessageController,
-                          decoration: InputDecoration(
-                            hintText: 'Type message',
-                            hintStyle: TextStyle(
-                                color: Theme.of(context).primaryColor),
-                            border: InputBorder.none,
-                          ),
-                          onChanged: (value) {
-                            if (value.isNotEmpty) {
-                              setState(() {
-                                _send = true;
-                              });
-                            } else {
-                              setState(() {
-                                _send = false;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                      Visibility(
-                        visible: _send,
-                        child: IconButton(
-                          onPressed: sendMessage,
-                          icon: Icon(Icons.send),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ChatStream(chatRoomId: widget.chatRoomId, scrollController: _scrollController),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Container(
+              
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.grey[600],
               ),
-            )
-          ],
-        ),
+              child: Row(
+               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      style: TextStyle(color: Colors.white, fontSize: 20,),
+                      controller: chatMessageController,
+                      decoration: InputDecoration(
+                        hintText: 'Type message',
+                        hintStyle: TextStyle(color: Colors.white, fontSize: 20),
+                        border: InputBorder.none,
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _send = value.isNotEmpty;
+                        });
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: _send,
+                    child: IconButton(
+                      onPressed: sendMessage,
+                      icon: Icon(
+                        Icons.send,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+
+
+
+

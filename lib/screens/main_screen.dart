@@ -145,7 +145,7 @@ class _MainScreenState extends State<MainScreen> {
                             ? CupertinoIcons.person_fill
                             : CupertinoIcons.person),
                         Text(
-                          'Account',
+                          'ACCOUNT',
                           style: TextStyle(
                               color: _index == 3 ? color : Colors.black,
                               fontWeight: _index == 3

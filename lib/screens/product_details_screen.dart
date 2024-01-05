@@ -113,6 +113,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       'chatRoomId': chatRoomId,
       'lastChat': null,
       'lastChatTime': DateTime.now().microsecondsSinceEpoch,
+      'read': false,
+      'image': images[0],
+      'adtitle': _name
     };
 
     _service.createChatRoom(
@@ -121,9 +124,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
 //open chat screen
 
-    Navigator.push<void>(
+    Navigator.push(
       context,
-      MaterialPageRoute<void>(
+      MaterialPageRoute(
         builder: (BuildContext context) => ChatConversation(
           chatRoomId: chatRoomId,
         ),

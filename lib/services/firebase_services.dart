@@ -72,6 +72,7 @@ class FirebaseService {
     messages.doc(chatRoomId).update({
       'lastChat': message['message'],
       'lastChatTime': message['time'],
+      'read': false
     });
   }
 
