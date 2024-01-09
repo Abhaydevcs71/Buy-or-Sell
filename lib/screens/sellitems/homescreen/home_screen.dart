@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               color: AppColors.whiteColor,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(12, 0, 12, 8),
+                padding: EdgeInsets.fromLTRB(12, 10, 12, 8),
                 child: Column(
                   children: [BannerWidget(), CategoryWidget()],
                 ),

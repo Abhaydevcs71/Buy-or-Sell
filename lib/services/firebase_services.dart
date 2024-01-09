@@ -68,11 +68,40 @@ class FirebaseService {
     messages.doc(chatRoomId).update({
       'lastChat': message['message'],
       'lastChatTime': message['time'],
-      'read' : false
+      'read': false
     });
   }
 
-  getChat(chatRoomId)async{
-    return messages.doc(chatRoomId).collection('chats').orderBy('time').snapshots();
+  getChat(chatRoomId) async {
+    return messages
+        .doc(chatRoomId)
+        .collection('chats')
+        .orderBy('time')
+        .snapshots();
+  }
+
+  Future<void> updateFavorite(bool _isLiked, String productId, context) async {
+    try {
+      if (user?.uid != null) {
+        DocumentSnapshot productDoc = await products.doc(productId).get();
+
+        if (productDoc.exists) {
+          List<String> favCount = List<String>.from(productDoc['favCount']);
+
+          if (_isLiked) {
+            favCount.add(user!.uid);
+          } else {
+            favCount.remove(user!.uid);
+          }
+
+          await products.doc(productId).update({
+            'favCount': favCount,
+          });
+        }
+      } else {
+      }
+    } catch (error) {
+      print('Error updating favorite: $error');
+    }
   }
 }

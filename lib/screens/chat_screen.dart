@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:second_store/screens/chat_conversation.dart';
+import 'package:second_store/screens/profile.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -38,7 +39,7 @@ class _ChatScreenState extends State<ChatScreen> {
               .where('users', arrayContains: _service.user!.uid)
               .snapshots(),
           builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) { 
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
               Text('Something went wrong');
             }
@@ -62,18 +63,21 @@ class _ChatScreenState extends State<ChatScreen> {
                     leading: Image.network(
                       data['image'],
                       width: 40,
-                      height: 40, 
+                      height: 40,
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.more_vert),
-                      onPressed: () {},
+                      onPressed: () {
+                      Navigator.pushReplacementNamed(context, ProfileForm.id);
+                      },
                     ),
                     title: Text(
                       data['adtitle'],
                       style: TextStyle(
-                          fontWeight: data['read'] == false
-                              ? FontWeight.bold
-                              : FontWeight.normal),
+                        fontWeight: data['read'] == false
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
                     ),
                     onTap: () {
                       _service.messages

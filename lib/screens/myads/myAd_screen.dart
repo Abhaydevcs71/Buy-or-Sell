@@ -109,7 +109,7 @@ class MyAdsScreen extends StatelessWidget {
 
                                   return ProductCard(
                                       data: data,
-                                      formatedPrice: _formatedPrice);
+                                      formattedPrice: _formatedPrice);
                                 }),
                           ),
                         ],

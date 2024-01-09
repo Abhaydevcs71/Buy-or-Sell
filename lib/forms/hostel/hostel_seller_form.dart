@@ -1,15 +1,19 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:second_store/forms/pg/user_review_screen.dart';
+import 'package:second_store/screens/gmap.dart';
 import 'package:second_store/screens/main_screen.dart';
 import 'package:second_store/widgets/image_picker.dart';
 import 'package:second_store/widgets/image_viewer.dart';
+import 'package:uuid/uuid.dart';
 
 class HostelSellerForm extends StatefulWidget {
   const HostelSellerForm({super.key});
@@ -27,11 +31,13 @@ class _HostelSellerFormState extends State<HostelSellerForm> {
   var _descController = TextEditingController();
   var _priceController = TextEditingController();
   var _addressController = TextEditingController();
+  var _phoneNumberController = TextEditingController();
   bool isUploadImage = false;
   bool imageSelected = false;
   final List<File> _image = [];
   final List<String> imageUrls = [];
   bool uploading = false;
+  var uuid = Uuid();
 
   void showConfirmDialogue(BuildContext context) async {
     showDialog(
@@ -83,6 +89,7 @@ class _HostelSellerFormState extends State<HostelSellerForm> {
   String? food;
   String? bathroom;
   bool val = false;
+  late LatLng loc;
 
   Future uploadFile(int i) async {
     if (_image.isEmpty) return;
@@ -111,6 +118,15 @@ class _HostelSellerFormState extends State<HostelSellerForm> {
       uploadTasks.add(uploadFile(i));
     }
     await Future.wait(uploadTasks);
+
+    //Get current timestamp
+    DateTime currentDate = DateTime.now();
+
+    //Get user
+    User? user = FirebaseAuth.instance.currentUser;
+
+    //Generate and get product id
+    var docId = uuid.v4();
     CollectionReference products =
         FirebaseFirestore.instance.collection('products');
     products.add({
@@ -125,6 +141,11 @@ class _HostelSellerFormState extends State<HostelSellerForm> {
       'parking': parking,
       'food': food,
       'bathroom': bathroom,
+      'date': currentDate,
+      'userId': user?.uid,
+      'docId': docId,
+      'phoneNumber': _phoneNumberController.text,
+      'location': "${loc.latitude} ${loc.longitude}",
     });
   }
 
@@ -386,7 +407,60 @@ class _HostelSellerFormState extends State<HostelSellerForm> {
                       },
                     ),
                     const SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      controller: _phoneNumberController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Phone Number',
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Required Field';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
                       height: 40,
+                    ),
+                    InkWell(
+                        onTap: () async {
+                          final result =
+                              await Navigator.pushNamed(context, MapScreen.id);
+                          if (result != null) {
+                            setState(() {
+                              loc = result as LatLng;
+                            });
+                            debugPrint("datdtatd" + loc.latitude.toString());
+                          }
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          height: 40,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.grey[400],
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 3,
+                                  blurRadius: 5,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ]),
+                          child: Text(
+                            'Location',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                    SizedBox(
+                      height: 10,
                     ),
                     InkWell(
                       onTap: () {

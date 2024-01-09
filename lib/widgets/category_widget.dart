@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:second_store/screens/categories/category_list.dart';
+import 'package:second_store/screens/category_result.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class CategoryWidget extends StatelessWidget {
@@ -25,23 +25,14 @@ class CategoryWidget extends StatelessWidget {
           }
     
           return Container(
-            height: 200,
+            height: 110,
             child: Column(
               children: [
                 Row(
                   children: [
+                    
                     Expanded(child: Text('categories')),
-                    TextButton(
-                      onPressed: (){
-                        Navigator.pushNamed(context, CategoryListScreen.id);
-                      },
-                      child: Row(
-                        children: [
-                          Text('see all',style: TextStyle(color: Colors.black),),
-                          Icon(Icons.arrow_forward_ios,size: 12,color: Colors.black,)
-                        ],
-                      ),
-                    ),
+                    
                   ],
                 ),
                 Expanded(
@@ -52,20 +43,30 @@ class CategoryWidget extends StatelessWidget {
                       var doc = snapshot.data!.docs[index];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width:60,
-                        height: 50,
-                        child: Column(children: [
-                          Image.network(doc['image']),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5),
-                            child: Flexible(child: Text(doc['catName'].toUpperCase(),
-                            maxLines:2,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize:10 ),)),
-                          ),
-                        ]),
+                      child: InkWell(
+                        onTap: (){
+                           var catName = snapshot.data!.docs[index]['catName'];
+                                Navigator.pushNamed(
+                                  context,
+                                  CategoryResultScreen.id,
+                                  arguments: {'catName': catName},
+                                );
+                        },
+                        child: Container(
+                          width:60,
+                          height: 50,
+                          child: Column(children: [
+                            Image.network(doc['image']),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Flexible(child: Text(doc['catName'].toUpperCase(),
+                              maxLines:2,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize:10 ),)),
+                            ),
+                          ]),
+                        ),
                       ),
                     );    
                   }),

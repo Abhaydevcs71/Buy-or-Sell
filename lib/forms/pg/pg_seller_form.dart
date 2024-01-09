@@ -1,15 +1,19 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:second_store/forms/pg/user_review_screen.dart';
+import 'package:second_store/screens/gmap.dart';
 import 'package:second_store/screens/main_screen.dart';
 import 'package:second_store/widgets/image_picker.dart';
 import 'package:second_store/widgets/image_viewer.dart';
+import 'package:uuid/uuid.dart';
 
 class PgSellerForm extends StatefulWidget {
   const PgSellerForm({super.key});
@@ -27,43 +31,64 @@ class _PgSellerFormState extends State<PgSellerForm> {
   var _descController = TextEditingController();
   var _priceController = TextEditingController();
   var _addressController = TextEditingController();
+  var _phoneNumberController = TextEditingController();
   bool isUploadImage = false;
   bool imageSelected = false;
   final List<File> _image = [];
   final List<String> imageUrls = [];
+  bool uploading = false;
+  var uuid = Uuid();
 
-  void showConfirmDialogue(BuildContext context) {
+  void showConfirmDialogue(BuildContext context) async {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm'),
-          content: Text('Are you sure you want to save the details?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                addProducts().then((value) =>
-                    Navigator.pushReplacementNamed(context, MainScreen.id));
-                // Navigator.pushReplacementNamed(context, MainScreen.id); // Close the dialog and navigate to home screen
-              },
-              child: Text('Yes'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text('No'),
-            ),
-          ],
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(
+                height: 10,
+              ),
+              Text('Adding products'),
+            ],
+          ),
         );
       },
     );
+
+    try {
+      // Call addProducts
+      await addProducts();
+
+      // Close the progress indicator dialog
+      Navigator.of(context).pop();
+
+      // Navigate to home screen
+      Navigator.pushReplacementNamed(context, MainScreen.id);
+    } catch (e) {
+      // Handle error, if any
+      print('Error adding products: $e');
+
+      // Close the progress indicator dialog
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to add products. Please try again.'),
+        ),
+      );
+    }
   }
 
   String? countPeople;
-  String? countRoom;
-  var PG;
+
+  String? parking;
+
+  String? bathroom;
   bool val = false;
+  late LatLng loc;
 
   Future uploadFile(int i) async {
     if (_image.isEmpty) return;
@@ -87,9 +112,20 @@ class _PgSellerFormState extends State<PgSellerForm> {
   }
 
   Future<void> addProducts() async {
+    List<Future<void>> uploadTasks = [];
     for (int i = 0; i < _image.length; i++) {
-      uploadFile(i);
+      uploadTasks.add(uploadFile(i));
     }
+    await Future.wait(uploadTasks);
+
+    //Get current timestamp
+    DateTime currentDate = DateTime.now();
+
+    //Get user
+    User? user = FirebaseAuth.instance.currentUser;
+
+    //Generate and get product id
+    var docId = uuid.v4();
     CollectionReference products =
         FirebaseFirestore.instance.collection('products');
     products.add({
@@ -98,9 +134,15 @@ class _PgSellerFormState extends State<PgSellerForm> {
       'Price': _priceController.text,
       'adress': _addressController.text,
       'images': imageUrls,
-      'Rooms': countRoom,
       'People': countPeople,
-      'Category': 'PG'
+      'Category': 'PG',
+      'parking': parking,
+      'bathroom': bathroom,
+      'date': currentDate,
+      'userId': user?.uid,
+      'docId': docId,
+      'phoneNumber': _phoneNumberController,
+      'location': "${loc.latitude} ${loc.longitude}",
     });
   }
 
@@ -136,9 +178,6 @@ class _PgSellerFormState extends State<PgSellerForm> {
 
   @override
   Widget build(BuildContext context) {
-    // String? countPeople;
-    // String? countRoom;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -168,7 +207,7 @@ class _PgSellerFormState extends State<PgSellerForm> {
                 child: Column(
                   children: [
                     const Text(
-                      'Paying Guest',
+                      'Hostel',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -220,7 +259,8 @@ class _PgSellerFormState extends State<PgSellerForm> {
                           border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       )),
-                      hint: const Text('Select the number of persons allowed'),
+                      hint:
+                          const Text('Select the number of persons in a room'),
                       value: countPeople,
                       onChanged: (String? newValue) {
                         setState(() {
@@ -243,14 +283,14 @@ class _PgSellerFormState extends State<PgSellerForm> {
                           border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       )),
-                      hint: const Text('Select the number of Rooms'),
-                      value: countPeople,
+                      hint: const Text('Parking facility'),
+                      value: parking,
                       onChanged: (String? newValue) {
                         setState(() {
-                          countRoom = newValue!;
+                          parking = newValue!;
                         });
                       },
-                      items: <String>['1', '2', '3', '4', '5', '6', '7', '8']
+                      items: <String>['available', 'not available']
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -258,7 +298,30 @@ class _PgSellerFormState extends State<PgSellerForm> {
                         );
                       }).toList(),
                     ),
-                    const SizedBox(
+                    SizedBox(
+                      height: 15,
+                    ),
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      )),
+                      hint: const Text('bathroom Facility'),
+                      value: bathroom,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          bathroom = newValue!;
+                        });
+                      },
+                      items: <String>['common', 'atached']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(
                       height: 15,
                     ),
                     TextFormField(
@@ -295,7 +358,60 @@ class _PgSellerFormState extends State<PgSellerForm> {
                       },
                     ),
                     const SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      controller: _phoneNumberController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Phone Number',
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Required Field';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
                       height: 40,
+                    ),
+                    InkWell(
+                        onTap: () async {
+                          final result =
+                              await Navigator.pushNamed(context, MapScreen.id);
+                          if (result != null) {
+                            setState(() {
+                              loc = result as LatLng;
+                            });
+                            debugPrint("datdtatd" + loc.latitude.toString());
+                          }
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          height: 40,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.grey[400],
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 3,
+                                  blurRadius: 5,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ]),
+                          child: Text(
+                            'Location',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                    SizedBox(
+                      height: 10,
                     ),
                     InkWell(
                       onTap: () {

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/screens/authentication/email_verification_screen.dart';
 import 'package:second_store/screens/location_screen.dart';
+import 'package:second_store/screens/profile.dart';
 
 class EmailAuthentication {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -43,7 +44,7 @@ class EmailAuthentication {
         password: password,
       );
       if (userCredential.user?.uid != null) {
-        Navigator.pushReplacementNamed(context, LocationScreen.id);
+        Navigator.pushReplacementNamed(context, ProfileForm.id);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

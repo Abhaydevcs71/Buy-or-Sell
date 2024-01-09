@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:second_store/constants/constants.dart';
 import 'package:second_store/forms/apartment/apartment_seller_form.dart';
-import 'package:second_store/forms/hostel/forms_screen.dart';
+
 import 'package:second_store/forms/hostel/hostel_seller_form.dart';
 import 'package:second_store/forms/hotel/hotel_seller_form.dart';
 import 'package:second_store/forms/house/house_seller_form.dart';
@@ -15,9 +15,10 @@ import 'package:second_store/screens/authentication/email_auth_screen.dart';
 import 'package:second_store/screens/authentication/email_verification_screen.dart';
 import 'package:second_store/screens/authentication/phoneauth_screen.dart';
 import 'package:second_store/screens/authentication/reset_password_screen.dart';
-import 'package:second_store/screens/categories/category_list.dart';
+import 'package:second_store/screens/category_result.dart';
 import 'package:second_store/screens/gmap.dart';
 import 'package:second_store/screens/product_details_screen.dart';
+import 'package:second_store/screens/profile.dart';
 
 import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 import 'package:second_store/screens/location_screen.dart';
@@ -61,32 +62,31 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: AppColors.mainColor, fontFamily: 'Lato'),
+      theme: ThemeData(primaryColor: Color.fromARGB(255, 204, 179, 184), fontFamily: 'Lato',
+      primarySwatch:Colors.blueGrey),
       initialRoute: SplashScreen.id,
       routes: {
         SplashScreen.id: (context) => SplashScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         PhoneAuthScreen.id: (context) => PhoneAuthScreen(),
+        ProfileForm.id:(context) => ProfileForm(),
         LocationScreen.id: (context) => LocationScreen(),
         HomeScreen.id: (context) => HomeScreen(),
         EmailAuthScreen.id: (context) => EmailAuthScreen(),
         EmailVerificationScreen.id: (context) => EmailVerificationScreen(),
         PasswordResetScreen.id: (context) => PasswordResetScreen(),
-        CategoryListScreen.id: (context) => CategoryListScreen(),
-        // SubCatList.id: (context) => SubCatList(),
+        
         MainScreen.id: (context) => MainScreen(),
-        // SellerSubCatList.id: (context) => SellerSubCatList(),
         SellerCategory.id: (context) => SellerCategory(),
         PgSellerForm.id: (context) => PgSellerForm(),
-        FormsScreen.id: (context) => FormsScreen(),
+
         HostelSellerForm.id: (context) => HostelSellerForm(),
-        //UserReviewScreen.id:(context)=>UserReviewScreen(),
         HouseSellerForm.id: (context) => HouseSellerForm(),
         HotelSellerForm.id: (context) => HotelSellerForm(),
         ApartmentSellerForm.id: (context) => ApartmentSellerForm(),
-        // FormLocation.id: (context) => FormLocation(),
         MapScreen.id: (context) => MapScreen(),
         ProductDetailsScreen.id: (context) => ProductDetailsScreen(),
+        CategoryResultScreen.id:(context) => CategoryResultScreen(),
       },
     );
   }
