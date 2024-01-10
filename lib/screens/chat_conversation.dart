@@ -32,7 +32,7 @@ class _ChatConversationState extends State<ChatConversation> {
       _service.createChat(widget.chatRoomId, message);
       chatMessageController.clear();
 
-      // Scroll to the bottom after a short delay to allow the keyboard to close  
+      // Scroll to the bottom 
       Future.delayed(Duration(milliseconds: 300), () {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,

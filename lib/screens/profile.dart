@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:second_store/screens/location_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 
@@ -23,6 +27,8 @@ class _ProfileFormState extends State<ProfileForm> {
   String? gender;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String imgUrl = '';
+  String pic = '';
 
   @override
   Widget build(BuildContext context) {
@@ -59,15 +65,63 @@ class _ProfileFormState extends State<ProfileForm> {
             children: [
               Stack(
                 children: [
-                  CircleAvatar(
-                    radius: 110,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(110),
+                    child: CircleAvatar(
+                      radius: 110,
+                      child: pic == ''
+                          ? Image.network(
+                              'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg',
+                              width: 220,
+                              height: 220,
+                              //color: Colors.blueGrey,
+                            )
+                          : Image.file(
+                              File(pic),
+                              width: 220,
+                              height: 220,
+                              fit: BoxFit.fill,
+                            ),
+                    ),
                   ),
                   Positioned(
                     right: 8,
                     bottom: 8,
                     child: IconButton(
                       iconSize: 40,
-                      onPressed: () {},
+                      onPressed: () async {
+                        ImagePicker profilePic = ImagePicker();
+                        XFile? file = await profilePic.pickImage(
+                            source: ImageSource.gallery);
+                        print('${file?.path}');
+                        setState(() {
+                          pic = file!.path;
+                        });
+
+                        if (file == null) return;
+
+                        String imgName =
+                            DateTime.now().millisecondsSinceEpoch.toString();
+
+                        // reference to storage
+
+                        Reference referenceRoot =
+                            FirebaseStorage.instance.ref();
+                        Reference referenceDir =
+                            referenceRoot.child('profiles');
+
+                        //reference for the image
+
+                        //Reference referencePicUpload = referenceDir.child('pic_name');
+                        Reference referencePicUpload =
+                            referenceDir.child(imgName);
+
+                        try {
+                          //store the pic
+                          await referencePicUpload.putFile(File(file.path));
+                          imgUrl = await referencePicUpload.getDownloadURL();
+                        } catch (e) {}
+                      },
                       icon: Icon(Icons.photo_camera),
                     ),
                   ),
@@ -200,13 +254,14 @@ class _ProfileFormState extends State<ProfileForm> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 20),
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _service.updateUser({
                         'firstName': _firstName.text,
                         'secondName': _secondName.text,
                         'gender': gender,
                         'dob': _date.text.toString(),
+                        'profile': imgUrl,
                       }, context).then((value) {
                         Navigator.pushReplacementNamed(
                             context, LocationScreen.id);
