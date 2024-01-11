@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:second_store/screens/product_details_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 class ProductCard extends StatefulWidget {
   ProductCard({
@@ -127,7 +128,8 @@ class _ProductCardState extends State<ProductCard> {
                 Positioned(
                   right: 0,
                   child: IconButton(
-                    icon: Icon(_isLiked ? Icons.favorite : Icons.favorite_border,
+                    icon: Icon(
+                      _isLiked ? Icons.favorite : Icons.favorite_border,
                     ),
                     color: _isLiked ? Colors.red : Colors.black,
                     onPressed: updateFavCount,

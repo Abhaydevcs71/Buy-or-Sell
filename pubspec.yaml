@@ -1,7 +1,7 @@
 name: second_store
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
+# pub.dev using flutter pub publish. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -23,10 +23,10 @@ environment:
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# consider running flutter pub upgrade --major-versions. Alternatively,
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
+# versions available, run flutter pub outdated.
 dependencies:
   animated_text_kit: ^4.2.2
   cloud_firestore: ^4.12.0
@@ -55,7 +55,7 @@ dependencies:
   provider: ^6.1.1
   uuid:
   flutter_chat_bubble: ^2.0.2
-  url_launcher: ^6.2.2
+  url_launcher: null
   flutter_phone_direct_caller: ^2.1.1
 dev_dependencies:
   flutter_lints: ^2.0.0

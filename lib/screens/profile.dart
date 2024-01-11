@@ -20,6 +20,7 @@ class _ProfileFormState extends State<ProfileForm> {
   TextEditingController _firstName = TextEditingController();
   TextEditingController _secondName = TextEditingController();
   TextEditingController _date = TextEditingController();
+  TextEditingController _phone = TextEditingController();
 
   FirebaseAuth auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
@@ -36,19 +37,19 @@ class _ProfileFormState extends State<ProfileForm> {
     // check if the user has already completed the profile
     //skips the page
 
-    _service.users
-        .doc(_service.user?.uid)
-        .get()
-        .then((DocumentSnapshot document) {
-      if (document.exists) {
-        Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
-        if (data != null && data.containsKey('firstName')) {
-          if (document['firstName'] != null) {
-            Navigator.pushReplacementNamed(context, HomeScreen.id);
-          }
-        }
-      }
-    });
+    // _service.users
+    //     .doc(_service.user?.uid)
+    //     .get()
+    //     .then((DocumentSnapshot document) {
+    //   if (document.exists) {
+    //     Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+    //     if (data != null && data.containsKey('firstName')) {
+    //       if (document['firstName'] != null) {
+    //         Navigator.pushReplacementNamed(context, HomeScreen.id);
+    //       }
+    //     }
+    //   }
+    // });
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -58,82 +59,82 @@ class _ProfileFormState extends State<ProfileForm> {
         title: Text('Profile Form'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(15),
-        child: Form(
-          key: _formKey,
+        padding: const EdgeInsets.all(10.0),
+        child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(110),
-                    child: CircleAvatar(
-                      radius: 110,
-                      child: pic == ''
-                          ? Image.network(
-                              'https://w7.pngwing.com/pngs/87/237/png-transparent-male-avatar-boy-face-man-user-flat-classy-users-icon.png',
-                              width: 220,
-                              height: 220,
-                              //color: Colors.blueGrey,
-                            )
-                          : Image.file(
-                              File(pic),
-                              width: 220,
-                              height: 220,
-                              fit: BoxFit.fill,
-                            ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 8,
-                    bottom: 8,
-                    child: IconButton(
-                      iconSize: 40,
-                      onPressed: () async {
-                        ImagePicker profilePic = ImagePicker();
-                        XFile? file = await profilePic.pickImage(
-                            source: ImageSource.gallery);
-                        print('${file?.path}');
-                        setState(() {
-                          pic = file!.path;
-                        });
-
-                        if (file == null) return;
-
-                        String imgName =
-                            DateTime.now().millisecondsSinceEpoch.toString();
-
-                        // reference to storage
-
-                        Reference referenceRoot =
-                            FirebaseStorage.instance.ref();
-                        Reference referenceDir =
-                            referenceRoot.child('profiles');
-
-                        //reference for the image
-
-                        //Reference referencePicUpload = referenceDir.child('pic_name');
-                        Reference referencePicUpload =
-                            referenceDir.child(imgName);
-
-                        try {
-                          //store the pic
-                          await referencePicUpload.putFile(File(file.path));
-                          imgUrl = await referencePicUpload.getDownloadURL();
-                        } catch (e) {}
-                      },
-                      icon: Icon(Icons.photo_camera),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Expanded(
+              Form(
+                key: _formKey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: CircleAvatar(
+                            radius: 100,
+                            child: pic == ''
+                                ? Image.network(
+                                    'https://w7.pngwing.com/pngs/87/237/png-transparent-male-avatar-boy-face-man-user-flat-classy-users-icon.png',
+                                    width: 200,
+                                    height: 200,
+                                    //color: Colors.blueGrey,
+                                  )
+                                : Image.file(
+                                    File(pic),
+                                    width: 200,
+                                    height: 200,
+                                    fit: BoxFit.fill,
+                                  ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 8,
+                          bottom: 8,
+                          child: IconButton(
+                            iconSize: 40,
+                            onPressed: () async {
+                              ImagePicker profilePic = ImagePicker();
+                              XFile? file = await profilePic.pickImage(
+                                  source: ImageSource.gallery);
+                              print('${file?.path}');
+                              setState(() {
+                                pic = file!.path;
+                              });
+              
+                              if (file == null) return;
+              
+                              String imgName =
+                                  DateTime.now().millisecondsSinceEpoch.toString();
+              
+                              // reference to storage
+              
+                              Reference referenceRoot =
+                                  FirebaseStorage.instance.ref();
+                              Reference referenceDir =
+                                  referenceRoot.child('profiles');
+              
+                              //reference for the image
+              
+                              //Reference referencePicUpload = referenceDir.child('pic_name');
+                              Reference referencePicUpload =
+                                  referenceDir.child(imgName);
+              
+                              try {
+                                //store the pic
+                                await referencePicUpload.putFile(File(file.path));
+                                imgUrl = await referencePicUpload.getDownloadURL();
+                              } catch (e) {}
+                            },
+                            icon: Icon(Icons.photo_camera),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
                     TextFormField(
                       controller: _firstName,
                       textAlign: TextAlign.center,
@@ -152,7 +153,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 8),
                     TextFormField(
                       controller: _secondName,
                       textAlign: TextAlign.center,
@@ -171,7 +172,30 @@ class _ProfileFormState extends State<ProfileForm> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 8),
+                    TextFormField(
+                      controller: _phone,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25)),
+                        fillColor: Colors.white70,
+                        filled: true,
+                        hintText: ' Phone No.',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your Phone Number';
+                        }
+                        else if (value.length < 10){
+                       return 'Please enter valid Number';
+                        }
+                        return null;
+                      },
+                    ),
+                                        SizedBox(height: 8),
+              
                     Padding(
                       padding: const EdgeInsets.only(right: 120, left: 120),
                       child: DropdownButtonFormField<String>(
@@ -210,7 +234,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         },
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 8),
                     Padding(
                       padding: const EdgeInsets.only(right: 80, left: 80),
                       child: TextFormField(
@@ -248,14 +272,11 @@ class _ProfileFormState extends State<ProfileForm> {
                         },
                       ),
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16.0),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: ElevatedButton(
-                  onPressed: () async {
+                    SizedBox(height: 8),
+                    Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: ElevatedButton(
+                      onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _service.updateUser({
                         'firstName': _firstName.text,
@@ -263,19 +284,24 @@ class _ProfileFormState extends State<ProfileForm> {
                         'gender': gender,
                         'dob': _date.text.toString(),
                         'profile': imgUrl,
+                        'phone': _phone.text
                       }, context).then((value) {
                         Navigator.pushReplacementNamed(
                             context, LocationScreen.id);
                       });
                     }
-                  },
-                  child: Text(
+                      },
+                      child: Text(
                     'NEXT',
                     style: TextStyle(fontSize: 20),
-                  ),
-                  style: ButtonStyle(
+                      ),
+                      style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all<Color>(Colors.teal)),
+                    ),
+                    ),
+                    
+                  ],
                 ),
               ),
             ],

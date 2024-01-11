@@ -9,7 +9,7 @@ class ChatConversation extends StatefulWidget {
   }) : super(key: key);
 
   final String chatRoomId;
-  
+
   @override
   State<ChatConversation> createState() => _ChatConversationState();
 }
@@ -32,7 +32,7 @@ class _ChatConversationState extends State<ChatConversation> {
       _service.createChat(widget.chatRoomId, message);
       chatMessageController.clear();
 
-      // Scroll to the bottom 
+      // Scroll to the bottom
       Future.delayed(const Duration(milliseconds: 300), () {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
@@ -42,7 +42,6 @@ class _ChatConversationState extends State<ChatConversation> {
       });
     }
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -63,22 +62,25 @@ class _ChatConversationState extends State<ChatConversation> {
       body: Column(
         children: [
           Expanded(
-            child: ChatStream(chatRoomId: widget.chatRoomId, scrollController: _scrollController),
+            child: ChatStream(
+                chatRoomId: widget.chatRoomId,
+                scrollController: _scrollController),
           ),
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: Container(
-              
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.grey[600],
               ),
               child: Row(
-               
                 children: [
                   Expanded(
                     child: TextField(
-                      style: const TextStyle(color: Colors.white, fontSize: 20,),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
                       controller: chatMessageController,
                       decoration: const InputDecoration(
                         hintText: 'Type message',
@@ -111,8 +113,3 @@ class _ChatConversationState extends State<ChatConversation> {
     );
   }
 }
-
-
-
-
-

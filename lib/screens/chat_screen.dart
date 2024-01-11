@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,7 @@ class _ChatScreenState extends State<ChatScreen> {
     FirebaseService _service = FirebaseService();
 
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 5,
@@ -56,14 +58,16 @@ class _ChatScreenState extends State<ChatScreen> {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
                 return Container(
+                  margin: EdgeInsets.only(top: 8),
+                  height: 80,
                   decoration: BoxDecoration(
                     border: Border(bottom: BorderSide(color: Colors.grey))
                   ),
                   child: ListTile(
                     leading: Image.network(
                       data['image'],
-                      width: 40,
-                      height: 40,
+                      width: 60,
+                      height: 60,
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.more_vert),
@@ -73,7 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     title: Text(
                       data['adtitle'],
-                      style: TextStyle(
+                      style: TextStyle(fontSize: 20,
                         fontWeight: data['read'] == false
                             ? FontWeight.bold
                             : FontWeight.normal,
@@ -90,7 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ChatConversation(
                                       chatRoomId: data['chatRoomId'])));
                     },
-                    subtitle: Text(data['lastChat']),
+                    //subtitle: Text(data['lastChat']),
                   ),
                 );
               }).toList(),

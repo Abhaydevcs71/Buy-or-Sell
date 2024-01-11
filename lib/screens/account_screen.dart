@@ -21,23 +21,21 @@ FirebaseService _service = FirebaseService();
 String profile = '';
 String? name;
 String? name2;
-
-
+String? num;
 
 class _AccountScreenState extends State<AccountScreen> {
-
   Future<void> fetchData() async {
-  QuerySnapshot doc = await users.where('uid', isEqualTo: user!.uid).get();
+    QuerySnapshot doc = await users.where('uid', isEqualTo: user!.uid).get();
 
-  var userData = doc.docs.first.data() as Map<String, dynamic>;
-setState(() {
-   profile = userData['profile'];
-  name = userData['firstName'];
-  name2 = userData['secondName'];
-  
-});
- 
-}
+    var userData = doc.docs.first.data() as Map<String, dynamic>;
+    setState(() {
+      profile = userData['profile'];
+      name = userData['firstName'];
+      name2 = userData['secondName'];
+      num = userData['phone'];
+    });
+  }
+
   @override
   void initState() {
     fetchData();
@@ -46,43 +44,109 @@ setState(() {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.teal,
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        children: [
-          Center(
-            child: Container(
-                //width: MediaQuery.sizeOf(context).width * 0.55,
-                //height: MediaQuery.sizeOf(context).height * 0.3,
-                child: ClipRRect(
-              borderRadius: BorderRadius.circular(110),
-              child: CircleAvatar(
-                  radius: 110,
-                  child: profile == ''
-                      ? Image.network(
-                          'https://w7.pngwing.com/pngs/87/237/png-transparent-male-avatar-boy-face-man-user-flat-classy-users-icon.png',
-                          width: 220,
-                          height: 220,
-                          fit: BoxFit.cover,
-                        )
-                      : Image.network(
-                          profile,fit: BoxFit.cover,
-                          width: 220,
-                          height: 220,
-                        )),
-            )),
-          ),
-          Text(user!.uid),
-          Text(user!.email.toString()),
-          Text(name!+' '+name2.toString()),
-          ElevatedButton(
-              onPressed: () {
+      body: Container(
+        margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Column(
+          children: [
+            Container(
+              height: MediaQuery.sizeOf(context).height * 0.43,
+              width: MediaQuery.sizeOf(context).width,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 14,
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(110),
+                    child: CircleAvatar(
+                        radius: 110,
+                        child: profile == ''
+                            ? Image.network(
+                                'https://w7.pngwing.com/pngs/87/237/png-transparent-male-avatar-boy-face-man-user-flat-classy-users-icon.png',
+                                width: 220,
+                                height: 220,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.network(
+                                profile,
+                                fit: BoxFit.cover,
+                                width: 220,
+                                height: 220,
+                              )),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    name! + ' ' + name2.toString(),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    user!.email.toString(),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    num.toString(),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            InkWell(
+              child: Container(
+                
+                margin: EdgeInsets.only(left: 10),
+                width: MediaQuery.sizeOf(context).width,
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.logout,
+                      size: 35,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 30,
+                    ),
+                    Text(
+                      'LOG OUT',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              onTap: () {
                 Navigator.pushReplacementNamed(context, LoginScreen.id);
               },
-              child: Text('Log out'))
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

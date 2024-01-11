@@ -93,7 +93,9 @@ class _MapScreenState extends State<MapScreen> {
                     position: initialLocation,
                     draggable: true,
                     onDragEnd: (value) {
-                      location = value;
+                      setState(() {
+                        location = value;
+                      });
                     },
                   ),
                 },
@@ -113,8 +115,6 @@ class _MapScreenState extends State<MapScreen> {
                 pressed=true;
                 await floatingButton();
                 try {
-                print(initialLocation);
-                print(initialLocation);
                 Navigator.pop(context, location);
                   
                 } catch (e) {

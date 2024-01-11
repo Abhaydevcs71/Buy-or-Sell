@@ -23,6 +23,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     Color color = Theme.of(context).primaryColor;
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       body: PageStorage(child: _currentScreen, bucket: _bucket),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.teal[200],

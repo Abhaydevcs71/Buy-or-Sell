@@ -6,12 +6,9 @@ import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 
 class FirebaseService {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  CollectionReference categories =
-      FirebaseFirestore.instance.collection('categories');
-  CollectionReference products =
-      FirebaseFirestore.instance.collection('products');
-  CollectionReference messages =
-      FirebaseFirestore.instance.collection('messages');
+  CollectionReference categories = FirebaseFirestore.instance.collection('categories');
+  CollectionReference products = FirebaseFirestore.instance.collection('products');
+  CollectionReference messages = FirebaseFirestore.instance.collection('messages');
 
   User? user = FirebaseAuth.instance.currentUser;
 
@@ -29,8 +26,7 @@ class FirebaseService {
     });
   }
 
-  Future<void> updateProduct(
-      Map<String, dynamic> data, String productId, context) {
+  Future<void> updateProduct(Map<String, dynamic> data, String productId, context) {
     return products.doc(productId).update(data).then(
       (value) {
         Navigator.pushNamed(context, HomeScreen.id);
@@ -46,8 +42,7 @@ class FirebaseService {
 
   Future<String?> getAddress(double lat, double long) async {
     final coordinates = Coordinates(lat, long);
-    var addresses =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
 
     return first.addressLine;
@@ -104,4 +99,8 @@ class FirebaseService {
       print('Error updating favorite: $error');
     }
   }
+
+  
+
+  
 }
