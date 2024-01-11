@@ -1,14 +1,19 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
 import 'package:second_store/constants/constants.dart';
 import 'package:second_store/screens/chat_conversation.dart';
+import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
+import 'package:second_store/screens/sellitems/homescreen/product_display/product_list.dart';
 import 'package:second_store/services/firebase_services.dart';
+import 'package:second_store/services/search_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -23,6 +28,10 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  // DocumentReference documentId =
+  //     FirebaseFirestore.instance.collection("products").doc();
+
+  var documentId;
   bool _loading = true;
   List<String> images = [];
   FirebaseService _service = FirebaseService();
@@ -66,6 +75,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         setState(() {
           // Update the state with the loaded data
           _loading = false;
+
           images = List<String>.from(data?['images']);
           _name = data?['name'];
           _adress = data?['adress'];
@@ -88,6 +98,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _wifi = data?['internet'];
           _cleaning = data?['cleaningservice'];
           _phoneNumber = data?['phoneNumber'];
+
+          documentId = snapshot.docs.first.reference;
         });
       }
     } catch (error) {
@@ -138,6 +150,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          if (_sellerId == _service.user!.uid)
+            IconButton(
+                onPressed: () async {
+                  FirebaseFirestore.instance
+                      .collection('products')
+                      .doc(documentId.id)
+                      .delete();
+                  print(documentId.id);
+                  await Future.delayed(Duration(seconds: 2));
+                  // Duration(seconds: 2);
+                  // Navigator.pop(context);
+                  Navigator.pushReplacementNamed(context, HomeScreen.id);
+                },
+                icon: Icon(Icons.delete))
+        ],
         backgroundColor: Colors.teal,
         title: Text(_name),
       ),

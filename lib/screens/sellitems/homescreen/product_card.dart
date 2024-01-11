@@ -66,13 +66,14 @@ class _ProductCardState extends State<ProductCard> {
                     SizedBox(
                       height: 5,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: Text(
-                        widget._formatedPrice,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                    if (widget.data['Category'] != 'Hotel')
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: Text(
+                          widget._formatedPrice,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: Text(

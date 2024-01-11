@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 10,
             ),
             //Product list
-            ProductList()
+            ProductList(true)
           ],
         ),
       ),

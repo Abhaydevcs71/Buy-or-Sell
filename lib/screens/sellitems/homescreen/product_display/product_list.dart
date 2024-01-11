@@ -7,7 +7,9 @@ import 'package:second_store/services/firebase_services.dart';
 import 'package:intl/intl.dart';
 
 class ProductList extends StatelessWidget {
-  const ProductList({super.key});
+  final bool? proScreen;
+
+  const ProductList(bool bool, {super.key, this.proScreen});
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +72,6 @@ class ProductList extends StatelessWidget {
 
                       return ProductCard(
                           data: data, formatedPrice: _formatedPrice);
-
                     }),
               ],
             );

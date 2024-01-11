@@ -4,14 +4,58 @@ import 'package:flutter/material.dart';
 import 'package:second_store/constants/constants.dart';
 import 'package:second_store/screens/location_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
+import 'package:second_store/services/search_services.dart';
 
-class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({super.key});
+class CustomAppBar extends StatefulWidget {
+  const CustomAppBar({Key? key}) : super(key: key);
+
+  @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  FirebaseService _service = FirebaseService();
+  SearchServices _search = SearchServices();
+  late Future<List<Products>> productsFuture;
+  List<Products> products = [];
+
+  Future<List<Products>> loadProducts() async {
+    try {
+      print('Loading products...');
+      QuerySnapshot snapshot = await _service.products.get();
+      print('Products loaded: ${snapshot.docs.length}');
+
+      List<Products> productList = snapshot.docs.map((doc) {
+        return Products(
+          doc: doc,
+          title: doc['name'],
+          category: doc['Category'],
+          description: doc['Description'],
+          postedDate: doc['date'],
+          price: doc['Price'],
+        );
+      }).toList();
+
+      setState(() {
+        products = productList;
+      });
+
+      print('Total products loaded: ${products.length}');
+      return products;
+    } catch (e) {
+      print('Error loading products: $e');
+      return []; // Return an empty list in case of an error
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    productsFuture = loadProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
-    FirebaseService _service = FirebaseService();
-
     return FutureBuilder<DocumentSnapshot>(
       future: _service.users.doc(_service.user?.uid).get(),
       builder:
@@ -29,13 +73,10 @@ class CustomAppBar extends StatelessWidget {
               snapshot.data!.data() as Map<String, dynamic>;
 
           if (data['address'] == null) {
-            // check the next one
-
             GeoPoint latLong = data['location'];
             _service
                 .getAddress(latLong.latitude, latLong.longitude)
                 .then((adrs) {
-              // show this address in appbar
               return appBar(adrs, context);
             });
           } else {
@@ -55,11 +96,13 @@ class CustomAppBar extends StatelessWidget {
       title: InkWell(
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => LocationScreen(
-                        locationChanging: true,
-                      )));
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => LocationScreen(
+                locationChanging: true,
+              ),
+            ),
+          );
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -95,15 +138,24 @@ class CustomAppBar extends StatelessWidget {
       ),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(56),
-        child: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 10, 12, 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
+        child: InkWell(
+          onTap: () {},
+          child: Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      onTap: () {
+                        print('Products count: ${products.length}');
+                        _search.search(
+                          context: context,
+                          productList: products,
+                        );
+                      },
+                      decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
@@ -111,23 +163,25 @@ class CustomAppBar extends StatelessWidget {
                           Icons.search,
                           size: 25,
                         ),
-                        labelText: 'Search by city or hotel',
+                        labelText: 'Search by title',
                         labelStyle: const TextStyle(fontSize: 18),
                         contentPadding:
-                            const EdgeInsets.only(left: 10, right: 10)),
+                            const EdgeInsets.only(left: 10, right: 10),
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                const Icon(
-                  Icons.notifications_none,
-                  size: 25,
-                ),
-                const SizedBox(
-                  width: 8,
-                )
-              ],
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  const Icon(
+                    Icons.notifications_none,
+                    size: 25,
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  )
+                ],
+              ),
             ),
           ),
         ),
