@@ -1,14 +1,11 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+
 import 'package:intl/intl.dart';
-import 'package:like_button/like_button.dart';
-import 'package:second_store/constants/constants.dart';
+
 import 'package:second_store/screens/chat_conversation.dart';
 import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 import 'package:second_store/screens/sellitems/homescreen/product_display/product_list.dart';
@@ -57,6 +54,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   var _wifi;
   var _cleaning;
   var _phoneNumber;
+  var _loc;
 
   @override
   void initState() {
@@ -98,7 +96,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _wifi = data?['internet'];
           _cleaning = data?['cleaningservice'];
           _phoneNumber = data?['phoneNumber'];
-
           documentId = snapshot.docs.first.reference;
         });
       }
@@ -108,13 +105,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     }
   }
 
+  void openGoogleMaps() async {
+    try {
+      // Open Google Maps with the specified location
+      String googleMapsUrl =
+          'https://www.google.com/maps/search/?api=1&query=$_loc';
+      await launch(googleMapsUrl);
+    } catch (e) {
+      print('Error opening Google Maps: $e');
+    }
+  }
+
   createChatRoom() {
     List<String> users = [
       _sellerId, // seller
       _service.user!.uid, // buyer
     ];
-
-// chat room id
 
     String chatRoomId = '$_sellerId.${_service.user!.uid}.${_id}';
 
@@ -136,9 +142,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
 //open chat screen
 
-    Navigator.push(
+    Navigator.push<void>(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (BuildContext context) => ChatConversation(
           chatRoomId: chatRoomId,
         ),
@@ -524,18 +530,45 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 SizedBox(
                   height: 10,
                 ),
-                Container(
-                  height: 120,
-                  color: Colors.teal,
-                  child: Center(
-                      child: Text(
-                    'Ad posted Location',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20),
-                  )),
+                InkWell(
+                  onTap: () {
+                    openGoogleMaps();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Color.fromARGB(255, 147, 209, 175),
+                      ),
+                      width: 200,
+                      padding: EdgeInsets.all(15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.location_on, color: Colors.white),
+                          SizedBox(width: 10),
+                          Text(
+                            'View on Map',
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
+                // Container(
+                //   height: 120,
+                //   color: Colors.teal,
+                //   child: Center(
+                //       child: Text(
+                //     'Ad posted Location',
+                //     style: TextStyle(
+                //         fontWeight: FontWeight.bold,
+                //         color: Colors.white,
+                //         fontSize: 20),
+                //   )),
+                // ),
                 SizedBox(
                   height: 20,
                 )

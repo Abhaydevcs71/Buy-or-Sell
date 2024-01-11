@@ -98,7 +98,7 @@ class _ChatStreamState extends State<ChatStream> {
                               ),
                               child: Text(
                                 snapshot.data!.docs[index]['message'],
-                                style: TextStyle(fontSize: 16),
+                                style: const TextStyle(fontSize: 16),
                               ),
                             ),
                           ),

@@ -5,6 +5,7 @@ class AppColors {
   static const Color whiteColor = Colors.white;
   static const Color greyColor = Colors.grey;
   static const Color blackColor = Colors.black;
+  
 }
 
 class AppImage {

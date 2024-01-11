@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:second_store/screens/location_screen.dart';
+import 'package:second_store/screens/profile.dart';
 
 class EmailVerificationScreen extends StatelessWidget {
   static const String id = 'email-ver';
@@ -58,7 +59,7 @@ class EmailVerificationScreen extends StatelessWidget {
                           );
                         }
                         Navigator.pushReplacementNamed(
-                            context, LocationScreen.id);
+                            context, ProfileForm.id);
                       },
                     ),
                   ),

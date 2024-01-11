@@ -1,19 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:like_button/like_button.dart';
 import 'package:second_store/screens/product_details_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 class ProductCard extends StatefulWidget {
   ProductCard({
-    super.key,
     required this.data,
-    required String formatedPrice,
-  }) : _formatedPrice = formatedPrice;
+    required String formattedPrice,
+  }) : _formattedPrice = formattedPrice;
 
   final QueryDocumentSnapshot<Object?> data;
-  final String _formatedPrice;
+  final String _formattedPrice;
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -21,7 +20,38 @@ class ProductCard extends StatefulWidget {
 
 class _ProductCardState extends State<ProductCard> {
   FirebaseService _service = FirebaseService();
-  final _format = NumberFormat('##,##,##0'); // to get price format look better
+  final _format = NumberFormat('##,##,##0');
+  bool _isLiked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getFav();
+  }
+
+  Future<void> getFav() async {
+    try {
+      var favCount = widget.data['favCount'] as List<dynamic>;
+
+      setState(() {
+        _isLiked = favCount.contains(_service.user!.uid);
+      });
+    } catch (error) {
+      print('Error getting fav: $error');
+    }
+  }
+
+  Future<void> updateFavCount() async {
+    try {
+      await _service.updateFavorite(!_isLiked, widget.data.id, context);
+
+      setState(() {
+        _isLiked = !_isLiked;
+      });
+    } catch (error) {
+      print('Error updating fav count: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +60,21 @@ class _ProductCardState extends State<ProductCard> {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProductDetailsScreen(
-                adId: adId,
-              ),
-            ));
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailsScreen(
+              adId: adId,
+            ),
+          ),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Container(
           decoration: BoxDecoration(
-              border:
-                  Border.all(color: Theme.of(context).primaryColor, width: 0),
-              borderRadius: BorderRadius.circular(8)),
+            border: Border.all(color: Theme.of(context).primaryColor, width: 0),
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Stack(
@@ -70,7 +101,7 @@ class _ProductCardState extends State<ProductCard> {
                       Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: Text(
-                          widget._formatedPrice,
+                          widget._formattedPrice,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -93,28 +124,62 @@ class _ProductCardState extends State<ProductCard> {
                   ],
                 ),
                 // like button part
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 100,
+                          child: Center(
+                            child: Image.network(
+                              widget.data['images'][0],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: Text(
+                          widget._formattedPrice,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: Text(
+                          widget.data['name'],
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: Text(widget.data['Category']),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                ),
+                // Like button part
                 Positioned(
                   right: 0,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Center(
-                      child: LikeButton(
-                        circleColor: CircleColor(
-                            start: Color(0xff00ddff), end: Color(0xff0099cc)),
-                        bubblesColor: BubblesColor(
-                          dotPrimaryColor: Color(0xff33b5e5),
-                          dotSecondaryColor: Color(0xff0099cc),
-                        ),
-                        likeBuilder: (bool isLiked) {
-                          return Icon(
-                            Icons.favorite,
-                            color: isLiked ? Colors.red : Colors.grey,
-                          );
-                        },
-                      ),
+                  child: IconButton(
+                    icon: Icon(
+                      _isLiked ? Icons.favorite : Icons.favorite_border,
                     ),
+                    color: _isLiked ? Colors.red : Colors.black,
+                    onPressed: updateFavCount,
                   ),
-                )
+                ),
               ],
             ),
           ),

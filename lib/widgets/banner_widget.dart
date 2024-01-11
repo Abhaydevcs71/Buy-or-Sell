@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:second_store/screens/profile.dart';
+//import 'package:firebase_storage/firebase_storage.dart';
 
 class BannerWidget extends StatelessWidget {
   const BannerWidget({super.key});
@@ -10,8 +11,18 @@ class BannerWidget extends StatelessWidget {
     return Center(
         child: Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * .30,
-      color: Color.fromARGB(255, 169, 201, 192),
+      height: MediaQuery.of(context).size.height * .25,
+      
+      decoration: BoxDecoration(
+color: Color.fromARGB(255, 169, 201, 192),
+borderRadius: BorderRadius.circular(8),
+gradient: LinearGradient(
+          colors: [Color(0xffdaa4af), Color(0xff3f5efb)],
+          stops: [0.25, 0.75],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        )
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -22,7 +33,7 @@ class BannerWidget extends StatelessWidget {
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                   children: [
                       SizedBox(
                         height: 10,
                       ),
@@ -73,41 +84,43 @@ class BannerWidget extends StatelessWidget {
                 ],
               ),
             ),
-            Row(
+        //     Row(
               
-              mainAxisSize:MainAxisSize.min,
-              children: [
-          Expanded(child: Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                onPrimary: Colors.teal[900],
-                shadowColor: const Color.fromARGB(255, 109, 106, 105),
-                elevation: 5,
-                fixedSize: const Size(30, 20)
-              ),
-              onPressed:(){},
-               child:Text(
-                'Rent hostel',textAlign: TextAlign.center,
-                )
-                ),
-          )
-              ),
-          SizedBox(width:20),
-          Expanded(child: Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                onPrimary: Colors.teal[900],
-                shadowColor: const Color.fromARGB(255, 109, 106, 105),
-                elevation: 5,
-                fixedSize: const Size(30, 20)
-              ),
-              onPressed: (){}, child: Text('Sell Hostel',textAlign: TextAlign.center,)),
-          )),
-        ],),
+        //       mainAxisSize:MainAxisSize.min,
+        //       children: [
+        //   Expanded(child: Padding(
+        //     padding: const EdgeInsets.only(left: 15),
+        //     child: ElevatedButton(
+        //       style: ElevatedButton.styleFrom(
+        //         primary: Colors.white,
+        //         onPrimary: Colors.teal[900],
+        //         shadowColor: const Color.fromARGB(255, 109, 106, 105),
+        //         elevation: 5,
+        //         fixedSize: const Size(30, 20)
+        //       ),
+        //       onPressed:(){
+                
+        //       },
+        //        child:Text(
+        //         'Rent hostel',textAlign: TextAlign.center,
+        //         )
+        //         ),
+        //   )
+        //       ),
+        //   SizedBox(width:20),
+        //   Expanded(child: Padding(
+        //     padding: const EdgeInsets.only(right: 15),
+        //     child: ElevatedButton(
+        //       style: ElevatedButton.styleFrom(
+        //         primary: Colors.white,
+        //         onPrimary: Colors.teal[900],
+        //         shadowColor: const Color.fromARGB(255, 109, 106, 105),
+        //         elevation: 5,
+        //         fixedSize: const Size(30, 20)
+        //       ),
+        //       onPressed: (){}, child: Text('Sell Hostel',textAlign: TextAlign.center,)),
+        //   )),
+        // ],),
           ],
         ),
       ),

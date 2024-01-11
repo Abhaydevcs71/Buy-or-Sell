@@ -16,6 +16,7 @@ class MyAdsScreen extends StatelessWidget {
       length: 2,
       initialIndex: 0,
       child: Scaffold(
+        backgroundColor: Colors.grey[200],
           appBar: AppBar(
             backgroundColor: Colors.white,
             elevation: 0,
@@ -47,13 +48,86 @@ class MyAdsScreen extends StatelessWidget {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
-                color: AppColors.whiteColor,
+          color: Colors.grey[200],
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FutureBuilder<QuerySnapshot>(
                     future: _service.products
                         .where('userId', isEqualTo: _service.user?.uid)
                         .orderBy('date')
+                        .get(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        print('Error: ${snapshot.error}');
+                        return Text('Error: ${snapshot.error}');
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 140, right: 140),
+                          child: Center(
+                            child: LinearProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Theme.of(context).primaryColor),
+                              backgroundColor: AppColors.whiteColor,
+                            ),
+                          ),
+                        );
+                      }
+
+                      return Column(
+                        children: [
+                          Container(
+                            
+                            height: 56,
+                            child: Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                'My Ads',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 250,
+                                  childAspectRatio: 2 / 2.6,
+                                  crossAxisSpacing: 0,
+                                  mainAxisSpacing: 8,
+                                ),
+                                itemCount: snapshot.data!.size,
+                                itemBuilder: (BuildContext context, int i) {
+                                  var data = snapshot.data!.docs[i];
+                                  var _price = int.parse(data[
+                                      'Price']); 
+                                  String _formatedPrice =
+                                      '₹ ${_format.format(_price)}';
+                                  return ProductCard(
+                                      data: data,
+                                      formattedPrice: _formatedPrice);
+                                }),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                          color: Colors.grey[200],
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FutureBuilder<QuerySnapshot>(
+                    future: _service.products
+                        .where('favCount', arrayContains: _service.user!.uid)
+                        //.orderBy('date'
                         .get(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -79,11 +153,12 @@ class MyAdsScreen extends StatelessWidget {
                       return Column(
                         children: [
                           Container(
+                            
                             height: 56,
                             child: Padding(
                               padding: EdgeInsets.all(8),
                               child: Text(
-                                'My Ads',
+                                'Favorites',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -103,13 +178,13 @@ class MyAdsScreen extends StatelessWidget {
                                 itemBuilder: (BuildContext context, int i) {
                                   var data = snapshot.data!.docs[i];
                                   var _price = int.parse(data[
-                                      'Price']); //price convert to int in firestore it is in string.
+                                      'Price']); 
                                   String _formatedPrice =
                                       '₹ ${_format.format(_price)}';
 
                                   return ProductCard(
                                       data: data,
-                                      formatedPrice: _formatedPrice);
+                                      formattedPrice: _formatedPrice);
                                 }),
                           ),
                         ],
@@ -118,9 +193,6 @@ class MyAdsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Center(
-                child: Text('My Favorites'),
-              )
             ],
           )),
     );

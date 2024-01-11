@@ -57,9 +57,9 @@ class AuthUi extends StatelessWidget {
               _authentication.addUser(context, user.uid);
             }
           }),
-          SignInButton(Buttons.FacebookNew,
-              text: 'Continue with Facebook', onPressed: () {}),
-          const Padding(
+          // SignInButton(Buttons.FacebookNew,
+          //     text: 'Continue with Facebook', onPressed: () {}),
+           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
               'OR',

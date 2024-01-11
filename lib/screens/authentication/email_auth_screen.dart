@@ -169,11 +169,11 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
               Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    child: const Text(
+                    child: _login ? Text(
                       'Forgot password?',
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.blue),
-                    ),
+                    ) : SizedBox(),
                     onPressed: () {
                       Navigator.pushNamed(context, PasswordResetScreen.id);
                     },

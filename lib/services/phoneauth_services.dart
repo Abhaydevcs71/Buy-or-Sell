@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/screens/authentication/otp_screen.dart';
 import 'package:second_store/screens/location_screen.dart';
+import 'package:second_store/screens/profile.dart';
 
 class PhoneAuthServices {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -21,7 +22,7 @@ class PhoneAuthServices {
     if (document.length > 0) {
       //user data exist
       //skip firestore
-      Navigator.pushReplacementNamed(context, LocationScreen.id);
+      Navigator.pushReplacementNamed(context, ProfileForm.id);
     } else {
       //user data not exist
       //add user data to firestore
@@ -30,7 +31,7 @@ class PhoneAuthServices {
         'mobile': user?.phoneNumber, // phone number
         'email': user?.email // email
       }).then((value) {
-        Navigator.pushReplacementNamed(context, LocationScreen.id);
+        Navigator.pushReplacementNamed(context, ProfileForm.id);
       }).catchError((error) => print("Failed to add user: $error"));
     }
   }
