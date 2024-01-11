@@ -41,13 +41,13 @@ class _ChatScreenState extends State<ChatScreen> {
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
-              Text('Something went wrong');
+              const Text('Something went wrong');
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
-              Center(
+              const Center(
                 child: CircularProgressIndicator(
-                    // valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                     valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
                     ),
               );
             }
@@ -56,9 +56,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
                 return Container(
-                  // decoration: BoxDecoration(
-                  //   border: Border(bottom: BorderSide(color: Colors.grey))
-                  // ),
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(color: Colors.grey))
+                  ),
                   child: ListTile(
                     leading: Image.network(
                       data['image'],
@@ -66,7 +66,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       height: 40,
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.more_vert),
+                      icon: const Icon(Icons.more_vert),
                       onPressed: () {
                       Navigator.pushReplacementNamed(context, ProfileForm.id);
                       },

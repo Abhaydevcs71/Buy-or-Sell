@@ -3,144 +3,85 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/screens/login_screen.dart';
+import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class AccountScreen extends StatefulWidget {
-  const AccountScreen({
-    super.key,
-  });
+  const AccountScreen({super.key});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
 }
 
+FirebaseAuth auth = FirebaseAuth.instance;
+User? user = auth.currentUser;
+CollectionReference users = FirebaseFirestore.instance.collection('users');
+FirebaseService _service = FirebaseService();
+
+String profile = '';
+String? name;
+String? name2;
+
+
+
 class _AccountScreenState extends State<AccountScreen> {
-  FirebaseAuth auth = FirebaseAuth.instance;
-  User? user = FirebaseAuth.instance.currentUser;
-  // final //QueryDocumentSnapshot<Object?> data;
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  FirebaseService _service = FirebaseService();
+  Future<void> fetchData() async {
+  QuerySnapshot doc = await users.where('uid', isEqualTo: user!.uid).get();
 
+  var userData = doc.docs.first.data() as Map<String, dynamic>;
+setState(() {
+   profile = userData['profile'];
+  name = userData['firstName'];
+  name2 = userData['secondName'];
+  
+});
+ 
+}
   @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
-//SignOut function
-
-    //  CollectionReference users = FirebaseFirestore.instance.collection('users');
-    void fetchUserData() async {
-      FirebaseAuth auth = FirebaseAuth.instance;
-      User? user = auth.currentUser;
-
-      if (user != null) {
-        // Reference to the "users" collection
-        CollectionReference users =
-            FirebaseFirestore.instance.collection('users');
-
-        // Query the user document based on the email field
-        QuerySnapshot querySnapshot =
-            await users.where('email', isEqualTo: user.email).get();
-
-        // Check if there is a matching document
-        if (querySnapshot.docs.isNotEmpty) {
-          // Retrieve the user data from the first document
-          var userData =
-              querySnapshot.docs.first.data() as Map<String, dynamic>;
-
-          // Access specific fields, for example, the 'name' field
-          var address = userData?['address'];
-          var city = userData?['city'];
-          var country = userData?['counntry'];
-
-          print('User ID: ${user.uid}');
-          print('User Email: ${user.email}');
-          print('User city: $address');
-          // Add more fields as needed
-        } else {
-          print('No matching document found in the "users" collection.');
-        }
-      } else {
-        print('User is not signed in.');
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal,
-        title: Text('Account'),
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 200,
-            color: Colors.blue,
-            child: Row(
-              children: [
-                Container(
-                  height: double.infinity,
-                  width: 120,
-                  child: Center(
-                      child: CircleAvatar(
-                    radius: 40,
-                    onBackgroundImageError: (exception, stackTrace) {
-                      Text('loading');
-                    },
-                    backgroundImage: NetworkImage(
-                        'https://w7.pngwing.com/pngs/87/237/png-transparent-male-avatar-boy-face-man-user-flat-classy-users-icon.png'),
-                  )),
-                ),
-
-                // Container(
-                //   color: Colors.yellow,
-                // )
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'User id:${user!.uid.toString()}',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text('Email: ${user!.email.toString()}')
-                  ],
-                )
-              ],
-            ),
+          Center(
+            child: Container(
+                //width: MediaQuery.sizeOf(context).width * 0.55,
+                //height: MediaQuery.sizeOf(context).height * 0.3,
+                child: ClipRRect(
+              borderRadius: BorderRadius.circular(110),
+              child: CircleAvatar(
+                  radius: 110,
+                  child: profile == ''
+                      ? Image.network(
+                          'https://w7.pngwing.com/pngs/87/237/png-transparent-male-avatar-boy-face-man-user-flat-classy-users-icon.png',
+                          width: 220,
+                          height: 220,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.network(
+                          profile,fit: BoxFit.cover,
+                          width: 220,
+                          height: 220,
+                        )),
+            )),
           ),
-          Container(
-            width: double.infinity,
-            height: 200,
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    height: double.infinity,
-                    width: double.infinity / .5,
-                    color: Colors.yellow,
-                    margin: EdgeInsets.only(right: 2, top: 5),
-                    child: Center(child: Text('Myad with number')),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    height: double.infinity,
-                    width: double.infinity / .5,
-                    color: Colors.red,
-                    margin: EdgeInsets.only(left: 2, top: 5),
-                    child: Center(child: Text('favorites with number')),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          Text(user!.uid),
+          Text(user!.email.toString()),
+          Text(name!+' '+name2.toString()),
           ElevatedButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-                Navigator.pushNamed(context, LoginScreen.id);
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, LoginScreen.id);
               },
-              child: Text('SignOut'))
+              child: Text('Log out'))
         ],
       ),
     );

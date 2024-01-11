@@ -33,10 +33,10 @@ class _ChatConversationState extends State<ChatConversation> {
       chatMessageController.clear();
 
       // Scroll to the bottom 
-      Future.delayed(Duration(milliseconds: 300), () {
+      Future.delayed(const Duration(milliseconds: 300), () {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
       });
@@ -51,7 +51,7 @@ class _ChatConversationState extends State<ChatConversation> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
@@ -78,9 +78,9 @@ class _ChatConversationState extends State<ChatConversation> {
                 children: [
                   Expanded(
                     child: TextField(
-                      style: TextStyle(color: Colors.white, fontSize: 20,),
+                      style: const TextStyle(color: Colors.white, fontSize: 20,),
                       controller: chatMessageController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Type message',
                         hintStyle: TextStyle(color: Colors.white, fontSize: 20),
                         border: InputBorder.none,
@@ -96,7 +96,7 @@ class _ChatConversationState extends State<ChatConversation> {
                     visible: _send,
                     child: IconButton(
                       onPressed: sendMessage,
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.send,
                         color: Colors.white,
                       ),

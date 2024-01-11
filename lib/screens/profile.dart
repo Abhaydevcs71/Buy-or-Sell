@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:second_store/screens/location_screen.dart';
+import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class ProfileForm extends StatefulWidget {
@@ -35,19 +36,19 @@ class _ProfileFormState extends State<ProfileForm> {
     // check if the user has already completed the profile
     //skips the page
 
-    // _service.users
-    //     .doc(_service.user?.uid)
-    //     .get()
-    //     .then((DocumentSnapshot document) {
-    //   if (document.exists) {
-    //     Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
-    //     if (data != null && data.containsKey('firstName')) {
-    //       if (document['firstName'] != null) {
-    //         Navigator.pushReplacementNamed(context, LocationScreen.id);
-    //       }
-    //     }
-    //   }
-    // });
+    _service.users
+        .doc(_service.user?.uid)
+        .get()
+        .then((DocumentSnapshot document) {
+      if (document.exists) {
+        Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('firstName')) {
+          if (document['firstName'] != null) {
+            Navigator.pushReplacementNamed(context, HomeScreen.id);
+          }
+        }
+      }
+    });
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -71,7 +72,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       radius: 110,
                       child: pic == ''
                           ? Image.network(
-                              'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg',
+                              'https://w7.pngwing.com/pngs/87/237/png-transparent-male-avatar-boy-face-man-user-flat-classy-users-icon.png',
                               width: 220,
                               height: 220,
                               //color: Colors.blueGrey,
