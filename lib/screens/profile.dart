@@ -37,19 +37,19 @@ class _ProfileFormState extends State<ProfileForm> {
     // check if the user has already completed the profile
     //skips the page
 
-    _service.users
-        .doc(_service.user?.uid)
-        .get()
-        .then((DocumentSnapshot document) {
-      if (document.exists) {
-        Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
-        if (data != null && data.containsKey('firstName')) {
-          if (document['firstName'] != null) {
-            Navigator.pushReplacementNamed(context, HomeScreen.id);
-          }
-        }
-      }
-    });
+    // _service.users
+    //     .doc(_service.user?.uid)
+    //     .get()
+    //     .then((DocumentSnapshot document) {
+    //   if (document.exists) {
+    //     Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+    //     if (data != null && data.containsKey('firstName')) {
+    //       if (document['firstName'] != null) {
+    //         Navigator.pushReplacementNamed(context, HomeScreen.id);
+    //       }
+    //     }
+    //   }
+    // });
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

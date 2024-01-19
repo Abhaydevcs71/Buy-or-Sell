@@ -6,9 +6,13 @@ class ChatConversation extends StatefulWidget {
   const ChatConversation({
     Key? key,
     required this.chatRoomId,
+    required this.profile,
+    required this.name1,
   }) : super(key: key);
 
   final String chatRoomId;
+  final String profile;
+  final String name1;
 
   @override
   State<ChatConversation> createState() => _ChatConversationState();
@@ -46,17 +50,48 @@ class _ChatConversationState extends State<ChatConversation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        automaticallyImplyLeading: false,
+        backgroundColor: Color.fromARGB(255, 221, 158, 171),
+        titleSpacing: -3,
+        leading: Row(
+          children: [
+            SizedBox(
+              width: 8,
+            ),
+            IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+        title: Row(
+          children: [
+            widget.profile == ''
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(35),
+                    child: Image.network(
+                      'https://w7.pngwing.com/pngs/87/237/png-transparent-male-avatar-boy-face-man-user-flat-classy-users-icon.png',
+                      width: 52,
+                      height: 52,
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(35),
+                    child: Image.network(
+                      widget.profile,
+                      width: 52,
+                      height: 52,
+                    ),
+                  ),
+            SizedBox(width: 12),
+            Text(
+              widget.name1,
+              style: TextStyle(fontSize: 26),
+            ),
+          ],
         ),
       ),
       body: Column(

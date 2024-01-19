@@ -186,8 +186,9 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 221, 158, 171),
         iconTheme: const IconThemeData(
           color: Colors.black,
         ),
@@ -548,7 +549,7 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.teal[400],
+                            backgroundColor: Color.fromARGB(255, 221, 158, 171),
                             foregroundColor: Colors.black,
                             shadowColor:
                                 const Color.fromARGB(255, 109, 106, 105),

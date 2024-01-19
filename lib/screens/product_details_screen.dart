@@ -55,6 +55,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   var _cleaning;
   var _phoneNumber;
   var _loc;
+  String? _name1;
+  String? _name2;
+  String? _num;
+  String _profile = '';
 
   @override
   void initState() {
@@ -68,10 +72,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       var snapshot =
           await _service.products.where('docId', isEqualTo: widget.adId).get();
       if (snapshot.docs.isNotEmpty) {
-        var data = snapshot.docs.first.data() as Map<String,
-            dynamic>; // Access the first document in the snapshot
+        var data = snapshot.docs.first.data() as Map<String, dynamic>;
         setState(() {
-          // Update the state with the loaded data
           _loading = false;
 
           images = List<String>.from(data?['images']);
@@ -89,7 +91,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _bathroom = data?['bathroom'];
           _gender = data?['gender'];
           _food = data?['food'];
-
           _familyRoomPrice = data?['familyRoomPrice'];
           _doubleRoomPrice = data?['doubleRoomPrice'];
           _singleRoomPrice = data?['singleRoomPrice'];
@@ -98,10 +99,31 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _phoneNumber = data?['phoneNumber'];
           documentId = snapshot.docs.first.reference;
         });
+
+        // Call fetchSellerData here
+        await fetchSellerData();
       }
     } catch (error) {
       print('Error loading product details: $error');
       // Handle error here
+    }
+  }
+
+  Future<void> fetchSellerData() async {
+    try {
+      var snapshot =
+          await _service.users.where('uid', isEqualTo: _sellerId).get();
+      if (snapshot.docs.isNotEmpty) {
+        var sData = snapshot.docs.first.data() as Map<String, dynamic>;
+        setState(() {
+          _name1 = sData['firstName'];
+          _name2 = sData['secondName'];
+          _profile = sData['profile'];
+          _num = sData['phone'];
+        });
+      }
+    } catch (e) {
+      print('Error fetching seller data: $e');
     }
   }
 
@@ -116,6 +138,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     }
   }
 
+  
   createChatRoom() {
     List<String> users = [
       _sellerId, // seller
@@ -146,7 +169,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       context,
       MaterialPageRoute<void>(
         builder: (BuildContext context) => ChatConversation(
-          chatRoomId: chatRoomId,
+          chatRoomId: chatRoomId,profile:_profile,name1: _name,
         ),
       ),
     );
@@ -155,6 +178,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         actions: [
           if (_sellerId == _service.user!.uid)
@@ -165,14 +189,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       .doc(documentId.id)
                       .delete();
                   print(documentId.id);
-                  await Future.delayed(Duration(seconds: 2));
+                  await Future.delayed(const Duration(seconds: 2));
                   // Duration(seconds: 2);
                   // Navigator.pop(context);
                   Navigator.pushReplacementNamed(context, HomeScreen.id);
                 },
-                icon: Icon(Icons.delete))
+                icon: const Icon(Icons.delete))
         ],
-        backgroundColor: Colors.teal,
+        backgroundColor: Color.fromARGB(255, 221, 158, 171),
         title: Text(_name),
       ),
       body: SafeArea(
@@ -193,8 +217,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                     Theme.of(context).primaryColor),
                               ),
-                              SizedBox(height: 10),
-                              Text('Loading images'),
+                              const SizedBox(height: 10),
+                              const Text('Loading images'),
                             ],
                           ),
                         )
@@ -212,20 +236,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             sliderHeight: 300,
                             showIndicator: true,
                             sliderWidth: double.infinity,
-                            indicatorActiveColor: Colors.teal,
+                            indicatorActiveColor:
+                                Color.fromARGB(255, 131, 144, 209),
                             indicatorDeactiveColor: Colors.blueGrey,
-                            autoPlayInterval: Duration(seconds: 4),
+                            autoPlayInterval: const Duration(seconds: 4),
                             currentItemShadow: [
                               BoxShadow(color: Colors.transparent)
                             ],
                           ),
                         ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Container(
-                  height: 130,
+                  height: 110,
                   width: double.infinity,
                   // color: Colors.grey[350],
                   child: Column(
@@ -236,7 +261,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         padding: const EdgeInsets.only(left: 10),
                         child: Text(
                           _name.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 40),
                         ),
                       ),
@@ -244,24 +269,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         padding: const EdgeInsets.only(left: 10),
                         child: Text(
                           '₹ ${_price.toString()}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 30),
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                const Padding(
+                  padding: EdgeInsets.only(left: 10),
                   child: Text(
                     'Description',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Container(
@@ -276,44 +301,44 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
                               'Description: ${_description.toString()}',
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.normal),
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.normal),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
                               'Address: ${_adress.toString()}',
-                              style: TextStyle(
-                                fontSize: 14,
+                              style: const TextStyle(
+                                fontSize: 20,
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
                                 'Posted On: ${DateFormat.yMd().add_jm().format(_date)}',
-                                style: TextStyle(
-                                    fontSize: 14,
+                                style: const TextStyle(
+                                    fontSize: 20,
                                     fontWeight: FontWeight.normal)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
                               'Parking: ${_parking.toString()}',
-                              style: TextStyle(fontSize: 14),
+                              style: const TextStyle(fontSize: 20),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           if (_category.toString() == 'House' ||
@@ -322,10 +347,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               padding: const EdgeInsets.only(left: 10),
                               child: Text(
                                 'BHK: ${_bhk.toString()}',
-                                style: TextStyle(fontSize: 14),
+                                style: const TextStyle(fontSize: 20),
                               ),
                             ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           if (_category.toString() == 'PG' ||
@@ -338,21 +363,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       'Number of people in a room: ${_people.toString()}',
-                                      style: TextStyle(fontSize: 14),
+                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       'Bathroom facility: ${_bathroom.toString()}',
-                                      style: TextStyle(fontSize: 14),
+                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   ),
                                 ]),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           if (_category.toString() == 'Hostel')
@@ -360,10 +385,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               padding: const EdgeInsets.only(left: 10),
                               child: Text(
                                 'Only for: ${_gender.toString()}',
-                                style: TextStyle(fontSize: 14),
+                                style: const TextStyle(fontSize: 20),
                               ),
                             ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           if (_category.toString() == 'Hostel' ||
@@ -372,10 +397,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               padding: const EdgeInsets.only(left: 10),
                               child: Text(
                                 'Food facility: ${_food.toString()}',
-                                style: TextStyle(fontSize: 14),
+                                style: const TextStyle(fontSize: 20),
                               ),
                             ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           if (_category.toString() ==
@@ -387,148 +412,57 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       'Price of Single Room: ${_singleRoomPrice.toString()}',
-                                      style: TextStyle(fontSize: 14),
+                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       'Price of Double Room: ${_doubleRoomPrice.toString()}',
-                                      style: TextStyle(fontSize: 14),
+                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       'Price of Family Room: ${_familyRoomPrice.toString()}',
-                                      style: TextStyle(fontSize: 14),
+                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       'Internet facility: ${_wifi.toString()}',
-                                      style: TextStyle(fontSize: 14),
+                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       'Room cleaning facility: ${_cleaning.toString()}',
-                                      style: TextStyle(fontSize: 14),
+                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                 ]),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Text(
-                                  'Phone Number: ${_phoneNumber.toString()}',
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 20),
-                                child: ElevatedButton.icon(
-                                    style: const ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStatePropertyAll(
-                                                Colors.teal),
-                                        minimumSize: MaterialStatePropertyAll(
-                                            Size(10, 10))),
-                                    onPressed: () async {
-                                      final Uri url = Uri(
-                                          scheme: 'tel',
-                                          path: _phoneNumber.toString());
-                                      if (await canLaunchUrl(url)) {
-                                        await launchUrl(url);
-                                      } else {
-                                        print('cannot launch this Url');
-                                      }
-                                    },
-                                    icon: Icon(Icons.call_outlined),
-                                    label: Text('Call')),
-                              )
-                            ],
-                          )
                         ],
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                _sellerId == _service.user!.uid
-                    ? SizedBox()
-                    : Container(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            createChatRoom();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.teal,
-                            textStyle: TextStyle(fontSize: 18),
-                          ),
-                          child: Text('Chat Now'),
-                        ),
-                      ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    'User details',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                //ad Posted user details
-                Container(
-                  height: 120,
-                  color: Colors.teal,
-                  child: Center(
-                      child: Text(
-                    'Ad posted user account part',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20),
-                  )),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    'Ad Posted at',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
                 ),
                 InkWell(
                   onTap: () {
@@ -539,11 +473,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
-                        color: Color.fromARGB(255, 147, 209, 175),
+                        color: Color.fromARGB(255, 131, 144, 209),
                       ),
-                      width: 200,
-                      padding: EdgeInsets.all(15),
-                      child: Row(
+                      width: 180,
+                      padding: const EdgeInsets.all(15),
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.location_on, color: Colors.white),
@@ -557,6 +491,113 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                   ),
                 ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    'Seller details',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                //ad Posted user details
+                Container(
+                  height: 100,
+                  width: double.infinity,
+                  color: Colors.grey[300],
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(40),
+                        child: CircleAvatar(
+                          radius: 40,
+                          child: _profile == ''
+                              ? Image.network(
+                                  'https://w7.pngwing.com/pngs/87/237/png-transparent-male-avatar-boy-face-man-user-flat-classy-users-icon.png')
+                              : Image.network(_profile),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _name1! + ' ' + _name2!.toString(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 25),
+                          ),
+                          Text(
+                            _num.toString(),
+                            style: TextStyle(fontSize: 20),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: _sellerId == _service.user!.uid
+                          ? const SizedBox()
+                          : SizedBox(
+                              width: 120,
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  createChatRoom();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 221, 158, 171),
+                                  textStyle: const TextStyle(fontSize: 20),
+                                ),
+                                child: const Text('Chat Now'),
+                              ),
+                            ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: _sellerId == _service.user!.uid
+                          ? const SizedBox()
+                          : SizedBox(
+                              width: 120,
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  final Uri url = Uri(
+                                      scheme: 'tel',
+                                      path: _phoneNumber.toString());
+                                  if (await canLaunchUrl(url)) {
+                                    await launchUrl(url);
+                                  } else {
+                                    print('cannot launch this Url');
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 221, 158, 171),
+                                  textStyle: const TextStyle(fontSize: 20),
+                                ),
+                                child: const Text('Call Now'),
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
                 // Container(
                 //   height: 120,
                 //   color: Colors.teal,
@@ -569,7 +610,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 //         fontSize: 20),
                 //   )),
                 // ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 )
               ],

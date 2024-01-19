@@ -26,7 +26,7 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: Colors.grey[200],
       body: PageStorage(child: _currentScreen, bucket: _bucket),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.teal[200],
+        backgroundColor: Color.fromARGB(255, 221, 158, 171),
         onPressed: () {
           //post ad
           Navigator.pushNamed(context, SellerCategory.id);
@@ -60,15 +60,12 @@ class _MainScreenState extends State<MainScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(_index == 0 ? Icons.home : Icons.home_outlined),
-                        Text(
-                          'HOME',
-                          style: TextStyle(
-                              color: _index == 0 ? color : Colors.black,
-                              fontWeight: _index == 0
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              fontSize: 12),
+                        Icon(
+                          _index == 0 ? Icons.home : Icons.home_outlined,
+                          color: _index == 0
+                              ? Color.fromARGB(255, 221, 158, 171)
+                              : Colors.black,
+                          size: 35,
                         ),
                       ],
                     ),
@@ -84,17 +81,14 @@ class _MainScreenState extends State<MainScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(_index == 1
-                            ? CupertinoIcons.chat_bubble_fill
-                            : CupertinoIcons.chat_bubble),
-                        Text(
-                          'CHAT',
-                          style: TextStyle(
-                              color: _index == 1 ? color : Colors.black,
-                              fontWeight: _index == 1
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              fontSize: 12),
+                        Icon(
+                          _index == 1
+                              ? CupertinoIcons.chat_bubble_fill
+                              : CupertinoIcons.chat_bubble,
+                          color: _index == 1
+                              ? Color.fromARGB(255, 221, 158, 171)
+                              : Colors.black,
+                          size: 30,
                         ),
                       ],
                     ),
@@ -116,17 +110,14 @@ class _MainScreenState extends State<MainScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(_index == 2
-                            ? CupertinoIcons.heart_fill
-                            : CupertinoIcons.heart),
-                        Text(
-                          'MY ADS',
-                          style: TextStyle(
-                              color: _index == 2 ? color : Colors.black,
-                              fontWeight: _index == 2
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              fontSize: 12),
+                        Icon(
+                          _index == 2
+                              ? CupertinoIcons.heart_fill
+                              : CupertinoIcons.heart,
+                          color: _index == 2
+                              ? Color.fromARGB(255, 221, 158, 171)
+                              : Colors.black,
+                          size: 30,
                         ),
                       ],
                     ),
@@ -142,17 +133,14 @@ class _MainScreenState extends State<MainScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(_index == 3
-                            ? CupertinoIcons.person_fill
-                            : CupertinoIcons.person),
-                        Text(
-                          'ACCOUNT',
-                          style: TextStyle(
-                              color: _index == 3 ? color : Colors.black,
-                              fontWeight: _index == 3
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              fontSize: 12),
+                        Icon(
+                          _index == 3
+                              ? CupertinoIcons.person_fill
+                              : CupertinoIcons.person,
+                          color: _index == 3
+                              ? Color.fromARGB(255, 221, 158, 171)
+                              : Colors.black,
+                          size: 30,
                         ),
                       ],
                     ),

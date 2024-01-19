@@ -19,10 +19,11 @@ class SellerCategory extends StatelessWidget {
     FirebaseService _service = FirebaseService();
 
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 221, 158, 171),
         elevation: 0,
         shape: Border(bottom: BorderSide(color: Colors.grey)),
-        backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(
           'Choose categories',

@@ -127,7 +127,7 @@ class MyAdsScreen extends StatelessWidget {
                   child: FutureBuilder<QuerySnapshot>(
                     future: _service.products
                         .where('favCount', arrayContains: _service.user!.uid)
-                        //.orderBy('date'
+                        //.orderBy('date')
                         .get(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {

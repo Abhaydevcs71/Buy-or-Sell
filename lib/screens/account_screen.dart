@@ -44,9 +44,9 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: Color.fromARGB(255, 221, 158, 171),
         automaticallyImplyLeading: false,
       ),
       body: Container(
@@ -85,7 +85,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   Text(
                     name! + ' ' + name2.toString(),
                     style: const TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 26,
                         fontWeight: FontWeight.bold),
                   ),
@@ -95,7 +95,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   Text(
                     user!.email.toString(),
                     style: const TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
@@ -105,7 +105,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   Text(
                     num.toString(),
                     style: const TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
@@ -117,15 +117,22 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             InkWell(
               child: Container(
-                
-                margin: EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                margin: EdgeInsets.only(left: 10, right: 10),
                 width: MediaQuery.sizeOf(context).width,
+                height: 50,
                 child: const Row(
                   children: [
+                    SizedBox(
+                      width: 8,
+                    ),
                     Icon(
                       Icons.logout,
                       size: 35,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                     SizedBox(
                       width: 30,
@@ -135,7 +142,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                   ],
