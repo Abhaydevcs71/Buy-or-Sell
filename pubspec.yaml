@@ -58,6 +58,7 @@ dependencies:
   url_launcher: null
   flutter_phone_direct_caller: ^2.1.1
   search_page: ^2.3.0
+  get: ^4.6.6
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

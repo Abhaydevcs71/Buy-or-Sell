@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:intl/intl.dart';
 
@@ -32,7 +33,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool _loading = true;
   List<String> images = [];
   FirebaseService _service = FirebaseService();
-  final _format = NumberFormat('##,##,##0');
+  //final _format = NumberFormat('##,##,##0');
   var _name;
   var _description;
   var _price;
@@ -70,32 +71,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       if (snapshot.docs.isNotEmpty) {
         var data = snapshot.docs.first.data() as Map<String,
             dynamic>; // Access the first document in the snapshot
+
+        // Update the state with the loaded data
         setState(() {
-          // Update the state with the loaded data
           _loading = false;
 
-          images = List<String>.from(data?['images']);
-          _name = data?['name'];
-          _adress = data?['adress'];
-          _bhk = data?['bhk'];
-          _description = data?['Description'];
+          images = List<String>.from(data['images']);
+          _name = data['name'];
+          _adress = data['adress'];
+          _bhk = data['bhk'];
+          _description = data['Description'];
           _parking = data['parking'];
-          _date = (data?['date'] as Timestamp).toDate();
-          _price = data?['Price'];
+          _date = (data['date'] as Timestamp).toDate();
+
+          _price = data['Price'];
           _sellerId = data['userId'];
           _id = data['docId'];
-          _category = data?['Category'];
-          _people = data?['People'];
-          _bathroom = data?['bathroom'];
-          _gender = data?['gender'];
-          _food = data?['food'];
+          _category = data['Category'];
+          _people = data['People'];
+          _bathroom = data['bathroom'];
+          _gender = data['gender'];
+          _food = data['food'];
 
-          _familyRoomPrice = data?['familyRoomPrice'];
-          _doubleRoomPrice = data?['doubleRoomPrice'];
-          _singleRoomPrice = data?['singleRoomPrice'];
-          _wifi = data?['internet'];
-          _cleaning = data?['cleaningservice'];
-          _phoneNumber = data?['phoneNumber'];
+          _familyRoomPrice = data['familyRoomPrice'];
+          _doubleRoomPrice = data['doubleRoomPrice'];
+          _singleRoomPrice = data['singleRoomPrice'];
+          _wifi = data['internet'];
+          _cleaning = data['cleaningservice'];
+          _phoneNumber = data['phoneNumber'];
           documentId = snapshot.docs.first.reference;
         });
       }
@@ -165,7 +168,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       .doc(documentId.id)
                       .delete();
                   print(documentId.id);
-                  await Future.delayed(Duration(seconds: 2));
+                  await Future.delayed(Duration(seconds: 2), () {
+                    Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  });
                   // Duration(seconds: 2);
                   // Navigator.pop(context);
                   Navigator.pushReplacementNamed(context, HomeScreen.id);
@@ -173,7 +180,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 icon: Icon(Icons.delete))
         ],
         backgroundColor: Colors.teal,
-        title: Text(_name),
+        title: Text(_name.toString()),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -214,10 +221,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             sliderWidth: double.infinity,
                             indicatorActiveColor: Colors.teal,
                             indicatorDeactiveColor: Colors.blueGrey,
-                            autoPlayInterval: Duration(seconds: 4),
-                            currentItemShadow: [
-                              BoxShadow(color: Colors.transparent)
-                            ],
+                            autoPlayInterval: const Duration(seconds: 4),
+                            // currentItemShadow: [
+                            //   BoxShadow(color: Colors.transparent)
+                            // ],
                           ),
                         ),
                 ),
@@ -295,14 +302,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           SizedBox(
                             height: 10,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                                'Posted On: ${DateFormat.yMd().add_jm().format(_date)}',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal)),
-                          ),
+                          if (_date != null)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                  'Posted On: ${DateFormat.yMd().add_jm().format(_date)}',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal)),
+                            ),
                           SizedBox(
                             height: 10,
                           ),
@@ -454,13 +462,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         minimumSize: MaterialStatePropertyAll(
                                             Size(10, 10))),
                                     onPressed: () async {
-                                      final Uri url = Uri(
-                                          scheme: 'tel',
-                                          path: _phoneNumber.toString());
-                                      if (await canLaunchUrl(url)) {
-                                        await launchUrl(url);
-                                      } else {
-                                        print('cannot launch this Url');
+                                      if (_phoneNumber != null) {
+                                        final Uri url = Uri(
+                                            scheme: 'tel',
+                                            path: _phoneNumber.toString());
+                                        if (await canLaunchUrl(url)) {
+                                          await launchUrl(url);
+                                        } else {
+                                          print('cannot launch this Url');
+                                        }
                                       }
                                     },
                                     icon: Icon(Icons.call_outlined),
@@ -574,6 +584,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 )
               ],
             ),
+            if (_loading = false)
+              Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
+              )
           ],
         )),
       ),

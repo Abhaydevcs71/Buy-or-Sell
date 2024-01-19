@@ -82,13 +82,14 @@ class _AccountScreenState extends State<AccountScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    name! + ' ' + name2.toString(),
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold),
-                  ),
+                  if (name != null)
+                    Text(
+                      name! + ' ' + name2.toString(),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold),
+                    ),
                   const SizedBox(
                     height: 8,
                   ),
@@ -117,7 +118,6 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             InkWell(
               child: Container(
-                
                 margin: EdgeInsets.only(left: 10),
                 width: MediaQuery.sizeOf(context).width,
                 child: const Row(

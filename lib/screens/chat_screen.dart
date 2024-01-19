@@ -49,20 +49,29 @@ class _ChatScreenState extends State<ChatScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               const Center(
                 child: CircularProgressIndicator(
-                     valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                    ),
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                ),
               );
             }
+
+            if (snapshot.data?.docs == null || snapshot.data!.docs.isEmpty) {
+              const Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                ),
+              );
+            }
+
             return ListView(
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
+
                 return Container(
                   margin: EdgeInsets.only(top: 8),
                   height: 80,
                   decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.grey))
-                  ),
+                      border: Border(bottom: BorderSide(color: Colors.grey))),
                   child: ListTile(
                     leading: Image.network(
                       data['image'],
@@ -72,12 +81,13 @@ class _ChatScreenState extends State<ChatScreen> {
                     trailing: IconButton(
                       icon: const Icon(Icons.more_vert),
                       onPressed: () {
-                      Navigator.pushReplacementNamed(context, ProfileForm.id);
+                        Navigator.pushReplacementNamed(context, ProfileForm.id);
                       },
                     ),
                     title: Text(
                       data['adtitle'],
-                      style: TextStyle(fontSize: 20,
+                      style: TextStyle(
+                        fontSize: 20,
                         fontWeight: data['read'] == false
                             ? FontWeight.bold
                             : FontWeight.normal,
