@@ -84,8 +84,8 @@ class _ChatStreamState extends State<ChatStream> {
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             backGroundColor: sentBy == me
-                                ? Colors.greenAccent
-                                : Colors.grey[300],
+                                ? Color.fromARGB(255, 131, 144, 209)
+                                : Color.fromARGB(255, 185, 191, 223),
                             clipper: ChatBubbleClipper8(
                               type: sentBy == me
                                   ? BubbleType.sendBubble

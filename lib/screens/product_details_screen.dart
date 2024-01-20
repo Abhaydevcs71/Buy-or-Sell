@@ -138,7 +138,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       'image': images[0],
       'adtitle': _name
     };
-
     _service.createChatRoom(
       chatData: chatData,
     );
@@ -150,6 +149,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       MaterialPageRoute<void>(
         builder: (BuildContext context) => ChatConversation(
           chatRoomId: chatRoomId,
+          name1: '',
+          profile: '',
         ),
       ),
     );
