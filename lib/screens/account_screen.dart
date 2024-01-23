@@ -44,8 +44,17 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-     backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        title: Row(
+          children: [
+            Icon(Icons.account_circle_outlined),
+            Text(
+              'Profile',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
         backgroundColor: Color.fromARGB(255, 221, 158, 171),
         elevation: 5,
         automaticallyImplyLeading: false,
