@@ -51,8 +51,7 @@ void main() async {
     // 4. App Attest provider with fallback to Device Check provider (App Attest provider is only available on iOS 14.0+, macOS 14.0+)
     // appleProvider: AppleProvider.appAttest,
   );
-  runApp(ChangeNotifierProvider(
-      create: (context) => CategoryProvider(), child: MyApp()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -62,31 +61,31 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: Color.fromARGB(255, 221, 158, 171), fontFamily: 'Lato',
-      primarySwatch:Colors.blueGrey),
+      theme: ThemeData(
+          primaryColor: Color.fromARGB(255, 221, 158, 171),
+          fontFamily: 'Lato',
+          primarySwatch: Colors.blueGrey),
       initialRoute: SplashScreen.id,
       routes: {
         SplashScreen.id: (context) => SplashScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         PhoneAuthScreen.id: (context) => PhoneAuthScreen(),
-        ProfileForm.id:(context) => ProfileForm(),
+        ProfileForm.id: (context) => ProfileForm(),
         LocationScreen.id: (context) => LocationScreen(),
         HomeScreen.id: (context) => HomeScreen(),
         EmailAuthScreen.id: (context) => EmailAuthScreen(),
         EmailVerificationScreen.id: (context) => EmailVerificationScreen(),
         PasswordResetScreen.id: (context) => PasswordResetScreen(),
-        
         MainScreen.id: (context) => MainScreen(),
         SellerCategory.id: (context) => SellerCategory(),
         PgSellerForm.id: (context) => PgSellerForm(),
-
         HostelSellerForm.id: (context) => HostelSellerForm(),
         HouseSellerForm.id: (context) => HouseSellerForm(),
         HotelSellerForm.id: (context) => HotelSellerForm(),
         ApartmentSellerForm.id: (context) => ApartmentSellerForm(),
         MapScreen.id: (context) => MapScreen(),
         ProductDetailsScreen.id: (context) => ProductDetailsScreen(),
-        CategoryResultScreen.id:(context) => CategoryResultScreen(),
+        CategoryResultScreen.id: (context) => CategoryResultScreen(),
       },
     );
   }

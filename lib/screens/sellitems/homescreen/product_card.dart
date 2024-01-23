@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:second_store/screens/product_details_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/intl.dart';
 
 class ProductCard extends StatefulWidget {
   ProductCard({
@@ -70,119 +69,79 @@ class _ProductCardState extends State<ProductCard> {
       },
       child: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).primaryColor, width: 0),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Stack(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border:
+                    Border.all(color: Theme.of(context).primaryColor, width: 0),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Stack(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 100,
-                        child: Center(
-                          child: Image.network(
-                            widget.data['images'][0],
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    if (widget.data['Category'] != 'Hotel')
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Text(
-                          widget._formattedPrice,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: Text(
-                        widget.data['name'],
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: Text(widget.data['Category']),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-                // like button part
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: 100,
-                          child: Center(
-                            child: Image.network(
-                              widget.data['images'][0],
-                              fit: BoxFit.cover,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 100,
+                            child: Center(
+                              child: Image.network(
+                                widget.data['images'][0],
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Text(
-                          widget._formattedPrice,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        SizedBox(
+                          height: 5,
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Text(
-                          widget.data['name'],
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        if (widget.data['Category'] != 'Hotel')
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: Text(
+                              widget._formattedPrice,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Text(
+                            widget.data['name'],
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Text(widget.data['Category']),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
-                ),
-                // Like button part
-                Positioned(
-                  right: 0,
-                  child: IconButton(
-                    icon: Icon(
-                      _isLiked ? Icons.favorite : Icons.favorite_border,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Text(widget.data['Category']),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
                     ),
-                    color: _isLiked ? Colors.red : Colors.black,
-                    onPressed: updateFavCount,
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+            //like Button part
+            Positioned(
+              right: -10,
+              top: -5,
+              child: IconButton(
+                icon: Icon(
+                  _isLiked ? Icons.favorite : Icons.favorite_border,
+                ),
+                color: _isLiked ? Colors.red : Colors.black,
+                onPressed: updateFavCount,
+              ),
+            ),
+          ],
         ),
       ),
     );
