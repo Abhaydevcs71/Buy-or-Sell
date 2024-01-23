@@ -53,10 +53,11 @@ class _ProfileFormState extends State<ProfileForm> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.green[300],
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text('Profile Form'),
+        backgroundColor: Color.fromARGB(255, 221, 158, 171),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -298,7 +299,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         ),
                         style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.teal)),
+                                MaterialStateProperty.all<Color>(Color.fromARGB(255, 221, 158, 171),)),
                       ),
                     ),
                   ],

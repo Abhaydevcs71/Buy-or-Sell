@@ -44,7 +44,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+     backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 221, 158, 171),
         elevation: 5,
@@ -97,7 +97,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   Text(
                     user!.email.toString(),
                     style: const TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
@@ -107,7 +107,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   Text(
                     num.toString(),
                     style: const TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
@@ -126,7 +126,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     Icon(
                       Icons.logout,
                       size: 35,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                     SizedBox(
                       width: 30,
@@ -136,7 +136,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                   ],
