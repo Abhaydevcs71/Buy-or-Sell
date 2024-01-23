@@ -38,71 +38,88 @@ class _ChatScreenState extends State<ChatScreen> {
         stream: _service.messages
             .where('users', arrayContains: _service.user!.uid)
             .snapshots(),
-        builder:
-            (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             const Text('Something went wrong');
           }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (snapshot.connectionState == ConnectionState.waiting ||
+              snapshot.data == null) {
             const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
               ),
             );
           }
-          return ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data =
-                  document.data() as Map<String, dynamic>;
-              return Container(
-                margin: const EdgeInsets.only(top: 8),
-                height: 80,
-                decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Color.fromARGB(255, 131, 144, 209)),),),
-                child: ListTile(
-                  leading: Image.network(
-                    data['image'],
-                    width: 60,
-                    height: 60,
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.more_vert),
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, ProfileForm.id);
-                    },
-                  ),
-                  title: Text(
-                    data['adtitle'],
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: data['read'] == false
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                    ),
-                  ),
-                  onTap: () {
-                    _service.messages
-                        .doc(data['chatRoomId'])
-                        .update({'read': 'true'});
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (BuildContext context) => ChatConversation(
-                          chatRoomId: data['chatRoomId'],profile: data['image'],name1: data['adtitle'],
+
+          // if (snapshot.data == null) {
+          //   const Center(
+          //     child: CircularProgressIndicator(
+          //       valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+          //     ),
+          //   );
+          // }
+          print('Data :${snapshot.data} ');
+
+          return snapshot.data != null
+              ? ListView(
+                  children:
+                      snapshot.data!.docs.map((DocumentSnapshot document) {
+                    Map<String, dynamic> data =
+                        document.data()! as Map<String, dynamic>;
+
+                    return Container(
+                      margin: EdgeInsets.only(top: 8),
+                      height: 80,
+                      decoration: BoxDecoration(
+                          border:
+                              Border(bottom: BorderSide(color: Colors.grey))),
+                      child: ListTile(
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.network(
+                            data['image'],
+                            width: 80,
+                            height: 50,
+                            fit: BoxFit.fill,
+                          ),
                         ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.more_vert),
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                                context, ProfileForm.id);
+                          },
+                        ),
+                        title: Text(
+                          data['adtitle'],
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: data['read'] == false
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                        ),
+                        onTap: () {
+                          _service.messages
+                              .doc(data['chatRoomId'])
+                              .update({'read': 'true'});
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                  builder: (BuildContext context) =>
+                                      ChatConversation(
+                                        chatRoomId: data['chatRoomId'],
+                                        profile: '',
+                                        name1: '',
+                                      )));
+                        },
+                        //subtitle: Text(data['lastChat']),
                       ),
                     );
-                  },
-                  subtitle: data['lastChat'] == null
-                      ? const Text('(draft)')
-                      : Text(
-                          data['lastChat'],
-                        ),
-                ),
-              );
-            }).toList(),
-          );
+                  }).toList(),
+                )
+              : Container();
         },
       ),
     );

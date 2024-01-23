@@ -4,25 +4,25 @@ import 'package:second_store/screens/profile.dart';
 //import 'package:firebase_storage/firebase_storage.dart';
 
 class BannerWidget extends StatelessWidget {
-  const BannerWidget({super.key});
+  String img;
+  String cat;
+   BannerWidget({super.key,required this.img,required this.cat});
 
   @override
   Widget build(BuildContext context) {
     return Center(
         child: Container(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * .25,
-      
       decoration: BoxDecoration(
-color: Color.fromARGB(255, 169, 201, 192),
-borderRadius: BorderRadius.circular(8),
-gradient: LinearGradient(
-          colors: [Color(0xffdaa4af), Color(0xff3f5efb)],
-          stops: [0.25, 0.75],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        )
-      ),
+          color: Color.fromARGB(255, 169, 201, 192),
+          borderRadius: BorderRadius.circular(8),
+          gradient: LinearGradient(
+            colors: [Color(0xffdaa4af), Color(0xff3f5efb)],
+            stops: [0.25, 0.75],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          )),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -33,12 +33,12 @@ gradient: LinearGradient(
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                   children: [
+                    children: [
                       SizedBox(
                         height: 10,
                       ),
                       Text(
-                        'Hostel',
+                        cat,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -59,16 +59,15 @@ gradient: LinearGradient(
                             repeatForever: true,
                             isRepeatingAnimation: true,
                             animatedTexts: [
-                              FadeAnimatedText('Reach 10 lakh+\nIntrested Buyers',
-                              duration: Duration(seconds: 4)),
-                              FadeAnimatedText('New way to\nRent or sell\nHostels',
-                              duration: Duration(seconds: 4)),
-                              FadeAnimatedText('Over 1 Lakh\n Hostels to Rent',
-                              duration: Duration(seconds: 4)),
+                              FadeAnimatedText(
+                                  'Reach 10 lakh+\nIntrested Buyers',
+                                  duration: Duration(seconds: 4)),
+                              FadeAnimatedText(
+                                  'New way to\nRent or sell\n${cat}S',
+                                  duration: Duration(seconds: 4)),
+                              FadeAnimatedText('Over 1 Lakh\n${cat}S \nto Rent',
+                                  duration: Duration(seconds: 4)),
                             ],
-                            onTap: () {
-                              print("Tap Event");
-                            },
                           ),
                         ),
                       )
@@ -79,52 +78,17 @@ gradient: LinearGradient(
                     child: Container(
                       width: 100,
                       height: 100,
-                      child: Image.network('https://firebasestorage.googleapis.com/v0/b/secondstore-62b29.appspot.com/o/categories%2Fhostel.png?alt=media&token=9966ce36-c34a-42b1-b6b5-4333ebb5d449')),
+                      child: Image.network(
+                          img,
+                          ),
+                    ),
                   )
                 ],
               ),
             ),
-        //     Row(
-              
-        //       mainAxisSize:MainAxisSize.min,
-        //       children: [
-        //   Expanded(child: Padding(
-        //     padding: const EdgeInsets.only(left: 15),
-        //     child: ElevatedButton(
-        //       style: ElevatedButton.styleFrom(
-        //         primary: Colors.white,
-        //         onPrimary: Colors.teal[900],
-        //         shadowColor: const Color.fromARGB(255, 109, 106, 105),
-        //         elevation: 5,
-        //         fixedSize: const Size(30, 20)
-        //       ),
-        //       onPressed:(){
-                
-        //       },
-        //        child:Text(
-        //         'Rent hostel',textAlign: TextAlign.center,
-        //         )
-        //         ),
-        //   )
-        //       ),
-        //   SizedBox(width:20),
-        //   Expanded(child: Padding(
-        //     padding: const EdgeInsets.only(right: 15),
-        //     child: ElevatedButton(
-        //       style: ElevatedButton.styleFrom(
-        //         primary: Colors.white,
-        //         onPrimary: Colors.teal[900],
-        //         shadowColor: const Color.fromARGB(255, 109, 106, 105),
-        //         elevation: 5,
-        //         fixedSize: const Size(30, 20)
-        //       ),
-        //       onPressed: (){}, child: Text('Sell Hostel',textAlign: TextAlign.center,)),
-        //   )),
-        // ],),
           ],
         ),
       ),
-      
     ));
   }
 }

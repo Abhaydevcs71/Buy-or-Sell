@@ -47,6 +47,7 @@ class _AccountScreenState extends State<AccountScreen> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 221, 158, 171),
+        elevation: 5,
         automaticallyImplyLeading: false,
       ),
       body: Container(
@@ -82,13 +83,14 @@ class _AccountScreenState extends State<AccountScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    name! + ' ' + name2.toString(),
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold),
-                  ),
+                  if (name != null)
+                    Text(
+                      name! + ' ' + name2.toString(),
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold),
+                    ),
                   const SizedBox(
                     height: 8,
                   ),
@@ -117,18 +119,10 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             InkWell(
               child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: EdgeInsets.only(left: 10),
                 width: MediaQuery.sizeOf(context).width,
-                height: 50,
                 child: const Row(
                   children: [
-                    SizedBox(
-                      width: 8,
-                    ),
                     Icon(
                       Icons.logout,
                       size: 35,
