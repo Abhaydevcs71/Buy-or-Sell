@@ -46,6 +46,15 @@ class _AccountScreenState extends State<AccountScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        title: Row(
+          children: [
+            Icon(Icons.account_circle_outlined),
+            Text(
+              'Profile',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
         backgroundColor: Colors.teal,
         automaticallyImplyLeading: false,
       ),
