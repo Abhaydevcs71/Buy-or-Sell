@@ -11,23 +11,20 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.mainColor,
+        backgroundColor: Color(0xfff3dfd5),
         body: Column(
           children: [
             Expanded(
                 child: Container(
               width: MediaQuery.of(context).size.width,
               color: AppColors.whiteColor,
-              child: Column(children: [
-                const SizedBox(
-                  height: 200,
-                ),
-                AppImage.iconImage,
-                const SizedBox(
-                  height: 10,
-                ),
-                AppTexts.loginScreenAppName,
-              ]),
+              child: Image.asset(
+                'assets/images/stay.jpeg',
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover,
+                //color: AppColors.whiteColor,
+              ),
             )),
             Expanded(
                 child: Container(

@@ -50,10 +50,11 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         elevation: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 221, 158, 171),
         iconTheme: IconThemeData(
           color: Colors.black,
         ),
@@ -76,10 +77,10 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
               ),
               CircleAvatar(
                 radius: 30,
-                backgroundColor: Colors.red.shade200,
+                //backgroundColor: Colors.red.shade200,
                 child: const Icon(
                   CupertinoIcons.person_alt_circle,
-                  color: Colors.red,
+                  color: Color.fromARGB(255, 221, 158, 171),
                   size: 60,
                 ),
               ),
@@ -144,6 +145,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                       : null,
                   contentPadding: EdgeInsets.only(left: 10),
                   filled: true,
+                  labelText: 'Password',
                   fillColor: Colors.grey.shade300,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(4),
@@ -190,7 +192,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                       },
                       child: Text(
                         _login ? 'Register' : 'Login ',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold,color: Color.fromARGB(255, 131, 144, 209),),
                       ))
                 ],
               )
