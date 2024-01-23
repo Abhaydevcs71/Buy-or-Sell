@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     Timer(
         const Duration(
-          seconds: 3,
+          seconds: 4,
         ), () {
       FirebaseAuth.instance.authStateChanges().listen((User? user) {
         if (user == null) {
@@ -48,37 +48,39 @@ class _SplashScreenState extends State<SplashScreen> {
     );
 
     return Scaffold(
-      backgroundColor: AppColors.mainColor,
+      //backgroundColor:Color.fromARGB(255, 221, 158, 171),
+      extendBodyBehindAppBar: true,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              'assets/images/263142.png',
-              height: 70,
-              width: 70,
-              color: AppColors.whiteColor,
+              'assets/images/stay.jpeg',
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.cover,
+              //color: AppColors.whiteColor,
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              width: 250.0,
-              child: AnimatedTextKit(
-                animatedTexts: [
-                  ColorizeAnimatedText(
-                    'Buy or Sell',
-                    textAlign: TextAlign.center,
-                    textStyle: colorizeTextStyle,
-                    colors: colorizeColors,
-                  ),
-                ],
-                isRepeatingAnimation: true,
-                onTap: () {
-                  print("Tap Event");
-                },
-              ),
-            )
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // SizedBox(
+            //   width: 250.0,
+            //   child: AnimatedTextKit(
+            //     animatedTexts: [
+            //       ColorizeAnimatedText(
+            //         'Buy or Sell',
+            //         textAlign: TextAlign.center,
+            //         textStyle: colorizeTextStyle,
+            //         colors: colorizeColors,
+            //       ),
+            //     ],
+            //     isRepeatingAnimation: true,
+            //     onTap: () {
+            //       print("Tap Event");
+            //     },
+            //   ),
+            // )
           ],
         ),
       ),

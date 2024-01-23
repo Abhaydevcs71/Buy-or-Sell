@@ -173,13 +173,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   const SizedBox(
                     width: 8,
                   ),
-                  const Icon(
-                    Icons.notifications_none,
-                    size: 25,
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  )
+                  
                 ],
               ),
             ),

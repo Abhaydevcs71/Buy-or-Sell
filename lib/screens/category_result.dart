@@ -20,21 +20,23 @@ class CategoryResultScreen extends StatelessWidget {
     print(categoryName);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Category Result')),
-      
+      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        title: Text('Category Result'),
+        backgroundColor: Color.fromARGB(255, 221, 158, 171),
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         color: AppColors.whiteColor,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          
           child: FutureBuilder<QuerySnapshot>(
             future: _service.products
                 .where('Category', isEqualTo: categoryName)
                 .orderBy('date')
                 .get(),
-            builder: (BuildContext context,
-                AsyncSnapshot<QuerySnapshot> snapshot) {
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
                 print('Error: ${snapshot.error}');
                 return Text('Error: ${snapshot.error}');
@@ -71,8 +73,7 @@ class CategoryResultScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: GridView.builder(
-                      gridDelegate:
-                          SliverGridDelegateWithMaxCrossAxisExtent(
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 250,
                         childAspectRatio: 2 / 2.6,
                         crossAxisSpacing: 0,
@@ -82,11 +83,9 @@ class CategoryResultScreen extends StatelessWidget {
                       itemBuilder: (BuildContext context, int i) {
                         var data = snapshot.data!.docs[i];
                         var _price = int.parse(data['Price']);
-                        String _formatedPrice =
-                            '₹ ${_format.format(_price)}';
+                        String _formatedPrice = '₹ ${_format.format(_price)}';
                         return ProductCard(
-                            data: data,
-                            formattedPrice: _formatedPrice);
+                            data: data, formattedPrice: _formatedPrice);
                       },
                     ),
                   ),

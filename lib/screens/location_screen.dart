@@ -276,7 +276,7 @@ class _LocationScreenState extends State<LocationScreen> {
       resizeToAvoidBottomInset: true,
       body: Column(
         children: [
-          Image.asset('assets/images/locatioon.png'),
+          Image.asset('assets/images/18-location-pin.gif'),
           const SizedBox(
             height: 20,
           ),
