@@ -49,6 +49,7 @@ class _AccountScreenState extends State<AccountScreen> {
         title: Row(
           children: [
             Icon(Icons.account_circle_outlined),
+            SizedBox(width: 10,),
             Text(
               'Profile',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),

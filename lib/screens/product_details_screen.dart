@@ -104,6 +104,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _cleaning = data['cleaningservice'];
           _phoneNumber = data['phoneNumber'];
           documentId = snapshot.docs.first.reference;
+          _loc = data['location'];
         });
         await fetchSellerData();
       }
