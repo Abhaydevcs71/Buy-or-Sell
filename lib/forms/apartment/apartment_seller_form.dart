@@ -28,10 +28,12 @@ class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
   var _priceController = TextEditingController();
   var _addressController = TextEditingController();
   var _phoneNumberController = TextEditingController();
+  
   bool isUploadImage = false;
   bool imageSelected = false;
   final List<File> _image = [];
   final List<String> imageUrls = [];
+  final List<String> fav= [];
   bool uploading = false;
   var uuid = Uuid();
 
@@ -130,6 +132,7 @@ class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
       'Description': _descController.text,
       'Price': _priceController.text,
       'adress': _addressController.text,
+      'favCount':fav,
       'images': imageUrls,
       'Category': 'Apartment',
       'bhk': bhk,

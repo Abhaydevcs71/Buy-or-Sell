@@ -12,7 +12,6 @@ import 'package:flutter_geocoder/services/base.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
-import 'package:second_store/forms/pg/user_review_screen.dart';
 import 'package:second_store/screens/gmap.dart';
 import 'package:second_store/screens/location_screen.dart';
 import 'package:second_store/screens/main_screen.dart';
@@ -42,6 +41,7 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
   bool isUploadImage = false;
   bool imageSelected = false;
   final List<File> _image = [];
+  final List<String> fav= [];
   final List<String> imageUrls = [];
   bool uploading = false;
   var uuid = Uuid();
@@ -144,6 +144,7 @@ class _HouseSellerFormState extends State<HouseSellerForm> {
       'images': imageUrls,
       'Category': 'House',
       'bhk': bhk,
+      'favCount':fav,
       'parking': parking,
       'location': "${loc.latitude} ${loc.longitude}",
       'date': currentDate,
