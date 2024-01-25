@@ -271,7 +271,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         child: Text(
                           _name.toString(),
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 40),
+                              fontWeight: FontWeight.bold, fontSize: 40,
+                              overflow: TextOverflow.ellipsis),
                         ),
                       ),
                       Padding(

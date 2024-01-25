@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:second_store/forms/pg/user_review_screen.dart';
 import 'package:second_store/screens/gmap.dart';
 import 'package:second_store/screens/main_screen.dart';
 import 'package:second_store/widgets/image_picker.dart';
@@ -36,6 +35,7 @@ class _HostelSellerFormState extends State<HostelSellerForm> {
   bool imageSelected = false;
   final List<File> _image = [];
   final List<String> imageUrls = [];
+  final List<String> fav= [];
   bool uploading = false;
   var uuid = Uuid();
 
@@ -140,6 +140,7 @@ class _HostelSellerFormState extends State<HostelSellerForm> {
       'gender': gender,
       'parking': parking,
       'food': food,
+      'favCount':fav,
       'bathroom': bathroom,
       'date': currentDate,
       'userId': user?.uid,

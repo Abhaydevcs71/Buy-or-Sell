@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:second_store/forms/pg/user_review_screen.dart';
 import 'package:second_store/screens/gmap.dart';
 import 'package:second_store/screens/main_screen.dart';
 import 'package:second_store/widgets/image_picker.dart';
@@ -29,8 +28,6 @@ class _HotelSellerFormState extends State<HotelSellerForm> {
   FirebaseStorage storage = FirebaseStorage.instance;
   var _nameController = TextEditingController();
   var _descController = TextEditingController();
-  var _singleRoomPriceController = TextEditingController();
-  var _doubleRoomPriceController = TextEditingController();
   var _familyRoomPriceController = TextEditingController();
   var _addressController = TextEditingController();
   var _phoneNumberController = TextEditingController();
@@ -38,6 +35,7 @@ class _HotelSellerFormState extends State<HotelSellerForm> {
   bool imageSelected = false;
   final List<File> _image = [];
   final List<String> imageUrls = [];
+  final List<String> fav = [];
   bool uploading = false;
   var uuid = Uuid();
 
@@ -138,19 +136,16 @@ class _HotelSellerFormState extends State<HotelSellerForm> {
     products.add({
       'name': _nameController.text,
       'Description': _descController.text,
-      'singleRoomPrice': _singleRoomPriceController.text,
-      'doubleRoomPrice': _doubleRoomPriceController.text,
-      'familyRoomPrice': _familyRoomPriceController.text,
+      'Price': _familyRoomPriceController.text,
       'adress': _addressController.text,
       'images': imageUrls,
+      'favCount': fav,
       'Category': 'Hotel',
       'cleaningservice': cleaningservice,
       'parking': parking,
       'food': food,
       'internet': internet,
-      'singleroom': singleRoom,
-      'doubleroom': doubleRoom,
-      'familyroom': familyRoom,
+      
       'date': currentDate,
       'userId': user?.uid,
       'docId': docId,
@@ -245,105 +240,7 @@ class _HotelSellerFormState extends State<HotelSellerForm> {
                         return null;
                       },
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      )),
-                      hint: const Text('Select the Number of single room'),
-                      value: singleRoom,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          singleRoom = newValue!;
-                        });
-                      },
-                      items: <String>[
-                        '1',
-                        '2',
-                        '3',
-                        '4',
-                        '5',
-                        '6',
-                        '7',
-                        '8',
-                        '9',
-                        '10'
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      )),
-                      hint: const Text('Select the Number of double room'),
-                      value: doubleRoom,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          doubleRoom = newValue!;
-                        });
-                      },
-                      items: <String>[
-                        '1',
-                        '2',
-                        '3',
-                        '4',
-                        '5',
-                        '6',
-                        '7',
-                        '8',
-                        '9',
-                        '10'
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      )),
-                      hint: const Text('Select the Number of family room'),
-                      value: familyRoom,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          familyRoom = newValue!;
-                        });
-                      },
-                      items: <String>[
-                        '1',
-                        '2',
-                        '3',
-                        '4',
-                        '5',
-                        '6',
-                        '7',
-                        '8',
-                        '9',
-                        '10'
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
+                   
                     SizedBox(
                       height: 15,
                     ),
@@ -460,45 +357,11 @@ class _HotelSellerFormState extends State<HotelSellerForm> {
                       height: 15,
                     ),
                     TextFormField(
-                      controller: _singleRoomPriceController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Single Room Price',
-                          prefixText: 'INR\t'),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Required Field';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      controller: _doubleRoomPriceController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Double Room Price',
-                          prefixText: 'INR\t'),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Required Field';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
                       controller: _familyRoomPriceController,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: 'Family Room Price',
+                          labelText: 'Room Price',
                           prefixText: 'INR\t'),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -712,8 +575,6 @@ class _HotelSellerFormState extends State<HotelSellerForm> {
                         onPressed: () {
                           if (_nameController.text.isEmpty ||
                               _descController.text.isEmpty ||
-                              _singleRoomPriceController.text.isEmpty ||
-                              _doubleRoomPriceController.text.isEmpty ||
                               _familyRoomPriceController.text.isEmpty ||
                               _addressController.text.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -728,7 +589,7 @@ class _HotelSellerFormState extends State<HotelSellerForm> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor:Color.fromARGB(255, 221, 158, 171),
+                            backgroundColor: Color.fromARGB(255, 221, 158, 171),
                             foregroundColor: Colors.black,
                             shadowColor:
                                 const Color.fromARGB(255, 109, 106, 105),
