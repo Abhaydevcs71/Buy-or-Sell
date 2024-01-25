@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:second_store/screens/gmap.dart';
 import 'package:second_store/screens/main_screen.dart';
 import 'package:second_store/widgets/image_picker.dart';
@@ -85,8 +84,9 @@ class _PgSellerFormState extends State<PgSellerForm> {
 
   String? countPeople;
 
+  String? gender;
   String? parking;
-
+  String? food;
   String? bathroom;
   bool val = false;
   late LatLng loc;
@@ -137,13 +137,15 @@ class _PgSellerFormState extends State<PgSellerForm> {
       'images': imageUrls,
       'People': countPeople,
       'Category': 'PG',
+      'gender': gender,
       'parking': parking,
+      'food': food,
       'favCount':fav,
       'bathroom': bathroom,
       'date': currentDate,
       'userId': user?.uid,
       'docId': docId,
-      'phoneNumber': _phoneNumberController,
+      'phoneNumber': _phoneNumberController.text,
       'location': "${loc.latitude} ${loc.longitude}",
     });
   }
@@ -210,7 +212,7 @@ class _PgSellerFormState extends State<PgSellerForm> {
                 child: Column(
                   children: [
                     const Text(
-                      'PG',
+                      'Pg',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -235,6 +237,29 @@ class _PgSellerFormState extends State<PgSellerForm> {
                       },
                     ),
                     const SizedBox(
+                      height: 15,
+                    ),
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      )),
+                      hint: const Text('Select hostel for which gender'),
+                      value: gender,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          gender = newValue!;
+                        });
+                      },
+                      items: <String>['Ladies', 'Boys']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(
                       height: 15,
                     ),
                     TextFormField(
@@ -291,6 +316,29 @@ class _PgSellerFormState extends State<PgSellerForm> {
                       onChanged: (String? newValue) {
                         setState(() {
                           parking = newValue!;
+                        });
+                      },
+                      items: <String>['available', 'not available']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      )),
+                      hint: const Text('Food Facility'),
+                      value: food,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          food = newValue!;
                         });
                       },
                       items: <String>['available', 'not available']
@@ -560,7 +608,7 @@ class _PgSellerFormState extends State<PgSellerForm> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 221, 158, 171),
+                            backgroundColor:Color.fromARGB(255, 221, 158, 171),
                             foregroundColor: Colors.black,
                             shadowColor:
                                 const Color.fromARGB(255, 109, 106, 105),
