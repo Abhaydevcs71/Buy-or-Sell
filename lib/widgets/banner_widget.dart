@@ -1,12 +1,12 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:second_store/screens/profile.dart';
+import 'package:second_store/screens/login/profile.dart';
 //import 'package:firebase_storage/firebase_storage.dart';
 
 class BannerWidget extends StatelessWidget {
   String img;
   String cat;
-   BannerWidget({super.key,required this.img,required this.cat});
+  BannerWidget({super.key, required this.img, required this.cat});
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +79,8 @@ class BannerWidget extends StatelessWidget {
                       width: 100,
                       height: 100,
                       child: Image.network(
-                          img,
-                          ),
+                        img,
+                      ),
                     ),
                   )
                 ],

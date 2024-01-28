@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:search_page/search_page.dart';
-import 'package:second_store/screens/product_details_screen.dart';
-import 'package:second_store/screens/sellitems/homescreen/product_display/product_list.dart';
+import 'package:second_store/screens/product_display/product_details_screen.dart';
+import 'package:second_store/screens/product_display/product_list.dart';
 
 class Products {
   final String? title, description, category, price;

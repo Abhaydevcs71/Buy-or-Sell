@@ -6,8 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/screens/authentication/otp_screen.dart';
-import 'package:second_store/screens/location_screen.dart';
-import 'package:second_store/screens/profile.dart';
+import 'package:second_store/screens/login/location_screen.dart';
+import 'package:second_store/screens/login/profile.dart';
 
 class PhoneAuthServices {
   FirebaseAuth auth = FirebaseAuth.instance;

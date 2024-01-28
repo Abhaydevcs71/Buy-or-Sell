@@ -7,7 +7,7 @@ import 'package:second_store/forms/house/house_seller_form.dart';
 import 'package:second_store/forms/pg/pg_seller_form.dart';
 //import 'package:second_store/forms/pg_seller_form.dart';
 
-import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
+import 'package:second_store/screens/home/home_screen.dart';
 //import 'package:second_store/screens/sellitems/seller_subCat.dart';
 import 'package:second_store/services/firebase_services.dart';
 

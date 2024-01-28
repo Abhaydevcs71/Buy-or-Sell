@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:second_store/screens/location_screen.dart';
-import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
+import 'package:second_store/screens/login/location_screen.dart';
+import 'package:second_store/screens/home/home_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class ProfileForm extends StatefulWidget {
@@ -298,8 +298,9 @@ class _ProfileFormState extends State<ProfileForm> {
                           style: TextStyle(fontSize: 20),
                         ),
                         style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all<Color>(Color.fromARGB(255, 221, 158, 171),)),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                          Color.fromARGB(255, 221, 158, 171),
+                        )),
                       ),
                     ),
                   ],

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_geocoder/geocoder.dart';
 import 'package:location/location.dart';
 import 'package:second_store/constants/constants.dart';
-import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
-import 'package:second_store/screens/main_screen.dart';
+import 'package:second_store/screens/home/home_screen.dart';
+import 'package:second_store/screens/home/main_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class LocationScreen extends StatefulWidget {

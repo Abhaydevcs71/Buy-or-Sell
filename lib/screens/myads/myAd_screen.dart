@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:second_store/constants/constants.dart';
-import 'package:second_store/screens/sellitems/homescreen/product_card.dart';
+import 'package:second_store/screens/product_display/product_card.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class MyAdsScreen extends StatelessWidget {
@@ -16,7 +16,7 @@ class MyAdsScreen extends StatelessWidget {
       length: 2,
       initialIndex: 0,
       child: Scaffold(
-        backgroundColor: Colors.grey[200],
+          backgroundColor: Colors.grey[200],
           appBar: AppBar(
             backgroundColor: Colors.white,
             elevation: 0,
@@ -48,7 +48,7 @@ class MyAdsScreen extends StatelessWidget {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
-          color: Colors.grey[200],
+                color: Colors.grey[200],
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FutureBuilder<QuerySnapshot>(
@@ -79,7 +79,6 @@ class MyAdsScreen extends StatelessWidget {
                       return Column(
                         children: [
                           Container(
-                            
                             height: 56,
                             child: Padding(
                               padding: EdgeInsets.all(8),
@@ -103,8 +102,7 @@ class MyAdsScreen extends StatelessWidget {
                                 itemCount: snapshot.data!.size,
                                 itemBuilder: (BuildContext context, int i) {
                                   var data = snapshot.data!.docs[i];
-                                  var _price = int.parse(data[
-                                      'Price']); 
+                                  var _price = int.parse(data['Price']);
                                   String _formatedPrice =
                                       '₹ ${_format.format(_price)}';
                                   return ProductCard(
@@ -120,8 +118,7 @@ class MyAdsScreen extends StatelessWidget {
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
-                          color: Colors.grey[200],
-
+                color: Colors.grey[200],
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FutureBuilder<QuerySnapshot>(
@@ -153,7 +150,6 @@ class MyAdsScreen extends StatelessWidget {
                       return Column(
                         children: [
                           Container(
-                            
                             height: 56,
                             child: Padding(
                               padding: EdgeInsets.all(8),
@@ -177,8 +173,7 @@ class MyAdsScreen extends StatelessWidget {
                                 itemCount: snapshot.data!.size,
                                 itemBuilder: (BuildContext context, int i) {
                                   var data = snapshot.data!.docs[i];
-                                  var _price = int.parse(data[
-                                      'Price']); 
+                                  var _price = int.parse(data['Price']);
                                   String _formatedPrice =
                                       '₹ ${_format.format(_price)}';
 

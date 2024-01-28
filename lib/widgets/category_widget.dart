@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:second_store/screens/category_result.dart';
+import 'package:second_store/screens/product_display/category_result.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class CategoryWidget extends StatelessWidget {

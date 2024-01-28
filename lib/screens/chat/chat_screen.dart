@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:second_store/screens/chat_conversation.dart';
-import 'package:second_store/screens/profile.dart';
+import 'package:second_store/screens/chat/chat_conversation.dart';
+import 'package:second_store/screens/login/profile.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -82,7 +82,6 @@ class _ChatScreenState extends State<ChatScreen> {
                             height: 52,
                           ),
                         ),
-                        
                         title: Text(
                           data['adtitle'],
                           style: TextStyle(
@@ -102,8 +101,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                   builder: (BuildContext context) =>
                                       ChatConversation(
                                         chatRoomId: data['chatRoomId'],
-                                       profile: data['image'],
-                                       name1: data['adtitle'],
+                                        profile: data['image'],
+                                        name1: data['adtitle'],
                                       )));
                         },
                         subtitle: data['lastChat'] == null

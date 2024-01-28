@@ -14,15 +14,15 @@ import 'package:second_store/screens/authentication/email_auth_screen.dart';
 import 'package:second_store/screens/authentication/email_verification_screen.dart';
 import 'package:second_store/screens/authentication/phoneauth_screen.dart';
 import 'package:second_store/screens/authentication/reset_password_screen.dart';
-import 'package:second_store/screens/category_result.dart';
-import 'package:second_store/screens/gmap.dart';
-import 'package:second_store/screens/product_details_screen.dart';
-import 'package:second_store/screens/profile.dart';
+import 'package:second_store/screens/product_display/category_result.dart';
+import 'package:second_store/screens/login/gmap.dart';
+import 'package:second_store/screens/product_display/product_details_screen.dart';
+import 'package:second_store/screens/login/profile.dart';
 
-import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
-import 'package:second_store/screens/location_screen.dart';
-import 'package:second_store/screens/login_screen.dart';
-import 'package:second_store/screens/main_screen.dart';
+import 'package:second_store/screens/home/home_screen.dart';
+import 'package:second_store/screens/login/location_screen.dart';
+import 'package:second_store/screens/login/login_screen.dart';
+import 'package:second_store/screens/home/main_screen.dart';
 import 'package:second_store/screens/sellitems/seller_category_list.dart';
 
 import 'package:second_store/screens/splash_screen.dart';

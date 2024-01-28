@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/constants/constants.dart';
-import 'package:second_store/screens/location_screen.dart';
+import 'package:second_store/screens/login/location_screen.dart';
 import 'package:second_store/widgets/auth_ui.dart';
 
 class LoginScreen extends StatelessWidget {

@@ -6,8 +6,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:second_store/screens/gmap.dart';
-import 'package:second_store/screens/main_screen.dart';
+import 'package:second_store/screens/login/gmap.dart';
+import 'package:second_store/screens/home/main_screen.dart';
 import 'package:second_store/widgets/image_viewer.dart';
 import 'package:uuid/uuid.dart';
 
@@ -28,12 +28,12 @@ class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
   var _priceController = TextEditingController();
   var _addressController = TextEditingController();
   var _phoneNumberController = TextEditingController();
-  
+
   bool isUploadImage = false;
   bool imageSelected = false;
   final List<File> _image = [];
   final List<String> imageUrls = [];
-  final List<String> fav= [];
+  final List<String> fav = [];
   bool uploading = false;
   var uuid = Uuid();
 
@@ -132,7 +132,7 @@ class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
       'Description': _descController.text,
       'Price': _priceController.text,
       'adress': _addressController.text,
-      'favCount':fav,
+      'favCount': fav,
       'images': imageUrls,
       'Category': 'Apartment',
       'bhk': bhk,
@@ -180,7 +180,7 @@ class _ApartmentSellerFormState extends State<ApartmentSellerForm> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-       backgroundColor: Color.fromARGB(255, 221, 158, 171),
+        backgroundColor: Color.fromARGB(255, 221, 158, 171),
         iconTheme: const IconThemeData(
           color: Colors.black,
         ),

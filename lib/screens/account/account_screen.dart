@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:second_store/screens/login_screen.dart';
-import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
+import 'package:second_store/screens/login/login_screen.dart';
+import 'package:second_store/screens/home/home_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -49,7 +49,9 @@ class _AccountScreenState extends State<AccountScreen> {
         title: Row(
           children: [
             Icon(Icons.account_circle_outlined),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             Text(
               'Profile',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),

@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/screens/authentication/email_verification_screen.dart';
-import 'package:second_store/screens/location_screen.dart';
-import 'package:second_store/screens/profile.dart';
+import 'package:second_store/screens/login/location_screen.dart';
+import 'package:second_store/screens/login/profile.dart';
 
 class EmailAuthentication {
   CollectionReference users = FirebaseFirestore.instance.collection('users');

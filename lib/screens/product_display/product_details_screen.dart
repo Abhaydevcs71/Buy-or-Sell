@@ -1,17 +1,13 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'package:intl/intl.dart';
 
-import 'package:second_store/screens/chat_conversation.dart';
-import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
-import 'package:second_store/screens/sellitems/homescreen/product_display/product_list.dart';
+import 'package:second_store/screens/chat/chat_conversation.dart';
+import 'package:second_store/screens/home/home_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
-import 'package:second_store/services/search_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -271,7 +267,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         child: Text(
                           _name.toString(),
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 40,
                               overflow: TextOverflow.ellipsis),
                         ),
                       ),
@@ -538,12 +535,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [if(_name1 != null)
-                          Text(
-                            _name1! + ' ' + _name2!.toString(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 25),
-                          ),
+                        children: [
+                          if (_name1 != null)
+                            Text(
+                              _name1! + ' ' + _name2!.toString(),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 25),
+                            ),
                           Text(
                             _num.toString(),
                             style: TextStyle(fontSize: 20),
@@ -590,8 +588,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   final Uri url = Uri(
-                                      scheme: 'tel',
-                                      path: _num.toString());
+                                      scheme: 'tel:+91',
+                                      path: _phoneNumber.toString());
                                   if (await canLaunchUrl(url)) {
                                     await launchUrl(url);
                                   } else {

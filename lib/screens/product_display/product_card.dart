@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:second_store/screens/product_details_screen.dart';
+import 'package:second_store/screens/product_display/product_details_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 import 'package:intl/intl.dart';
 
@@ -99,9 +99,6 @@ class _ProductCardState extends State<ProductCard> {
                         SizedBox(
                           height: 5,
                         ),
-                       
-
-                      
                         Padding(
                           padding: const EdgeInsets.only(left: 15),
                           child: Text(
@@ -109,7 +106,6 @@ class _ProductCardState extends State<ProductCard> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                          
                         Padding(
                           padding: const EdgeInsets.only(left: 15),
                           child: Text(

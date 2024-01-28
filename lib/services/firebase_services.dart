@@ -2,13 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geocoder/geocoder.dart';
-import 'package:second_store/screens/sellitems/homescreen/home_screen.dart';
+import 'package:second_store/screens/home/home_screen.dart';
 
 class FirebaseService {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  CollectionReference categories = FirebaseFirestore.instance.collection('categories');
-  CollectionReference products = FirebaseFirestore.instance.collection('products');
-  CollectionReference messages = FirebaseFirestore.instance.collection('messages');
+  CollectionReference categories =
+      FirebaseFirestore.instance.collection('categories');
+  CollectionReference products =
+      FirebaseFirestore.instance.collection('products');
+  CollectionReference messages =
+      FirebaseFirestore.instance.collection('messages');
 
   User? user = FirebaseAuth.instance.currentUser;
 
@@ -20,13 +23,14 @@ class FirebaseService {
     ).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Failed to update location'),
+          content: Text('Failed to update user details'),
         ),
       );
     });
   }
 
-  Future<void> updateProduct(Map<String, dynamic> data, String productId, context) {
+  Future<void> updateProduct(
+      Map<String, dynamic> data, String productId, context) {
     return products.doc(productId).update(data).then(
       (value) {
         Navigator.pushNamed(context, HomeScreen.id);
@@ -42,12 +46,12 @@ class FirebaseService {
 
   Future<String?> getAddress(double lat, double long) async {
     final coordinates = Coordinates(lat, long);
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
 
     return first.addressLine;
   }
-
 
   createChatRoom({chatData}) {
     messages.doc(chatData['chatRoomId']).set(chatData).catchError((e) {
@@ -93,14 +97,9 @@ class FirebaseService {
             'favCount': favCount,
           });
         }
-      } else {
-      }
+      } else {}
     } catch (error) {
       print('Error updating favorite: $error');
     }
   }
-
-  
-
-  
 }

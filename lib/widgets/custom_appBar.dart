@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/constants/constants.dart';
-import 'package:second_store/screens/location_screen.dart';
+import 'package:second_store/screens/login/location_screen.dart';
 import 'package:second_store/services/firebase_services.dart';
 import 'package:second_store/services/search_services.dart';
 
@@ -173,7 +173,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   const SizedBox(
                     width: 8,
                   ),
-                  
                 ],
               ),
             ),

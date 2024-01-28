@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/screens/authentication/phoneauth_screen.dart';
-import 'package:second_store/screens/location_screen.dart';
+import 'package:second_store/screens/login/location_screen.dart';
 import 'package:second_store/services/phoneauth_services.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -28,8 +28,8 @@ class _OTPScreenState extends State<OTPScreen> {
 
   Future<void> PhoneCredential(BuildContext context, String otp) async {
     FirebaseAuth _auth = FirebaseAuth.instance;
-    debugPrint("ver id::::"+widget.verId);
-    debugPrint("otp:::::"+otp);
+    debugPrint("ver id::::" + widget.verId);
+    debugPrint("otp:::::" + otp);
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: widget.verId, smsCode: otp);
@@ -214,7 +214,8 @@ class _OTPScreenState extends State<OTPScreen> {
                                 setState(() {
                                   _loading = true;
                                 });
-                                PhoneCredential(context, '${_text1.text}${_text2.text}${_text3.text}${_text4.text}${_text5.text}${_text6.text}');
+                                PhoneCredential(context,
+                                    '${_text1.text}${_text2.text}${_text3.text}${_text4.text}${_text5.text}${_text6.text}');
                               }
                             }
                           }

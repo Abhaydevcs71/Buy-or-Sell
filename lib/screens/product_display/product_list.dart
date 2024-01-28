@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/constants/constants.dart';
-import 'package:second_store/screens/sellitems/homescreen/product_card.dart';
+import 'package:second_store/screens/product_display/product_card.dart';
 import 'package:second_store/services/firebase_services.dart';
 import 'package:intl/intl.dart';
 

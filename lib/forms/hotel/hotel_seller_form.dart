@@ -8,8 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:second_store/screens/gmap.dart';
-import 'package:second_store/screens/main_screen.dart';
+import 'package:second_store/screens/login/gmap.dart';
+import 'package:second_store/screens/home/main_screen.dart';
 import 'package:second_store/widgets/image_picker.dart';
 import 'package:second_store/widgets/image_viewer.dart';
 import 'package:uuid/uuid.dart';
@@ -145,7 +145,6 @@ class _HotelSellerFormState extends State<HotelSellerForm> {
       'parking': parking,
       'food': food,
       'internet': internet,
-      
       'date': currentDate,
       'userId': user?.uid,
       'docId': docId,
@@ -240,7 +239,6 @@ class _HotelSellerFormState extends State<HotelSellerForm> {
                         return null;
                       },
                     ),
-                   
                     SizedBox(
                       height: 15,
                     ),

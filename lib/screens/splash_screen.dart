@@ -4,8 +4,8 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:second_store/constants/constants.dart';
-import 'package:second_store/screens/location_screen.dart';
-import 'package:second_store/screens/login_screen.dart';
+import 'package:second_store/screens/login/location_screen.dart';
+import 'package:second_store/screens/login/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String id = 'splash-screen';

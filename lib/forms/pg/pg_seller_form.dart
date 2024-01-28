@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:second_store/screens/gmap.dart';
-import 'package:second_store/screens/main_screen.dart';
+import 'package:second_store/screens/login/gmap.dart';
+import 'package:second_store/screens/home/main_screen.dart';
 import 'package:second_store/widgets/image_picker.dart';
 import 'package:second_store/widgets/image_viewer.dart';
 import 'package:uuid/uuid.dart';
@@ -36,7 +36,7 @@ class _PgSellerFormState extends State<PgSellerForm> {
   bool imageSelected = false;
   final List<File> _image = [];
   final List<String> imageUrls = [];
-  final List<String> fav= [];
+  final List<String> fav = [];
   bool uploading = false;
   var uuid = Uuid();
 
@@ -138,7 +138,7 @@ class _PgSellerFormState extends State<PgSellerForm> {
       'People': countPeople,
       'Category': 'PG',
       'parking': parking,
-      'favCount':fav,
+      'favCount': fav,
       'bathroom': bathroom,
       'date': currentDate,
       'userId': user?.uid,

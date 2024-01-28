@@ -9,14 +9,13 @@ class MapScreen extends StatefulWidget {
   @override
   State<MapScreen> createState() => _MapScreenState();
 }
-   LatLng location = LatLng(37.422131, -122.084801);
-bool pressed=false;
+
+LatLng location = LatLng(37.422131, -122.084801);
+bool pressed = false;
 
 String locationMessage = 'Current location of the user';
 late String lat;
 late String long;
-
-
 
 // Getting current location
 Future<Position> _getCurrentLocation() async {
@@ -40,8 +39,8 @@ Future<Position> _getCurrentLocation() async {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  var initialLocation = LatLng(37.422131, -122.084801);
-  late GoogleMapController mapController; 
+  var initialLocation = LatLng(9.956530371540934, 76.30119109423303);
+  late GoogleMapController mapController;
 
   void _liveLocation() {
     LocationSettings locationSettings = const LocationSettings(
@@ -57,17 +56,19 @@ class _MapScreenState extends State<MapScreen> {
       });
     });
   }
-  floatingButton(){
-  _getCurrentLocation().then((value) {
-                    setState(() {
-                    initialLocation=LatLng(value.latitude, value.longitude);  
-                      mapController.animateCamera(
-                      CameraUpdate.newLatLngZoom(initialLocation, 14),
-                     );
-                    });
-                    _liveLocation();
-                  });
-}
+
+  floatingButton() {
+    _getCurrentLocation().then((value) {
+      setState(() {
+        initialLocation = LatLng(value.latitude, value.longitude);
+        mapController.animateCamera(
+          CameraUpdate.newLatLngZoom(initialLocation, 14),
+        );
+      });
+      _liveLocation();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +101,7 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                 },
                 onMapCreated: (GoogleMapController controller) {
-              mapController = controller;
+                  mapController = controller;
                 },
               ),
             ),
@@ -111,20 +112,20 @@ class _MapScreenState extends State<MapScreen> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(fixedSize: const Size(150, 50)),
               child: Text('Save Location'),
-              onPressed: () async{
-                pressed=true;
+              onPressed: () async {
+                pressed = true;
                 await floatingButton();
                 try {
-                Navigator.pop(context, location);
-                  
+                  Navigator.pop(context, location);
                 } catch (e) {
-                 print('errorrrr: $e') ;
-                 Navigator.pop(context, location);
-                 ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to add location. Please try again.'),
-        ),
-      );
+                  print('errorrrr: $e');
+                  Navigator.pop(context, location);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content:
+                          Text('Failed to add location. Please try again.'),
+                    ),
+                  );
                 }
               },
             ),
@@ -143,4 +144,3 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 }
-

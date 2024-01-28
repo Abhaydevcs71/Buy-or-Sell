@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:second_store/screens/chat_stream.dart';
+import 'package:second_store/screens/chat/chat_stream.dart';
 import 'package:second_store/services/firebase_services.dart';
 
 class ChatConversation extends StatefulWidget {
