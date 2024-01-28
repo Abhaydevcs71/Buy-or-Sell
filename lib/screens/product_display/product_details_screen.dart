@@ -416,36 +416,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      'Price of Single Room: ${_singleRoomPrice.toString()}',
-                                      style: const TextStyle(fontSize: 20),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      'Price of Double Room: ${_doubleRoomPrice.toString()}',
-                                      style: const TextStyle(fontSize: 20),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      'Price of Family Room: ${_familyRoomPrice.toString()}',
-                                      style: const TextStyle(fontSize: 20),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
+                                 
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(

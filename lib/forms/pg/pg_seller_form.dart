@@ -85,8 +85,9 @@ class _PgSellerFormState extends State<PgSellerForm> {
 
   String? countPeople;
 
+  String? gender;
   String? parking;
-
+  String? food;
   String? bathroom;
   bool val = false;
   late LatLng loc;
@@ -137,13 +138,15 @@ class _PgSellerFormState extends State<PgSellerForm> {
       'images': imageUrls,
       'People': countPeople,
       'Category': 'PG',
+      'gender': gender,
       'parking': parking,
+      'food': food,
       'favCount': fav,
       'bathroom': bathroom,
       'date': currentDate,
       'userId': user?.uid,
       'docId': docId,
-      'phoneNumber': _phoneNumberController,
+      'phoneNumber': _phoneNumberController.text,
       'location': "${loc.latitude} ${loc.longitude}",
     });
   }
@@ -210,7 +213,7 @@ class _PgSellerFormState extends State<PgSellerForm> {
                 child: Column(
                   children: [
                     const Text(
-                      'PG',
+                      'Pg',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -235,6 +238,29 @@ class _PgSellerFormState extends State<PgSellerForm> {
                       },
                     ),
                     const SizedBox(
+                      height: 15,
+                    ),
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      )),
+                      hint: const Text('Select hostel for which gender'),
+                      value: gender,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          gender = newValue!;
+                        });
+                      },
+                      items: <String>['Ladies', 'Boys']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(
                       height: 15,
                     ),
                     TextFormField(
@@ -291,6 +317,29 @@ class _PgSellerFormState extends State<PgSellerForm> {
                       onChanged: (String? newValue) {
                         setState(() {
                           parking = newValue!;
+                        });
+                      },
+                      items: <String>['available', 'not available']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      )),
+                      hint: const Text('Food Facility'),
+                      value: food,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          food = newValue!;
                         });
                       },
                       items: <String>['available', 'not available']
