@@ -416,7 +416,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                 
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(
@@ -559,7 +558,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   final Uri url = Uri(
-                                      scheme: 'tel:+91',
+                                      scheme: 'tel',
                                       path: _phoneNumber.toString());
                                   if (await canLaunchUrl(url)) {
                                     await launchUrl(url);
